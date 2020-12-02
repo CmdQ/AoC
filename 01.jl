@@ -82,16 +82,14 @@ using Test
         @test find_product3(d) == 2 * 20 * 1998
     end
 
+    finds = [identity, find_product2, find_product3]
     @testset "recursive equivalence" begin
-        @test find(a, 2) == find_product2(a)
-        @test find(b, 2) == find_product2(b)
-        @test find(c, 2) == find_product2(c)
-        @test find(d, 2) == find_product2(d)
-
-        @test find(a, 3) == find_product3(a)
-        @test find(b, 3) == find_product3(b)
-        @test find(c, 3) == find_product3(c)
-        @test find(d, 3) == find_product3(d)
+        for i in 2:3
+            @test find(a, i) == finds[i](a)
+            @test find(b, i) == finds[i](b)
+            @test find(c, i) == finds[i](c)
+            @test find(d, i) == finds[i](d)
+        end
     end
 
     @testset "solutions" begin
