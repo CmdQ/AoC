@@ -2,7 +2,7 @@
 
 const r = Int64[]
 
-open("expense-report.txt", "r") do f
+open("inputs/expense-report.txt", "r") do f
     for i in eachline(f)
         push!(r, parse(Int64, i))
     end
