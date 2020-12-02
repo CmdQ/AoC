@@ -10,6 +10,8 @@ function load()
     re
 end
 
+# Original solution. My first Julia code ever.
+# See below for a generalized, count-independent version.
 function find_product2(r::Array{Int})
     for (o, a) in enumerate(r)
         for i = o+1:length(r)
@@ -20,6 +22,8 @@ function find_product2(r::Array{Int})
     end
 end
 
+# Original solution. My first Julia code ever.
+# See below for a generalized, count-independent version.
 function find_product3(r::Array{Int})
     for (o, a) in enumerate(r)
         for i = o+1:length(r)
@@ -34,7 +38,7 @@ end
 
 using DataStructures
 
-function find(r::Array{Int}, n, start = 1, which = nil())::Union{Int,Nothing}
+function find(r::Array{Int}, n, start = 1, which = nil())::Union{Int, Nothing}
     if start <= length(r)
         current = r[start]
         extended = cons(current, which)
