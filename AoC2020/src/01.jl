@@ -2,7 +2,7 @@
 
 function load()
     re = Int[]
-    open("inputs/expense-report.txt", "r") do f
+    open("$(@__DIR__)/../inputs/expense-report.txt", "r") do f
         for i in eachline(f)
             push!(re, parse(Int, i))
         end
