@@ -6,20 +6,48 @@ This repo is to keep track of my [AoC 2020][aoc] [progress] while learning [Juli
 
 ## Thoughts
 
-### 01
+### 1
 
 - [ ] Could the variable number of nested loops be an opportunity for macros?
 - [x] The same could also be done with recursion. Does Julia do [TCO][]? No. :(
 
-### 03
+### 3
 
 - `IOBuffer` easily passes a `String` where files are expected.
 
-### 04
+### 4
 
 - [ ] Why does `const Mappings = Dict{String, String}` not work?
 - [ ] Heisenbug?
 - [ ] Loading with `reduce`/`foldl` and `ImmutableDict`
+
+#### Heisenbug
+
+The working code uses this function:
+
+```julia
+function fd(s::String, fromto::UnitRange)::Bool
+    parsed = tryparse(UInt, s)
+    if isnothing(parsed)
+        false
+    else
+        parsed in fromto
+    end
+end
+```
+
+When I the version with exception, it only worked while debugging, but not otherwise.
+
+```julia
+function fd(s::String, fromto::UnitRange)::Bool
+    try
+        parse(UInt, s) in fromto
+    catch ArgumentError
+        false
+    end    
+end
+```
+
 
 
 [aoc]: https://adventofcode.com/
