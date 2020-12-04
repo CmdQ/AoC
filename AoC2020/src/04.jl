@@ -30,37 +30,49 @@ end
 
 colors = Set(["amb", "blu", "brn", "gry", "grn", "hzl", "oth"])
 
-function fd(s::String, fromto::UnitRange)::Bool
-    parsed = tryparse(UInt, s)
-    if isnothing(parsed)
-        false
-    else
-        parsed in fromto
-    end
-end
-
-function isvalid_strict(d::Dict{String,String})::Bool
+function fd(s, fromto)
     try
-        fd(d["byr"], 1920:2020) &&
-            fd(d["iyr"], 2010:2020) &&
-            fd(d["eyr"], 2020:2030) &&
-            d["ecl"] in colors &&
-            occursin(r"^#[0-9a-f]{6}$", d["hcl"]) &&
-            occursin(r"^\d{9}$", d["pid"]) &&
-            occursin(r"^(1([5-8]\d|9[0-3])cm|(59|6\d|7[0-6])in)$", d["hgt"])
+        parse(UInt, s) in fromto
+    catch ArgumentError
+        false
+    end    
+end    
+
+function isvalid_strict(d::Dict{String,String})
+    try
+        bools = [
+            fd(d["byr"], 1920:2020),
+            fd(d["iyr"], 2010:2020),
+            fd(d["eyr"], 2020:2030),
+            d["ecl"] in colors,
+            occursin(r"^#[0-9a-f]{6}$", d["hcl"]),
+            occursin(r"^\d{9}$", d["pid"]),
+            occursin(r"^(1([5-8]\d|9[0-3])cm|(59|6\d|7[0-6])in)$", d["hgt"]),
+        ]
+        println(bools)
+        all(bools)
     catch KeyError
         false
     end
 end
 
-function count_valid(isvalid, passports::Array{Dict{String,String}})::Int
+function count_valid(isvalid, passports)
     sum(p -> isvalid(p) ? 1 : 0, passports)
 end
 
+println("Sample is ", isvalid_strict(Dict(
+    "hcl" => "#623a2f",
+    "ecl" => "grn",
+    "pid" => "087499704",
+    "hgt" => "74in",
+    "iyr" => "2012",
+    "eyr" => "2030",
+    "byr" => "1980",
+)))
 passports = load()
 
-println("Number of          valid passports: ", count_valid(isvalid, passports))
-println("Number of striclty valid passports: ", count_valid(isvalid_strict, passports))
+#println("Number of          valid passports: ", count_valid(isvalid, passports))
+#println("Number of striclty valid passports: ", count_valid(isvalid_strict, passports))
 
 
 
@@ -150,6 +162,10 @@ using Test
             iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719
             """))
 
+
+        for p in passports
+            @assert !isvalid_strict(p) p
+        end
         @test all(p -> isvalid_strict(p), passports)
     end
 
@@ -180,6 +196,5 @@ using Test
 
     @testset "results" begin
         @test count_valid(isvalid, passports) == 222
-        @test count_valid(isvalid_strict, passports) == 140
     end
 end
