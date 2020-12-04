@@ -18,7 +18,7 @@ This repo is to keep track of my [AoC 2020][aoc] [progress] while learning [Juli
 ### 4
 
 - [ ] Why does `const Mappings = Dict{String, String}` not work?
-- [ ] Heisenbug?
+- [ ] [Heisenbug?][heisenbug4]
 - [ ] Loading with `reduce`/`foldl` and `ImmutableDict`
 
 #### Heisenbug
@@ -55,3 +55,4 @@ end
 [julia]: https://julialang.org/
 [docs]: https://docs.julialang.org/en/v1/
 [tco]: https://en.wikipedia.org/wiki/Tail_call
+[heisenbug4]: https://stackoverflow.com/questions/65140849/
