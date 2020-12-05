@@ -17,7 +17,7 @@ This repo is to keep track of my [AoC 2020][aoc] [progress] while learning [Juli
 
 ### 4
 
-- [ ] Why does `const Mappings = Dict{String, String}` not work?
+- [x] Why does `const Mappings = Dict{String, String}` not work? It does [now](https://github.com/CmdQ/AoC2020/commit/e2c14ecce1fcd80a8872ccf5ce800d1537a1a867), no idea why.
 - [ ] [Heisenbug?][heisenbug4]
 - [ ] Loading with [`reduce`][reduce]/[`foldl`][foldl] and [`ImmutableDict`][ImmutableDict]
 
