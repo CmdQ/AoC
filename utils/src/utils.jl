@@ -17,6 +17,10 @@ function _something_impl(thing, rest...)
     end
 end
 
+macro something(things...)
+    _something_impl(things...)
+end
+
 function _something_nothing_impl(thing)
     quote
         local evaluated = $(esc(thing))
@@ -37,10 +41,6 @@ function _something_nothing_impl(thing, rest...)
             something(evalued)
         end
     end
-end
-
-macro something(things...)
-    _something_impl(things...)
 end
 
 macro something_nothing(things...)

@@ -1,12 +1,14 @@
 #!/usr/bin/julia
 
-function parse(f)::Array{Dict{String,String}}
-    d = Dict{String,String}()
+const Mappings = Dict{String,String}
+
+function parse(f)::Array{Mappings}
+    d = Mappings()
     re = Array{typeof(d),1}()
     for line in eachline(f)
         if isempty(line)
             push!(re, d)
-            d = Dict{String,String}()
+            d = Mappings()
         else
             for tuple in split(line)
                 k, v = split(tuple, ':')
@@ -18,13 +20,13 @@ function parse(f)::Array{Dict{String,String}}
     re
 end
 
-function load()::Array{Dict{String,String}}
+function load()::Array{Mappings}
     open("$(@__DIR__)/../inputs/passports.txt", "r") do f
         parse(f)
     end
 end
 
-function isvalid(d::Dict{String,String})
+function isvalid(d::Mappings)
     isempty(setdiff(Set(["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]), keys(d)))
 end
 
@@ -39,7 +41,7 @@ function fd(s::String, fromto::UnitRange)::Bool
     end
 end
 
-function isvalid_strict(d::Dict{String,String})::Bool
+function isvalid_strict(d::Mappings)::Bool
     try
         fd(d["byr"], 1920:2020) &&
             fd(d["iyr"], 2010:2020) &&
@@ -53,7 +55,7 @@ function isvalid_strict(d::Dict{String,String})::Bool
     end
 end
 
-function count_valid(isvalid, passports::Array{Dict{String,String}})::Int
+function count_valid(isvalid, passports::Array{Mappings})::Int
     sum(p -> isvalid(p) ? 1 : 0, passports)
 end
 
