@@ -1,5 +1,45 @@
 #!/usr/bin/julia
 
+function _something_impl(things)
+    head, tail = Iterators.peel(things)
+    if isempty(tail)
+        :(something($(esc(head))))
+    else
+        quote
+            local evalued = $(esc(head))
+            if isnothing(evalued)
+                $(_something_impl(tail))
+            else
+                something(evalued)
+            end
+        end
+    end
+end
+
+macro something(things...)
+    _something_impl(things)
+end
+
+using Test
+
+@testset "@something" begin
+    @testset "throws" begin
+        @test_throws ArgumentError @something nothing
+        @test_throws ArgumentError @something nothing nothing
+        @test_throws ArgumentError @something nothing nothing nothing
+    end
+
+    @testset "unwrapping" begin
+        @test (@something Some(0)) === 0
+        @test (@something nothing Some(0)) === 0
+        @test (@something Some(nothing) 1) === nothing
+        @test (@something nothing nothing Some(0)) === 0
+        @test (@something nothing Some(nothing) 1) === nothing
+        @test (@something nothing nothing Some(0) nothing) === 0
+        @test (@something nothing Some(nothing) 1 nothing) === nothing
+    end
+end
+
 function load()
     re = Int[]
     open("$(@__DIR__)/../inputs/expense-report.txt", "r") do f
@@ -14,7 +54,7 @@ end
 # See below for a generalized, count-independent version.
 function find_product2(r::Array{Int})
     for (o, a) in enumerate(r)
-        for i = o+1:length(r)
+        for i in o+1:length(r)
             if a + r[i] == 2020
                 return a * r[i]
             end
@@ -26,8 +66,8 @@ end
 # See below for a generalized, count-independent version.
 function find_product3(r::Array{Int})
     for (o, a) in enumerate(r)
-        for i = o+1:length(r)
-            for j = i+1:length(r)
+        for i in o+1:length(r)
+            for j in i+1:length(r)
                 if a + r[i] + r[j] == 2020
                     return a * r[i] * r[j]
                 end
@@ -38,7 +78,7 @@ end
 
 using DataStructures
 
-function find(r::Array{Int}, n, start = 1, which = nil())::Union{Int, Nothing}
+function find(r::Array{Int}, n, start = 1, which = nil())::Union{Int,Nothing}
     if start <= length(r)
         current = r[start]
         extended = cons(current, which)
@@ -46,11 +86,15 @@ function find(r::Array{Int}, n, start = 1, which = nil())::Union{Int, Nothing}
         if with_current == 2020 && n == 1
             return prod(extended)
         else
-            re = find(r, n, start + 1, which)
-            if isnothing(re)
-                return find(r, n - 1, start + 1, extended)
-            else
-                re
+            try
+                return @something find(r, n, start + 1, which) find(
+                    r,
+                    n - 1,
+                    start + 1,
+                    extended,
+                )
+            catch ArgumentError
+                return nothing
             end
         end
     end
