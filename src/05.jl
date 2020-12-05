@@ -1,6 +1,6 @@
 #!/usr/bin/julia
 
-function convert_seat(s::String)::Int
+function convert_seat(s)
     replacements = [
         ('F', 'L'),
         ('B', 'R'),
@@ -9,7 +9,7 @@ function convert_seat(s::String)::Int
     parse(Int, replaced, base=2)
 end
 
-function load()::Array{Int}
+function load()
     re = []
     open("$(@__DIR__)/../inputs/plane-seats.txt", "r") do f
         for line in eachline(f)
@@ -19,7 +19,7 @@ function load()::Array{Int}
     re
 end
 
-function find_missing_on_sorted(seats::Array{Int})::Int
+function find_missing_on_sorted(seats)
     for i in 2:length(seats)
         if seats[i-1] + 2 == seats[i]
             return seats[i-1] + 1
