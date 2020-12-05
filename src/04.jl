@@ -2,7 +2,7 @@
 
 const Mappings = Dict{String,String}
 
-function parse(f)::Array{Mappings}
+function parse(f)
     d = Mappings()
     re = Array{typeof(d),1}()
     for line in eachline(f)
@@ -20,19 +20,19 @@ function parse(f)::Array{Mappings}
     re
 end
 
-function load()::Array{Mappings}
+function load()
     open("$(@__DIR__)/../inputs/passports.txt", "r") do f
         parse(f)
     end
 end
 
-function isvalid(d::Mappings)
+function isvalid(d)
     isempty(setdiff(Set(["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]), keys(d)))
 end
 
 colors = Set(["amb", "blu", "brn", "gry", "grn", "hzl", "oth"])
 
-function fd(s::String, fromto::UnitRange)::Bool
+function fd(s, fromto)
     parsed = tryparse(UInt, s)
     if isnothing(parsed)
         false
@@ -41,7 +41,7 @@ function fd(s::String, fromto::UnitRange)::Bool
     end
 end
 
-function isvalid_strict(d::Mappings)::Bool
+function isvalid_strict(d)
     try
         fd(d["byr"], 1920:2020) &&
             fd(d["iyr"], 2010:2020) &&
@@ -55,7 +55,7 @@ function isvalid_strict(d::Mappings)::Bool
     end
 end
 
-function count_valid(isvalid, passports::Array{Mappings})::Int
+function count_valid(isvalid, passports)::Int
     sum(p -> isvalid(p) ? 1 : 0, passports)
 end
 

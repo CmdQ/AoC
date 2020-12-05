@@ -6,6 +6,10 @@ This repo is to keep track of my [AoC 2020][aoc] [progress] while learning [Juli
 
 ## Thoughts
 
+- Don't be [overzealous with types][overzealous].
+
+[overzealous]: https://stackoverflow.com/a/56430371/581002
+
 ### 1
 
 - [x] Could the variable number of nested loops be an opportunity for macros?
@@ -20,6 +24,11 @@ This repo is to keep track of my [AoC 2020][aoc] [progress] while learning [Juli
 - [x] Why does `const Mappings = Dict{String, String}` not work? It does [now](https://github.com/CmdQ/AoC2020/commit/e2c14ecce1fcd80a8872ccf5ce800d1537a1a867), no idea why.
 - [ ] [Heisenbug?][heisenbug4]
 - [ ] Loading with [`reduce`][reduce]/[`foldl`][foldl] and [`ImmutableDict`][ImmutableDict]
+
+### 5
+
+That was almost too easy. Julia's `parse` is capable of binary numbers, so after replacing letters you're done.
+The whole splitting into rows and seats is nonsense.
 
 #### Heisenbug
 
@@ -44,7 +53,7 @@ function fd(s::String, fromto::UnitRange)::Bool
         parse(UInt, s) in fromto
     catch ArgumentError
         false
-    end    
+    end
 end
 ```
 

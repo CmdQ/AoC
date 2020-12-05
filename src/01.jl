@@ -14,7 +14,7 @@ end
 
 # Original solution. My first Julia code ever.
 # See below for a generalized, count-independent version.
-function find_product2(r::Array{Int})
+function find_product2(r)
     for (o, a) in enumerate(r)
         for i in o+1:length(r)
             if a + r[i] == 2020
@@ -26,7 +26,7 @@ end
 
 # Original solution. My first Julia code ever.
 # See below for a generalized, count-independent version.
-function find_product3(r::Array{Int})
+function find_product3(r)
     for (o, a) in enumerate(r)
         for i in o+1:length(r)
             for j in i+1:length(r)
@@ -40,7 +40,7 @@ end
 
 using DataStructures
 
-function find(r::Array{Int}, n, start = 1, which = nil())::Union{Int,Nothing}
+function find(r, n, start = 1, which = nil())::Union{Int,Nothing}
     if start <= length(r)
         current = r[start]
         extended = cons(current, which)
