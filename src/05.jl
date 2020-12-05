@@ -19,17 +19,18 @@ function load()::Array{Int}
     re
 end
 
-function find_missing(seats::Array{Int})::Int
+function find_missing_on_sorted(seats::Array{Int})::Int
     for i in 2:length(seats)
         if seats[i-1] + 2 == seats[i]
             return seats[i-1] + 1
         end
     end
 end
+find_missing = find_missing_on_sorted ∘ sort
 
 seats = load()
 println("Highest seat number: $(maximum(seats))")
-println("My seat is $(find_missing(sort(seats)))")
+println("My seat is $(find_missing(seats))")
 
 
 
@@ -46,6 +47,6 @@ using Test
 
     @testset "results" begin
         @test maximum(seats) == 919
-        @test find_missing(sort(seats)) == 642
+        @test find_missing(seats) == 642
     end
 end
