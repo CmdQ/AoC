@@ -48,16 +48,12 @@ function find(r::Array{Int}, n, start = 1, which = nil())::Union{Int,Nothing}
         if with_current == 2020 && n == 1
             return prod(extended)
         else
-            try
-                return @something find(r, n, start + 1, which) find(
-                    r,
-                    n - 1,
-                    start + 1,
-                    extended,
-                )
-            catch ArgumentError
-                return nothing
-            end
+            return @something_nothing find(r, n, start + 1, which) find(
+                r,
+                n - 1,
+                start + 1,
+                extended,
+            )
         end
     end
 end
