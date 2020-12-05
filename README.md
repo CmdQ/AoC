@@ -45,7 +45,7 @@ function fd(s::String, fromto::UnitRange)::Bool
 end
 ```
 
-When I the version with exception, it only worked while debugging, but not otherwise.
+When I had the version with exception, it only worked while debugging, but not otherwise.
 
 ```julia
 function fd(s::String, fromto::UnitRange)::Bool

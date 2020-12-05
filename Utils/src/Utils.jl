@@ -1,4 +1,4 @@
-module utils
+module Utils
 export @something
 export @something_nothing
 
