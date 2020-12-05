@@ -1,6 +1,6 @@
 #!/usr/bin/julia
 
-using utils
+using Utils
 
 function load()
     re = Int[]

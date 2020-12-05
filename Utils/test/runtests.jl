@@ -1,4 +1,4 @@
-using utils
+using Utils
 using Test
 
 @testset "@something" begin
