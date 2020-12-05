@@ -1,0 +1,4 @@
+name = "utils"
+uuid = "c4255648-aa77-49a3-8633-17feb5ee199d"
+authors = ["Tobias Becker <tobias.becker@methodpark.de>"]
+version = "0.1.0"

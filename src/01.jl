@@ -1,44 +1,6 @@
 #!/usr/bin/julia
 
-function _something_impl(things)
-    head, tail = Iterators.peel(things)
-    if isempty(tail)
-        :(something($(esc(head))))
-    else
-        quote
-            local evalued = $(esc(head))
-            if isnothing(evalued)
-                $(_something_impl(tail))
-            else
-                something(evalued)
-            end
-        end
-    end
-end
-
-macro something(things...)
-    _something_impl(things)
-end
-
-using Test
-
-@testset "@something" begin
-    @testset "throws" begin
-        @test_throws ArgumentError @something nothing
-        @test_throws ArgumentError @something nothing nothing
-        @test_throws ArgumentError @something nothing nothing nothing
-    end
-
-    @testset "unwrapping" begin
-        @test (@something Some(0)) === 0
-        @test (@something nothing Some(0)) === 0
-        @test (@something Some(nothing) 1) === nothing
-        @test (@something nothing nothing Some(0)) === 0
-        @test (@something nothing Some(nothing) 1) === nothing
-        @test (@something nothing nothing Some(0) nothing) === 0
-        @test (@something nothing Some(nothing) 1 nothing) === nothing
-    end
-end
+using utils
 
 function load()
     re = Int[]
