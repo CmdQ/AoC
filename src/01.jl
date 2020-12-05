@@ -113,6 +113,7 @@ println("Product of 3: ", find_product3(expenses))
 
 
 using Test
+using OffsetArrays
 
 @testset begin
     a = [11, 222, 1010, 3333, 1010]
@@ -130,7 +131,7 @@ using Test
         @test find_product3(d) == 2 * 20 * 1998
     end
 
-    finds = [identity, find_product2, find_product3]
+    finds = OffsetArray([find_product2, find_product3], 2:3)
     @testset "recursive equivalence" begin
         for i in 2:3
             @test find(a, i) == finds[i](a)
