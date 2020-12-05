@@ -8,7 +8,7 @@ This repo is to keep track of my [AoC 2020][aoc] [progress] while learning [Juli
 
 ### 1
 
-- [ ] Could the variable number of nested loops be an opportunity for macros?
+- [x] Could the variable number of nested loops be an opportunity for macros?
 - [x] The same could also be done with recursion. Does Julia do [TCO][]? [No][notco]. :(
 
 ### 3
