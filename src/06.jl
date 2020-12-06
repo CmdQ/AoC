@@ -11,18 +11,21 @@ function load(combiner)
 end
 
 function sumcount(sets)
-    sum(s -> length(s), sets)
+    sum(length, sets)
 end
 
-println("Misunderstood sum of counts is: ", sumcount(load(union)))
-println("Correct       sum of counts is: ", sumcount(load(intersect)))
+println("Misunderstood sum of counts is: ", union |> load |> sumcount)
+println("Correct       sum of counts is: ", intersect |> load |> sumcount)
+
+
+
 
 
 
 
 using Test
 
-@testset "" begin
+@testset "Custom Customs" begin
     input = """
     abc
 
@@ -58,5 +61,7 @@ using Test
     end
 
     @testset "results" begin
+        @test union |> load |> sumcount == 6947
+        @test intersect |> load |> sumcount == 3398
     end
 end
