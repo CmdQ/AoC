@@ -1,5 +1,3 @@
-#!/usr/bin/julia
-
 struct Password
     counts::UnitRange{UInt8}
     character::Char
