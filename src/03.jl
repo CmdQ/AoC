@@ -1,5 +1,3 @@
-#!/usr/bin/julia
-
 function load()
     open("$(@__DIR__)/../inputs/tree-map.txt", "r") do f
         permutedims(reduce(hcat, collect.(eachline(f))))

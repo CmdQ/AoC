@@ -1,23 +1,10 @@
-#!/usr/bin/julia
+using Utils
 
 const Mappings = Dict{String,String}
 
 function parse(f)
-    d = Mappings()
-    re = Array{typeof(d),1}()
-    for line in eachline(f)
-        if isempty(line)
-            push!(re, d)
-            d = Mappings()
-        else
-            for tuple in split(line)
-                k, v = split(tuple, ':')
-                d[k] = v
-            end
-        end
-    end
-    push!(re, d)
-    re
+    blocks = split(f)
+    map(block -> Dict(split(item, ':') for item=split(block)), blocks)
 end
 
 function load()

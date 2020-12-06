@@ -1,5 +1,3 @@
-#!/usr/bin/julia
-
 function convert_seat(s)
     replacements = [
         ('F', 'L'),

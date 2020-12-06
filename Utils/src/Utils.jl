@@ -1,4 +1,5 @@
 module Utils
+import Base
 export @something
 export @something_nothing
 
@@ -45,6 +46,29 @@ end
 
 macro something_nothing(things...)
     _something_nothing_impl(things...)
+end
+
+function Base.split(f, buffer::Base.IO)
+    re = String[]
+    block = String[]
+    for line in eachline(buffer)
+        if f(line)
+            push!(re, join(block, '\n'))
+            block = String[]
+        else
+            push!(block, line)
+        end
+    end
+    push!(re, join(block, '\n'))
+    re
+end
+
+function Base.split(str::Base.String, buffer::Base.IO)
+    split(s -> s == str, buffer)
+end
+
+function Base.split(buffer::Base.IO)
+    split(isempty, buffer)
 end
 
 end

@@ -1,5 +1,3 @@
-#!/usr/bin/julia
-
 function load()
     re = []
     open("$(@__DIR__)/../inputs/.txt", "r") do f

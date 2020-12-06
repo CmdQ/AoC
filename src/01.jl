@@ -1,5 +1,3 @@
-#!/usr/bin/julia
-
 using Utils
 
 function load()
