@@ -1,10 +1,10 @@
 using Utils
+using Underscores
 
 const Mappings = Dict{String,String}
 
 function parse_file(f)
-    blocks = split(f)
-    map(block -> Dict(split(item, ':') for item=split(block)), blocks)
+    @_ split(f) |> map(Dict(split(item, ':') for item=split(_)), __)
 end
 
 function load()
@@ -42,8 +42,8 @@ function isvalid_strict(d)
     end
 end
 
-function count_valid(isvalid, passports)::Int
-    sum(p -> isvalid(p) ? 1 : 0, passports)
+function count_valid(isvalid, passports)
+    @_ sum(isvalid(_) ? 1 : 0, passports)
 end
 
 passports = load()
@@ -139,7 +139,7 @@ using Test
             iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719
             """))
 
-        @test all(p -> isvalid_strict(p), passports)
+        @test (@_ all(isvalid_strict(_), passports))
     end
 
     @testset "example 2 invalid" begin
@@ -159,7 +159,7 @@ using Test
             pid:3556412378 byr:2007
             """))
 
-        @test !any(p -> isvalid_strict(p), passports)
+        @test !(@_ any(isvalid_strict(_), passports))
     end
 
     @testset "TDD" begin
