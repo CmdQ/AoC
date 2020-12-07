@@ -128,6 +128,7 @@ version = "2.0.0"
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
 [[Utils]]
+deps = ["Underscores"]
 path = "Utils"
 uuid = "c4255648-aa77-49a3-8633-17feb5ee199d"
 version = "0.1.0"
