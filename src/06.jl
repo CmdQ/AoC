@@ -13,7 +13,7 @@ end
 
 function load(combiner)
     open("$(@__DIR__)/../inputs/customs-declarations.txt", "r") do f
-        parse(f, combiner)
+        parse_file(f, combiner)
     end
 end
 
@@ -53,7 +53,7 @@ using Test
 
 
     @testset "example 1" begin
-        example = parse(IOBuffer(input), union)
+        example = parse_file(IOBuffer(input), union)
 
         @test length(example) == 5
         @test example[1] == example[2] == example[3]
@@ -61,7 +61,7 @@ using Test
     end
 
     @testset "example 2" begin
-        example = parse(IOBuffer(input), intersect)
+        example = parse_file(IOBuffer(input), intersect)
 
         @test length(example) == 5
         @test sumcount(example) == 6
