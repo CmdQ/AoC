@@ -7,6 +7,7 @@ This repo is to keep track of my [AoC 2020][aoc] [progress] while learning [Juli
 ## Thoughts
 
 - Don't be [overzealous with types][overzealous].
+- Julia lacks real discriminated unions. You can you `Union` types, but the compiler doesn't prevent you from adding more.
 
 [overzealous]: https://stackoverflow.com/a/56430371/581002
 
@@ -66,6 +67,8 @@ end
 - Damn, in every new try I end up much too complicated!
 - [LightGraphs.jl][lightgraphs_jl] seems popular, but how do I now if a node is already there?!?
 - [Graphs.jl][graphs_jl] is modeled after Boost. Couldn't get it right either. Documentation needs more real examples.
+- **If you don't make it complicated, it's easy.**
+- Julia really is quite short, like it.
 
 ### 08
 
@@ -84,7 +87,3 @@ end
 [reduce]: https://docs.julialang.org/en/v1/base/collections/#Base.reduce-Tuple{Any,Any}
 [foldl]: https://docs.julialang.org/en/v1/base/collections/#Base.foldl-Tuple{Any,Any}
 [ImmutableDict]: https://docs.julialang.org/en/v1/base/collections/#Base.ImmutableDict
-[underscores]: https://c42f.github.io/Underscores.jl/stable/
-[lightgraphs_jl]: https://github.com/JuliaGraphs/LightGraphs.jl
-[graphs_jl]: https://graphsjl-docs.readthedocs.io/en/latest/
-[chain_jl]: https://github.com/jkrumbiegel/Chain.jl
