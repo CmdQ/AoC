@@ -2,14 +2,14 @@ using Utils
 
 const Mappings = Dict{String,String}
 
-function parse(f)
+function parse_file(f)
     blocks = split(f)
     map(block -> Dict(split(item, ':') for item=split(block)), blocks)
 end
 
 function load()
     open("$(@__DIR__)/../inputs/passports.txt", "r") do f
-        parse(f)
+        parse_file(f)
     end
 end
 
@@ -113,7 +113,7 @@ using Test
             ),
         ]
 
-        example = parse(IOBuffer(example_input))
+        example = parse_file(IOBuffer(example_input))
 
         @test example == expected
 
@@ -124,7 +124,7 @@ using Test
     end
 
     @testset "example 2 valid" begin
-        passports = parse(IOBuffer("""
+        passports = parse_file(IOBuffer("""
             pid:087499704 hgt:74in ecl:grn iyr:2012 eyr:2030 byr:1980
             hcl:#623a2f
 
@@ -143,7 +143,7 @@ using Test
     end
 
     @testset "example 2 invalid" begin
-        passports = parse(IOBuffer("""
+        passports = parse_file(IOBuffer("""
             eyr:1972 cid:100
             hcl:#18171d ecl:amb hgt:170 pid:186cm iyr:2018 byr:1926
 
