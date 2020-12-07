@@ -1,7 +1,14 @@
 using Utils
+using Chain
 
-function parse(f, combiner)
-    map(block -> reduce(combiner, map(Set, split(block))), split(f))
+function parse_file(f, combiner)
+    map(split(f)) do block
+        @chain block begin
+            split
+            map(Set, _)
+            reduce(combiner, _)
+        end
+    end
 end
 
 function load(combiner)

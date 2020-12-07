@@ -9,6 +9,11 @@ version = "2.3.0"
 [[Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 
+[[Chain]]
+git-tree-sha1 = "109b2f37e2837502374fb36a37e33c5a7cf01840"
+uuid = "8be319e6-bccf-4806-a6f7-6fae938471bc"
+version = "0.4.0"
+
 [[Compat]]
 deps = ["Base64", "Dates", "DelimitedFiles", "Distributed", "InteractiveUtils", "LibGit2", "Libdl", "LinearAlgebra", "Markdown", "Mmap", "Pkg", "Printf", "REPL", "Random", "SHA", "Serialization", "SharedArrays", "Sockets", "SparseArrays", "Statistics", "Test", "UUIDs", "Unicode"]
 git-tree-sha1 = "a706ff10f1cd8dab94f59fd09c0e657db8e77ff0"
