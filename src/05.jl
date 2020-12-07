@@ -3,7 +3,7 @@ function convert_seat(s)
         ('F', 'L'),
         ('B', 'R'),
     ]
-    replaced = foldl((acc, (i, r)) -> replace(acc, r => i - 1), enumerate(replacements); init=s)
+    replaced = foldl((acc, (i, r)) -> replace(acc, r => i - 1), enumerate(replacements), init=s)
     parse(Int, replaced, base=2)
 end
 

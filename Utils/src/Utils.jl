@@ -1,7 +1,10 @@
 module Utils
+
 import Base
 export @something
 export @something_nothing
+
+using Underscores
 
 function _something_impl(thing)
     :(something($(esc(thing))))
@@ -64,7 +67,7 @@ function Base.split(f, buffer::Base.IO)
 end
 
 function Base.split(str::Base.String, buffer::Base.IO)
-    split(s -> s == str, buffer)
+    @_ split(_ == str, buffer)
 end
 
 function Base.split(buffer::Base.IO)

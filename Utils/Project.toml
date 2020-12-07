@@ -2,3 +2,6 @@ name = "Utils"
 uuid = "c4255648-aa77-49a3-8633-17feb5ee199d"
 authors = ["Tobias Becker <tobias.becker@methodpark.de>"]
 version = "0.1.0"
+
+[deps]
+Underscores = "d9a01c3f-67ce-4d8c-9b55-35f6e4050bb1"

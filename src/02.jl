@@ -1,3 +1,5 @@
+using Underscores
+
 struct Password
     counts::UnitRange{UInt8}
     character::Char
@@ -17,7 +19,7 @@ function load()
 end
 
 function isvalid(pw::Password)
-    count(c -> c == pw.character, pw.password) in pw.counts
+    (@_ count(_ == pw.character, pw.password)) in pw.counts
 end
 
 function isvalid_positions(pw::Password)
@@ -26,7 +28,7 @@ function isvalid_positions(pw::Password)
 end
 
 function count_valid(which)
-    count(pw -> which(pw), pws)
+    @_ count(which(_), pws)
 end
 
 const pws = load()
