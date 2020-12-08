@@ -92,3 +92,7 @@ The whole splitting into rows and seats is nonsense.
 [reduce]: https://docs.julialang.org/en/v1/base/collections/#Base.reduce-Tuple{Any,Any}
 [foldl]: https://docs.julialang.org/en/v1/base/collections/#Base.foldl-Tuple{Any,Any}
 [ImmutableDict]: https://docs.julialang.org/en/v1/base/collections/#Base.ImmutableDict
+[underscores]: https://c42f.github.io/Underscores.jl/stable/
+[lightgraphs_jl]: https://github.com/JuliaGraphs/LightGraphs.jl
+[graphs_jl]: https://graphsjl-docs.readthedocs.io/en/latest/
+[chain_jl]: https://github.com/jkrumbiegel/Chain.jl
