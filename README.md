@@ -58,11 +58,11 @@ end
 That was almost too easy. Julia's `parse` is capable of binary numbers, so after replacing letters you're done.
 The whole splitting into rows and seats is nonsense.
 
-### 06
+### 6
 
 - Used [Chain.jl][chain_jl] but appart from that it's really boring.
 
-### 07
+### 7
 
 - Damn, in every new try I end up much too complicated!
 - [LightGraphs.jl][lightgraphs_jl] seems popular, but how do I now if a node is already there?!?
@@ -70,10 +70,15 @@ The whole splitting into rows and seats is nonsense.
 - **If you don't make it complicated, it's easy.**
 - Julia really is quite short, like it.
 
-### 08
+### 8
 
 - File parsing is a nice example for using [Underscores.jl][underscores].
 - Otherwise boring backtracking.
+
+
+
+
+
 
 
 
