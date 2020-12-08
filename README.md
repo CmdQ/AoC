@@ -26,11 +26,6 @@ This repo is to keep track of my [AoC 2020][aoc] [progress] while learning [Juli
 - [ ] [Heisenbug?][heisenbug4]
 - [ ] Loading with [`reduce`][reduce]/[`foldl`][foldl] and [`ImmutableDict`][ImmutableDict]
 
-### 5
-
-That was almost too easy. Julia's `parse` is capable of binary numbers, so after replacing letters you're done.
-The whole splitting into rows and seats is nonsense.
-
 #### Heisenbug
 
 The working code uses this function:
@@ -57,6 +52,11 @@ function fd(s::String, fromto::UnitRange)::Bool
     end
 end
 ```
+
+### 5
+
+That was almost too easy. Julia's `parse` is capable of binary numbers, so after replacing letters you're done.
+The whole splitting into rows and seats is nonsense.
 
 ### 06
 
