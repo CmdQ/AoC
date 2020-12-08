@@ -57,6 +57,21 @@ function fd(s::String, fromto::UnitRange)::Bool
 end
 ```
 
+### 06
+
+- Used [Chain.jl][chain_jl] but appart from that it's really boring.
+
+### 07
+
+- Damn, in every new try I end up much too complicated!
+- [LightGraphs.jl][lightgraphs_jl] seems popular, but how do I now if a node is already there?!?
+- [Graphs.jl][graphs_jl] is modeled after Boost. Couldn't get it right either. Documentation needs more real examples.
+
+### 08
+
+- File parsing is a nice example for using [Underscores.jl][underscores].
+- Otherwise boring backtracking.
+
 
 
 [aoc]: https://adventofcode.com/
@@ -69,3 +84,7 @@ end
 [reduce]: https://docs.julialang.org/en/v1/base/collections/#Base.reduce-Tuple{Any,Any}
 [foldl]: https://docs.julialang.org/en/v1/base/collections/#Base.foldl-Tuple{Any,Any}
 [ImmutableDict]: https://docs.julialang.org/en/v1/base/collections/#Base.ImmutableDict
+[underscores]: https://c42f.github.io/Underscores.jl/stable/
+[lightgraphs_jl]: https://github.com/JuliaGraphs/LightGraphs.jl
+[graphs_jl]: https://graphsjl-docs.readthedocs.io/en/latest/
+[chain_jl]: https://github.com/jkrumbiegel/Chain.jl
