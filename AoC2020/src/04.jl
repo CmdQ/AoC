@@ -18,12 +18,6 @@ function parse(f)::Array{Dict{String,String}}
     re
 end
 
-function load()::Array{Dict{String,String}}
-    open("$(@__DIR__)/../inputs/passports.txt", "r") do f
-        parse(f)
-    end
-end
-
 function isvalid(d::Dict{String,String})
     isempty(setdiff(Set(["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]), keys(d)))
 end
@@ -35,8 +29,17 @@ function fd(s, fromto)
         parse(UInt, s) in fromto
     catch ArgumentError
         false
-    end    
-end    
+    end
+end
+
+function fdt(s, fromto)
+    parsed = tryparse(UInt, s)
+    if isnothing(parsed)
+        false
+    else
+        parsed in fromto
+    end
+end
 
 function isvalid_strict(d::Dict{String,String})
     try
@@ -49,18 +52,14 @@ function isvalid_strict(d::Dict{String,String})
             occursin(r"^\d{9}$", d["pid"]),
             occursin(r"^(1([5-8]\d|9[0-3])cm|(59|6\d|7[0-6])in)$", d["hgt"]),
         ]
-        println(bools)
+        println("DEBUG: ", bools)
         all(bools)
     catch KeyError
         false
     end
 end
 
-function count_valid(isvalid, passports)
-    sum(p -> isvalid(p) ? 1 : 0, passports)
-end
-
-println("Sample is ", isvalid_strict(Dict(
+sample = Dict(
     "hcl" => "#623a2f",
     "ecl" => "grn",
     "pid" => "087499704",
@@ -68,11 +67,15 @@ println("Sample is ", isvalid_strict(Dict(
     "iyr" => "2012",
     "eyr" => "2030",
     "byr" => "1980",
-)))
-passports = load()
+)
 
-#println("Number of          valid passports: ", count_valid(isvalid, passports))
-#println("Number of striclty valid passports: ", count_valid(isvalid_strict, passports))
+println("Sample is ", isvalid_strict(sample))
+@assert fd("2010", 2000:2020) == fdt("2010", 2000:2020)
+println("after assert")
+
+
+
+
 
 
 
@@ -187,14 +190,5 @@ using Test
             """))
 
         @test !any(p -> isvalid_strict(p), passports)
-    end
-
-    @testset "TDD" begin
-        first = passports[1]
-        @test length(first) == 6
-    end
-
-    @testset "results" begin
-        @test count_valid(isvalid, passports) == 222
     end
 end
