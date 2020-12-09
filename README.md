@@ -75,7 +75,9 @@ The whole splitting into rows and seats is nonsense.
 - File parsing is a nice example for using [Underscores.jl][underscores].
 - Otherwise boring backtracking.
 
+### 9
 
+- [SubArrays][] are helpful here.
 
 
 
@@ -96,3 +98,4 @@ The whole splitting into rows and seats is nonsense.
 [lightgraphs_jl]: https://github.com/JuliaGraphs/LightGraphs.jl
 [graphs_jl]: https://graphsjl-docs.readthedocs.io/en/latest/
 [chain_jl]: https://github.com/jkrumbiegel/Chain.jl
+[subarrays]: https://docs.julialang.org/en/v1/devdocs/subarrays/
