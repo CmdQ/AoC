@@ -79,7 +79,9 @@ The whole splitting into rows and seats is nonsense.
 
 - [SubArrays][] are helpful here.
 
+### 11
 
+- [`fill`][fill] with array assignment can be used nicely for boundary conditions.
 
 
 
@@ -99,3 +101,4 @@ The whole splitting into rows and seats is nonsense.
 [graphs_jl]: https://graphsjl-docs.readthedocs.io/en/latest/
 [chain_jl]: https://github.com/jkrumbiegel/Chain.jl
 [subarrays]: https://docs.julialang.org/en/v1/devdocs/subarrays/
+[fill]: https://docs.julialang.org/en/v1/base/arrays/#Base.fill
