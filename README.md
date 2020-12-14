@@ -79,6 +79,12 @@ The whole splitting into rows and seats is nonsense.
 
 - [SubArrays][] are helpful here.
 
+### 10
+
+- For a very long time, my problem was that I [forgot to include the source port][reddit10] (0).
+- Then with the help of a hash cache it gets super quick.
+- [ ] How do you write a general `memoize` function in Julia? How to annotate Functions?
+
 ### 11
 
 - [`fill`][fill] with array assignment can be used nicely for boundary conditions.
@@ -102,3 +108,4 @@ The whole splitting into rows and seats is nonsense.
 [chain_jl]: https://github.com/jkrumbiegel/Chain.jl
 [subarrays]: https://docs.julialang.org/en/v1/devdocs/subarrays/
 [fill]: https://docs.julialang.org/en/v1/base/arrays/#Base.fill
+[reddit10]: https://www.reddit.com/r/adventofcode/comments/kd0ksw/2020_day_10_part_2_always_the_same_wrong_example/
