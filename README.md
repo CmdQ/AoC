@@ -89,7 +89,9 @@ The whole splitting into rows and seats is nonsense.
 
 - [`fill`][fill] with array assignment can be used nicely for boundary conditions.
 
+### 15
 
+- Again, [dict][] is your friend.
 
 
 [aoc]: https://adventofcode.com/
@@ -109,3 +111,4 @@ The whole splitting into rows and seats is nonsense.
 [subarrays]: https://docs.julialang.org/en/v1/devdocs/subarrays/
 [fill]: https://docs.julialang.org/en/v1/base/arrays/#Base.fill
 [reddit10]: https://www.reddit.com/r/adventofcode/comments/kd0ksw/2020_day_10_part_2_always_the_same_wrong_example/
+[dict]: https://docs.julialang.org/en/v1/base/collections/#Base.Dict
