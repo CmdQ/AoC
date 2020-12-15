@@ -8,8 +8,7 @@ This repo is to keep track of my [AoC 2020][aoc] [progress] while learning [Juli
 
 - Don't be [overzealous with types][overzealous].
 - Julia lacks real discriminated unions. You can you `Union` types, but the compiler doesn't prevent you from adding more.
-
-[overzealous]: https://stackoverflow.com/a/56430371/581002
+- [Code optimisation in Julia][optimization]
 
 ### 1
 
@@ -112,3 +111,5 @@ The whole splitting into rows and seats is nonsense.
 [fill]: https://docs.julialang.org/en/v1/base/arrays/#Base.fill
 [reddit10]: https://www.reddit.com/r/adventofcode/comments/kd0ksw/2020_day_10_part_2_always_the_same_wrong_example/
 [dict]: https://docs.julialang.org/en/v1/base/collections/#Base.Dict
+[overzealous]: https://stackoverflow.com/a/56430371/581002
+[optimization]: https://techytok.com/code-optimisation-in-julia/
