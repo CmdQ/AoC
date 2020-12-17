@@ -27,74 +27,37 @@ function ex1(plan)
     minutes[perm[1]] * plan.choices[perm[1]]
 end
 
-function increase(busses, atleast=0)
-    greatest = atleast
-    for i in eachindex(busses)
-        state, num = busses[i]
-        difference = atleast - state
-        @assert difference >= 0
-        state += cld(difference, num) * num
-        busses[i] = state, num
-        greatest = max(greatest, state)
-    end
-    greatest
-end
-
-function ex2_brute_force(busses, status=0)
-    busses = @_ map(i -> (-(i[1] - 1), i[2]), enumerate(busses)) |> filter(!ismissing(_[2]), __)
-    re = length(busses) - 1
-    while !all(i -> i[1] == re, busses)
-        re = increase(busses, re)
-        if status != 0
-            println(re)
-        end
-    end
-    re
-end
-
 function combine_moduli((a1, n1), (a2, n2))
     d, m1, m2 = gcdx(n1, n2)
-    println("Bezout(n1=$n1, n2=$n2) -> m1=$m1 and m2=$m2")
     @assert d == 1
     x = a1 * n2 * m2 + a2 * n1 * m1
-    println("x is then $x")
     p = n1 * n2
-    println("p = n1 * n2 = $p")
     (p + x) % p, p
-    println("that gives \t $x ≡ (mod $(p))")
 end
 
 function ex2_crt(busses)
     only_nums = skipmissing(busses)
-    @assert all(((a,b),) -> a == b || gcd(a, b) == 1 , Iterators.product(only_nums, only_nums))
 
-    busses = @_ map((_[1] - 1, _[2]), enumerate(busses)) |> filter(!ismissing(_[2]), __)
+    @assert all(((a, b),) -> a == b || gcd(a, b) == 1, Iterators.product(only_nums, only_nums))
 
-    reduce(combine_moduli, busses)
+    busses = @_ only_nums |> eachindex |> map(let id = only_nums[_]; (convert(Int128, id - _ + 1), id) end, __)
+
+    a, n = reduce(combine_moduli, busses)
+    while a < 0
+        a += n
+    end
+    a % n
 end
-
-reduce(combine_moduli, [(0,3),(3,4),(4,5)]) |> println
-ex2_crt([67,7,59,61]) |> println
-#ex2_crt([67,7,missing,59,61]) |> println
-# [(0, 67), (1, 7), (3, 59), (4, 61)]    1261476
-
-function f(a,b)
-    println(a,"<->",b)
-    b
-end
-
-f2(a,b) = println(a,"<->",b)
-
-a = [(1,2),(3,4),(5,6)]
-reduce(f, a)
-reduce(f2, a)
-#reduce(i -> i, a)
-exit(0)
 
 plan = load()
 
-#println("First bus times wait time: ", ex1(plan))
-#println(ex2_brute_force(plan.choices, 1))
+println("First bus times wait time: ", ex1(plan))
+println("Perfect alignment: ", ex2_crt(plan.choices))
+
+
+
+
+
 
 
 using Test
@@ -114,15 +77,18 @@ using Test
     end
 
     @testset "example 2" begin
-        @test ex2_brute_force([67,7,59,61]) == 754018
-        @test ex2_brute_force([17,missing,13,19]) == 3417
-        @test ex2_brute_force([67,missing,7,59,61]) == 779210
-        @test ex2_brute_force([67,7,missing,59,61]) == 1261476
-        @test ex2_brute_force([1789,37,47,1889]) == 1202161486
-        @test ex2_brute_force(example.choices) == 1068781
+        for f in [ex2_crt]
+            @test f([67,7,59,61]) == 754018
+            @test f([17,missing,13,19]) == 3417
+            @test f([67,missing,7,59,61]) == 779210
+            @test f([67,7,missing,59,61]) == 1261476
+            @test f([1789,37,47,1889]) == 1202161486
+            @test f(example.choices) == 1068781
+        end
     end
 
     @testset "results" begin
         @test ex1(plan) == 8063
+        @test ex2_crt(plan.choices) == 775230782877242
     end
 end
