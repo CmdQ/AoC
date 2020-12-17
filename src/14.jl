@@ -1,21 +1,17 @@
 using Underscores
 
-const MASK_PREF = "mask = "
+const MASK_PREFIX = "mask = "
 
-function masked_writer(value, addr, mem, set_mask, unset_mask)
-    mem[addr] = (value & unset_mask) | set_mask
-end
-
-function run_decoder(f, writer)
+function run_decoder(f)
     mem::Dict{UInt16,UInt64} = Dict()
     set_mask::UInt64 = 0
     unset_mask = typemax(UInt64)
 
     for line in eachline(f)
-        if startswith(line, MASK_PREF)
+        if startswith(line, MASK_PREFIX)
             set_mask = 0
             unset_mask = typemax(typeof(unset_mask))
-            for bit in length(MASK_PREF)+1:length(line)
+            for bit in length(MASK_PREFIX)+1:length(line)
                 set_mask <<= 1
                 unset_mask <<= 1
                 if line[bit] != '0'
@@ -29,7 +25,7 @@ function run_decoder(f, writer)
             m = match(r"^mem\[(\d+)\] = (\d+)$", line)
             addr = parse(keytype(mem), m[1])
             value = parse(valtype(mem), m[2])
-            writer(value, addr, mem, set_mask, unset_mask)
+            mem[addr] = (value & unset_mask) | set_mask
         end
     end
 
@@ -40,7 +36,7 @@ function set_all(mem, addr, mask, value, lookat)
     if lookat == 0
         mem[addr] = value
     else
-        while (mask & lookat) == 0
+        while lookat != 0 && (mask & lookat) == 0
             lookat >>= 1
         end
 
@@ -54,11 +50,11 @@ function run_decoder2(f)
     set_mask::UInt64 = 0
     floating_mask::UInt64 = 0
 
-    for line in eachline(f)
-        if startswith(line, MASK_PREF)
+    for (i, line) in enumerate(eachline(f))
+        if startswith(line, MASK_PREFIX)
             set_mask = 0
             floating_mask = 0
-            for bit in length(MASK_PREF)+1:length(line)
+            for bit in length(MASK_PREFIX)+1:length(line)
                 set_mask <<= 1
                 floating_mask <<= 1
                 if line[bit] == '1'
@@ -78,9 +74,9 @@ function run_decoder2(f)
     sum(values(mem))
 end
 
-function run_decoder(writer)
+function run_decoder()
     open("$(@__DIR__)/../inputs/docking-data.txt", "r") do f
-        run_decoder(f, writer)
+        run_decoder(f)
     end
 end
 
@@ -90,10 +86,10 @@ function run_decoder2()
     end
 end
 
-ex1() = run_decoder(masked_writer)
+ex1() = run_decoder()
 ex2() = run_decoder2()
 
-#println("Final memory sum: ", ex1())
+println("Final memory sum: ", ex1())
 println("Final floating memory sum: ", ex2())
 
 
@@ -114,7 +110,7 @@ using Test
         mem[8] = 0
         """
 
-        example = run_decoder(IOBuffer(input), masked_writer)
+        example = run_decoder(IOBuffer(input))
 
         @test example == 165
     end
@@ -134,5 +130,6 @@ using Test
 
     @testset "results" begin
         @test ex1() == 18630548206046
+        @test ex2() == 4254673508445
     end
 end
