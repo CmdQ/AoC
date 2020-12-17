@@ -90,6 +90,13 @@ The whole splitting into rows and seats is nonsense.
 
 - [`fill`][fill] with array assignment can be used nicely for boundary conditions.
 
+### 13
+
+- All the time the wrong answer because `[17,missing,13,19]` needs to be `[(17, 17), (13, 11), (19, 16)]` and not `[(17, 0), (13, 2), (19, 3)]`.
+- [Chinese Remainder Theorem][crt] put to good use.
+- Intermediate steps were too big for `Int64`, nice that `Int128` is readily available. Pairwise parallel application with sorted moduli instead of `reduce` might have stayed within `Int64`.
+- [SaferIntegers][saferintegers_jl] would have helped catching that earlier. Julia [wraps around][overflows] silently, but at least it is defined behaviour.
+
 ### 15
 
 - Again, [dict][] is your friend.
@@ -120,3 +127,6 @@ The whole splitting into rows and seats is nonsense.
 [optimization]: https://techytok.com/code-optimisation-in-julia/
 [strange]: https://github.com/JuliaLang/julia/pull/23337]
 [iterators]: https://julialang.org/blog/2018/07/iterators-in-julia-0.7/
+[saferintegers_jl]: https://github.com/JeffreySarnoff/SaferIntegers.jl
+[overflows]: https://docs.julialang.org/en/v1/manual/integers-and-floating-point-numbers/#Overflow-behavior
+[crt]: https://en.wikipedia.org/wiki/Chinese_remainder_theorem
