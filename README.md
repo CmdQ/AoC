@@ -90,6 +90,10 @@ The whole splitting into rows and seats is nonsense.
 
 - [`fill`][fill] with array assignment can be used nicely for boundary conditions.
 
+### 12
+
+- The computation is a simple summation via `foldl`. All the rest of the logic is in [operator][] [overloading][].
+
 ### 13
 
 - All the time the wrong answer because `[17,missing,13,19]` needs to be `[(17, 17), (13, 11), (19, 16)]` and not `[(17, 0), (13, 2), (19, 3)]`.
@@ -106,27 +110,29 @@ The whole splitting into rows and seats is nonsense.
 - [ ] Variable number of dimensions/loops could again be done with a macro.
 
 [aoc]: https://adventofcode.com/
-[progress]: https://adventofcode.com/2020
-[julia]: https://julialang.org/
-[docs]: https://docs.julialang.org/en/v1/
-[tco]: https://en.wikipedia.org/wiki/Tail_call
-[heisenbug4]: https://stackoverflow.com/questions/65140849/
-[notco]: https://groups.google.com/g/julia-dev/c/POP6YXCnP-k/m/vTxLngw_jSIJ
-[reduce]: https://docs.julialang.org/en/v1/base/collections/#Base.reduce-Tuple{Any,Any}
-[foldl]: https://docs.julialang.org/en/v1/base/collections/#Base.foldl-Tuple{Any,Any}
-[ImmutableDict]: https://docs.julialang.org/en/v1/base/collections/#Base.ImmutableDict
-[underscores]: https://c42f.github.io/Underscores.jl/stable/
-[lightgraphs_jl]: https://github.com/JuliaGraphs/LightGraphs.jl
-[graphs_jl]: https://graphsjl-docs.readthedocs.io/en/latest/
 [chain_jl]: https://github.com/jkrumbiegel/Chain.jl
-[subarrays]: https://docs.julialang.org/en/v1/devdocs/subarrays/
-[fill]: https://docs.julialang.org/en/v1/base/arrays/#Base.fill
-[reddit10]: https://www.reddit.com/r/adventofcode/comments/kd0ksw/2020_day_10_part_2_always_the_same_wrong_example/
-[dict]: https://docs.julialang.org/en/v1/base/collections/#Base.Dict
-[overzealous]: https://stackoverflow.com/a/56430371/581002
-[optimization]: https://techytok.com/code-optimisation-in-julia/
-[strange]: https://github.com/JuliaLang/julia/pull/23337]
-[iterators]: https://julialang.org/blog/2018/07/iterators-in-julia-0.7/
-[saferintegers_jl]: https://github.com/JeffreySarnoff/SaferIntegers.jl
-[overflows]: https://docs.julialang.org/en/v1/manual/integers-and-floating-point-numbers/#Overflow-behavior
 [crt]: https://en.wikipedia.org/wiki/Chinese_remainder_theorem
+[dict]: https://docs.julialang.org/en/v1/base/collections/#Base.Dict
+[docs]: https://docs.julialang.org/en/v1/
+[fill]: https://docs.julialang.org/en/v1/base/arrays/#Base.fill
+[foldl]: https://docs.julialang.org/en/v1/base/collections/#Base.foldl-Tuple{Any,Any}
+[graphs_jl]: https://graphsjl-docs.readthedocs.io/en/latest/
+[heisenbug4]: https://stackoverflow.com/questions/65140849/
+[ImmutableDict]: https://docs.julialang.org/en/v1/base/collections/#Base.ImmutableDict
+[iterators]: https://julialang.org/blog/2018/07/iterators-in-julia-0.7/
+[julia]: https://julialang.org/
+[lightgraphs_jl]: https://github.com/JuliaGraphs/LightGraphs.jl
+[notco]: https://groups.google.com/g/julia-dev/c/POP6YXCnP-k/m/vTxLngw_jSIJ
+[operator]: https://docs.julialang.org/en/v1/devdocs/ast/#Operators
+[optimization]: https://techytok.com/code-optimisation-in-julia/
+[overflows]: https://docs.julialang.org/en/v1/manual/integers-and-floating-point-numbers/#Overflow-behavior
+[overloading]: https://docs.julialang.org/en/v1/manual/methods/
+[overzealous]: https://stackoverflow.com/a/56430371/581002
+[progress]: https://adventofcode.com/2020
+[reddit10]: https://www.reddit.com/r/adventofcode/comments/kd0ksw/2020_day_10_part_2_always_the_same_wrong_example/
+[reduce]: https://docs.julialang.org/en/v1/base/collections/#Base.reduce-Tuple{Any,Any}
+[saferintegers_jl]: https://github.com/JeffreySarnoff/SaferIntegers.jl
+[strange]: https://github.com/JuliaLang/julia/pull/23337]
+[subarrays]: https://docs.julialang.org/en/v1/devdocs/subarrays/
+[tco]: https://en.wikipedia.org/wiki/Tail_call
+[underscores]: https://c42f.github.io/Underscores.jl/stable/
