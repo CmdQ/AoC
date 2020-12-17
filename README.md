@@ -9,6 +9,8 @@ This repo is to keep track of my [AoC 2020][aoc] [progress] while learning [Juli
 - Don't be [overzealous with types][overzealous].
 - Julia lacks real discriminated unions. You can you `Union` types, but the compiler doesn't prevent you from adding more.
 - [Code optimisation in Julia][optimization]
+- Tuple destructuring is kind of [strange][].
+- How to write [iterators][].
 
 ### 1
 
@@ -92,6 +94,9 @@ The whole splitting into rows and seats is nonsense.
 
 - Again, [dict][] is your friend.
 
+### 17
+
+- [ ] Variable number of dimensions/loops could again be done with a macro.
 
 [aoc]: https://adventofcode.com/
 [progress]: https://adventofcode.com/2020
@@ -113,3 +118,5 @@ The whole splitting into rows and seats is nonsense.
 [dict]: https://docs.julialang.org/en/v1/base/collections/#Base.Dict
 [overzealous]: https://stackoverflow.com/a/56430371/581002
 [optimization]: https://techytok.com/code-optimisation-in-julia/
+[strange]: https://github.com/JuliaLang/julia/pull/23337]
+[iterators]: https://julialang.org/blog/2018/07/iterators-in-julia-0.7/
