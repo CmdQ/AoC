@@ -109,6 +109,12 @@ The whole splitting into rows and seats is nonsense.
 
 - [ ] Variable number of dimensions/loops could again be done with a macro.
 
+### 20
+
+- This takes the longest so far because of missing types/type instability—Julia can't perform then.
+- [ ] Could not figure out how to satisfy [`@code_warntype`][warntype].
+- [ ] As a way out: candidate for [threading][]?
+
 [aoc]: https://adventofcode.com/
 [chain_jl]: https://github.com/jkrumbiegel/Chain.jl
 [crt]: https://en.wikipedia.org/wiki/Chinese_remainder_theorem
@@ -136,3 +142,5 @@ The whole splitting into rows and seats is nonsense.
 [subarrays]: https://docs.julialang.org/en/v1/devdocs/subarrays/
 [tco]: https://en.wikipedia.org/wiki/Tail_call
 [underscores]: https://c42f.github.io/Underscores.jl/stable/
+[warntype]: https://docs.julialang.org/en/v1/manual/performance-tips/#man-code-warntype
+[threading]: https://docs.julialang.org/en/v1/manual/parallel-computing/
