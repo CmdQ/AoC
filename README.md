@@ -109,6 +109,11 @@ The whole splitting into rows and seats is nonsense.
 
 - [ ] Variable number of dimensions/loops could again be done with a macro.
 
+### 18
+
+- I knew you needed two Stacks. That one of them is reversed took a long time.
+- Also making subexpressions while tokenizing spoils the [shunting yard][shunting] fun.
+
 ### 20
 
 - This takes the longest so far because of missing types/type instability—Julia can't perform then.
@@ -144,3 +149,4 @@ The whole splitting into rows and seats is nonsense.
 [underscores]: https://c42f.github.io/Underscores.jl/stable/
 [warntype]: https://docs.julialang.org/en/v1/manual/performance-tips/#man-code-warntype
 [threading]: https://docs.julialang.org/en/v1/manual/parallel-computing/
+[shunting]: https://en.wikipedia.org/wiki/Shunting-yard_algorithm
