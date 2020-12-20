@@ -122,7 +122,7 @@ The whole splitting into rows and seats is nonsense.
 
 - This takes the longest so far because of missing types/type instability—Julia can't perform then.
 - [ ] Could not figure out how to satisfy [`@code_warntype`][warntype].
-- [ ] As a way out: candidate for [threading][]?
+- [ ] As a way out: candidate for [threading][]?
 
 [aoc]: https://adventofcode.com/
 [chain_jl]: https://github.com/jkrumbiegel/Chain.jl
