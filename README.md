@@ -105,6 +105,10 @@ The whole splitting into rows and seats is nonsense.
 
 - Again, [dict][] is your friend.
 
+### 16
+
+- That was *not* fun and definitely had the most rewrites.
+
 ### 17
 
 - [ ] Variable number of dimensions/loops could again be done with a macro.
