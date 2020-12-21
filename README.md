@@ -124,6 +124,11 @@ The whole splitting into rows and seats is nonsense.
 - [ ] Could not figure out how to satisfy [`@code_warntype`][warntype].
 - [ ] As a way out: candidate for [threading][]?
 
+### 21
+
+- Loops made me go crazy again. Finally decided to get a [persistent data structure library][functional_ds] which makes thinking recursively a lot easier.
+- [ ] Another possibility for parallel code?
+
 [aoc]: https://adventofcode.com/
 [chain_jl]: https://github.com/jkrumbiegel/Chain.jl
 [crt]: https://en.wikipedia.org/wiki/Chinese_remainder_theorem
@@ -154,3 +159,4 @@ The whole splitting into rows and seats is nonsense.
 [warntype]: https://docs.julialang.org/en/v1/manual/performance-tips/#man-code-warntype
 [threading]: https://docs.julialang.org/en/v1/manual/parallel-computing/
 [shunting]: https://en.wikipedia.org/wiki/Shunting-yard_algorithm
+[functional_ds]: https://github.com/JuliaCollections/FunctionalCollections.jl
