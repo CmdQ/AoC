@@ -11,6 +11,8 @@ This repo is to keep track of my [AoC 2020][aoc] [progress] while learning [Juli
 - [Code optimisation in Julia][optimization]
 - Tuple destructuring is kind of [strange][].
 - How to write [iterators][].
+- An article about different [debuggers][].
+- I need to try [Revise][revise_jl].
 
 ### 1
 
@@ -84,7 +86,7 @@ The whole splitting into rows and seats is nonsense.
 
 - For a very long time, my problem was that I [forgot to include the source port][reddit10] (0).
 - Then with the help of a hash cache it gets super quick.
-- [ ] How do you write a general `memoize` function in Julia? How to annotate Functions?
+- [x] How do you write a [general `memoize` function in Julia? How to annotate Functions? Just with `::Function`.
 
 ### 11
 
@@ -170,3 +172,5 @@ The whole splitting into rows and seats is nonsense.
 [functional_ds]: https://github.com/JuliaCollections/FunctionalCollections.jl
 [dispatch]: https://docs.julialang.org/en/v1/manual/methods/
 [strings]: https://docs.julialang.org/en/v1/manual/metaprogramming/#Non-Standard-String-Literals
+[debuggers]: https://julialang.org/blog/2019/03/debuggers/
+[revise_jl]: https://github.com/timholy/Revise.jl

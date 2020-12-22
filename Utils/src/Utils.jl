@@ -3,6 +3,7 @@ module Utils
 export @something
 export @something_nothing
 export @aoc_str
+export memoize
 
 using Underscores
 
@@ -76,6 +77,19 @@ end
 
 function Base.split(buffer::Base.IO)
     split(isempty, buffer)
+end
+
+function memoize(f::Function)::Function
+    cache = Dict()
+    function(args...)
+        if haskey(cache, args)
+            cache[args]
+        else
+            re = f(args...)
+            cache[args] = re
+            re
+        end
+    end
 end
 
 end
