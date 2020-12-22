@@ -118,6 +118,10 @@ The whole splitting into rows and seats is nonsense.
 - I knew you needed two Stacks. That one of them is reversed took a long time.
 - Also making subexpressions while tokenizing spoils the [shunting yard][shunting] fun.
 
+### 19
+
+- [Multiple dispatch][dispatch] is awesome.
+
 ### 20
 
 - This takes the longest so far because of missing types/type instability—Julia can't perform then.
@@ -160,3 +164,4 @@ The whole splitting into rows and seats is nonsense.
 [threading]: https://docs.julialang.org/en/v1/manual/parallel-computing/
 [shunting]: https://en.wikipedia.org/wiki/Shunting-yard_algorithm
 [functional_ds]: https://github.com/JuliaCollections/FunctionalCollections.jl
+[dispatch]: https://docs.julialang.org/en/v1/manual/methods/
