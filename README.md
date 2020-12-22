@@ -133,6 +133,10 @@ The whole splitting into rows and seats is nonsense.
 - Loops made me go crazy again. Finally decided to get a [persistent data structure library][functional_ds] which makes thinking recursively a lot easier.
 - [ ] Another possibility for parallel code?
 
+### 23
+
+- Finally came around to implementing [non-standard string literals][strings]—nice.
+
 [aoc]: https://adventofcode.com/
 [chain_jl]: https://github.com/jkrumbiegel/Chain.jl
 [crt]: https://en.wikipedia.org/wiki/Chinese_remainder_theorem
@@ -165,3 +169,4 @@ The whole splitting into rows and seats is nonsense.
 [shunting]: https://en.wikipedia.org/wiki/Shunting-yard_algorithm
 [functional_ds]: https://github.com/JuliaCollections/FunctionalCollections.jl
 [dispatch]: https://docs.julialang.org/en/v1/manual/methods/
+[strings]: https://docs.julialang.org/en/v1/manual/metaprogramming/#Non-Standard-String-Literals

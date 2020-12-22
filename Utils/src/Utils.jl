@@ -1,10 +1,14 @@
 module Utils
 
-import Base
 export @something
 export @something_nothing
+export @aoc_str
 
 using Underscores
+
+macro aoc_str(s)
+    "$(@__DIR__)/../../inputs/" * s * (endswith(s, ".txt") ? "" : ".txt")
+end
 
 function _something_impl(thing)
     :(something($(esc(thing))))
