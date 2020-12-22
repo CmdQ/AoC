@@ -3,7 +3,7 @@ using Utils
 
 function load()
     re = Int[]
-    open("$(@__DIR__)/../inputs/expense-report.txt", "r") do f
+    open(aoc"01_expense-report", "r") do f
         for i in eachline(f)
             push!(re, parse(Int, i))
         end

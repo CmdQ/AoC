@@ -1,6 +1,6 @@
 function load()
     re = []
-    open("$(@__DIR__)/../inputs/.txt", "r") do f
+    open(aoc"", "r") do f
         for line in eachline(f)
         end
     end

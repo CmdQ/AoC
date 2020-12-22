@@ -31,7 +31,7 @@ function parse_file(f)
 end
 
 function load()
-    open("$(@__DIR__)/../inputs/20.txt", "r") do f
+    open(aoc"20", "r") do f
         parse_file(f)
     end
 end

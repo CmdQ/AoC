@@ -1,3 +1,5 @@
+using Utils
+
 function convert_seat(s)
     replacements = [
         ('F', 'L'),
@@ -9,7 +11,7 @@ end
 
 function load()
     re = []
-    open("$(@__DIR__)/../inputs/plane-seats.txt", "r") do f
+    open(aoc"05_plane-seats", "r") do f
         for line in eachline(f)
             push!(re, convert_seat(line))
         end

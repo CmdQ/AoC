@@ -1,4 +1,5 @@
 using Underscores
+using Utils
 
 const MASK_PREFIX = "mask = "
 
@@ -75,13 +76,13 @@ function run_decoder2(f)
 end
 
 function run_decoder()
-    open("$(@__DIR__)/../inputs/docking-data.txt", "r") do f
+    open(aoc"14_docking-data", "r") do f
         run_decoder(f)
     end
 end
 
 function run_decoder2()
-    open("$(@__DIR__)/../inputs/docking-data.txt", "r") do f
+    open(aoc"14_docking-data", "r") do f
         run_decoder2(f)
     end
 end

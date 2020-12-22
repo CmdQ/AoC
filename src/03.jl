@@ -1,7 +1,8 @@
 using Underscores
+using Utils
 
 function load()
-    open("$(@__DIR__)/../inputs/tree-map.txt", "r") do f
+    open(aoc"03_tree-map", "r") do f
         permutedims(reduce(hcat, collect.(eachline(f))))
     end
 end

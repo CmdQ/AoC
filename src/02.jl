@@ -1,4 +1,5 @@
 using Underscores
+using Utils
 
 struct Password
     counts::UnitRange{UInt8}
@@ -9,7 +10,7 @@ end
 function load()
     reg = r"(\d+)-(\d+) (\w): (\w+)"
     re = Password[]
-    open("$(@__DIR__)/../inputs/passwords.txt", "r") do f
+    open(aoc"02_passwords", "r") do f
         for line in eachline(f)
             f, t, c, p = match(reg, line).captures
             push!(re, Password(parse(UInt8, f):parse(UInt8, t), c[1], p))

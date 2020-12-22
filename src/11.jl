@@ -1,5 +1,6 @@
 using Chain
 using Underscores
+using  Utils
 
 @enum Seat::Int8 floor=Int('.') empty=Int('L') occupied=Int('#') void=Int('?')
 
@@ -28,7 +29,7 @@ function parse_file(f)
 end
 
 function load()
-    open("$(@__DIR__)/../inputs/seats.txt", "r") do f
+    open(aoc"11_seats", "r") do f
         parse_file(f)
     end
 end

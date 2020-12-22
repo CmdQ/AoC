@@ -1,4 +1,5 @@
 using Underscores
+using Utils
 
 struct BusChoice
     arrival::Int
@@ -15,7 +16,7 @@ function parse_file(f)
 end
 
 function load()
-    open("$(@__DIR__)/../inputs/bus-ids.txt", "r") do f
+    open(aoc"13_bus-ids", "r") do f
         parse_file(f)
     end
 end

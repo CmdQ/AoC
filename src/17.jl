@@ -14,7 +14,7 @@ end
 
 
 function load()
-    open("$(@__DIR__)/../inputs/17.txt", "r") do f
+    open(aoc"17", "r") do f
         parse_file(f)
     end
 end
