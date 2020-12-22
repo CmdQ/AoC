@@ -54,37 +54,6 @@ function ex1(problem::Problem)
     score(pone, ptwo)
 end
 
-input1 = """
-Player 1:
-9
-2
-6
-3
-1
-
-Player 2:
-5
-8
-4
-7
-10
-"""
-
-example1 = parse_file(IOBuffer(input1))
-
-input2 = """
-Player 1:
-43
-19
-
-Player 2:
-2
-29
-14
-"""
-
-example2 = parse_file(IOBuffer(input2))
-
 const Cache = Set
 
 combine(pone::Deck, ptwo::Deck) = hash((pone, ptwo))
@@ -95,7 +64,7 @@ function ex2(cache::Cache, pone::Deck, ptwo::Deck, game=1, round=1)
     while !isempty(pone) && !isempty(ptwo)
         marker = combine(pone, ptwo)
         if marker in cache
-            error("player 1 wins immediately")
+            throw(:one)
         else
             push!(cache, marker)
         end
@@ -154,8 +123,43 @@ using Test
 
 @testset "Crab Combat" begin
     @testset "example 1" begin
+        input1 = """
+        Player 1:
+        9
+        2
+        6
+        3
+        1
+        
+        Player 2:
+        5
+        8
+        4
+        7
+        10
+        """
+        
+        example1 = parse_file(IOBuffer(input1))
+    
         @test ex1(example1) == 306
         @test ex2(example1) == 291
+    end
+
+    @testset "example 2" begin
+        input2 = """
+        Player 1:
+        43
+        19
+        
+        Player 2:
+        2
+        29
+        14
+        """
+        
+        example2 = parse_file(IOBuffer(input2))
+
+        @test_throws :one ex2(example2)
     end
 
     @testset "results" begin
