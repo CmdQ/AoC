@@ -1,11 +1,12 @@
 using Underscores
+using Utils
 
 function parse_file(f)
     @_ eachline(f) |> map(let t = split(_); t[1], parse(Int, t[2]) end, __)
 end
 
 function load()
-    open("$(@__DIR__)/../inputs/bootcode.txt", "r") do f
+    open(aoc"08_bootcode", "r") do f
         parse_file(f)
     end
 end

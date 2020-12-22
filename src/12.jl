@@ -1,4 +1,5 @@
 using Underscores
+using Utils
 
 function parse_file(f)
     re::Array{Union{Rotate,Move}} = []
@@ -26,7 +27,7 @@ function parse_file(f)
 end
 
 function load()
-    open("$(@__DIR__)/../inputs/ship-movement.txt", "r") do f
+    open(aoc"12_ship-movement", "r") do f
         parse_file(f)
     end
 end

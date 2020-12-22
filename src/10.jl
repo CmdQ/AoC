@@ -1,11 +1,12 @@
 using Underscores
+using  Utils
 
 function parse_file(f)
     @_ map(parse(Int16, _), eachline(f))
 end
 
 function load()
-    open("$(@__DIR__)/../inputs/jolt.txt", "r") do f
+    open(aoc"10_jolt", "r") do f
         parse_file(f)
     end
 end

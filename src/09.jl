@@ -1,11 +1,12 @@
 using Underscores
+using Utils
 
 function parse_file(f)
     @_ map(parse(Int64, _), eachline(f))
 end
 
 function load()
-    open("$(@__DIR__)/../inputs/encrypted.txt", "r") do f
+    open(aoc"09_encrypted", "r") do f
         parse_file(f)
     end
 end

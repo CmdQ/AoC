@@ -128,12 +128,12 @@ The whole splitting into rows and seats is nonsense.
 
 - This takes the longest so far because of missing types/type instability—Julia can't perform then.
 - [ ] Could not figure out how to satisfy [`@code_warntype`][warntype].
-- [ ] As a way out: candidate for [threading][]?
+- [x] As a way out: candidate for [threading][]? Didn't get faster.
 
 ### 21
 
 - Loops made me go crazy again. Finally decided to get a [persistent data structure library][functional_ds] which makes thinking recursively a lot easier.
-- [ ] Another possibility for parallel code?
+- [x] Another possibility for parallel code? Nope, `@threads` doesn't like something.
 
 ### 23
 

@@ -12,7 +12,7 @@ function parse_file(f, combiner)
 end
 
 function load(combiner)
-    open("$(@__DIR__)/../inputs/customs-declarations.txt", "r") do f
+    open(aoc"06_customs-declarations", "r") do f
         parse_file(f, combiner)
     end
 end

@@ -42,7 +42,7 @@ function parse_file(f::IO)
 end
 
 function load()
-    open("$(@__DIR__)/../inputs/16.txt", "r") do f
+    open(aoc"16", "r") do f
         parse_file(f)
     end
 end

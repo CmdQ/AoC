@@ -22,7 +22,7 @@ function parse_file(f)
 end
 
 function load()
-    open("$(@__DIR__)/../inputs/color-bags.txt", "r") do f
+    open(aoc"07_color-bags", "r") do f
         parse_file(f)
     end
 end
