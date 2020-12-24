@@ -68,7 +68,7 @@ The whole splitting into rows and seats is nonsense.
 ### 7
 
 - Damn, in every new try I end up much too complicated!
-- [LightGraphs.jl][lightgraphs_jl] seems popular, but how do I now if a node is already there?!?
+- [LightGraphs.jl][lightgraphs_jl] seems popular, but how do I know if a node is already there?!?
 - [Graphs.jl][graphs_jl] is modeled after Boost. Couldn't get it right either. Documentation needs more real examples.
 - **If you don't make it complicated, it's easy.**
 - Julia really is quite short, like it.
@@ -138,6 +138,10 @@ The whole splitting into rows and seats is nonsense.
 ### 23
 
 - Finally came around to implementing [non-standard string literals][strings]—nice.
+
+### 24
+
+- Nothing interesting except how to get hexagonal indexing right.
 
 [aoc]: https://adventofcode.com/
 [chain_jl]: https://github.com/jkrumbiegel/Chain.jl
