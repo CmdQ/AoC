@@ -6,13 +6,14 @@ This repo is to keep track of my [AoC 2020][aoc] [progress] while learning [Juli
 
 ## Thoughts
 
-- Don't be [overzealous with types][overzealous].
+- Don't be [overzealous with types](https://stackoverflow.com/a/56430371/581002).
 - Julia lacks real discriminated unions. You can you `Union` types, but the compiler doesn't prevent you from adding more.
-- [Code optimisation in Julia][optimization]
-- Tuple destructuring is kind of [strange][].
-- How to write [iterators][].
-- An article about different [debuggers][].
-- I need to try [Revise][revise_jl].
+- [Code optimisation in Julia](https://techytok.com/code-optimisation-in-julia/)
+- Tuple destructuring is kind of [strange](https://github.com/JuliaLang/julia/pull/23337]).
+- How to write [iterators](https://julialang.org/blog/2018/07/iterators-in-julia-0.7/)
+- An article about different [debuggers](https://julialang.org/blog/2019/03/debuggers/)
+- I need to try [Revise](https://github.com/timholy/Revise.jl)
+- [Composable multi-threaded parallelism in Julia](https://julialang.org/blog/2019/07/multithreading/)
 
 ### 1
 
@@ -141,40 +142,34 @@ The whole splitting into rows and seats is nonsense.
 
 ### 24
 
-- Nothing interesting except how to get hexagonal indexing right.
+- Nothing interesting except how to get hexagonal indexing right. Theoretically I could make it with half the memory.
 
 [aoc]: https://adventofcode.com/
 [chain_jl]: https://github.com/jkrumbiegel/Chain.jl
 [crt]: https://en.wikipedia.org/wiki/Chinese_remainder_theorem
 [dict]: https://docs.julialang.org/en/v1/base/collections/#Base.Dict
+[dispatch]: https://docs.julialang.org/en/v1/manual/methods/
 [docs]: https://docs.julialang.org/en/v1/
 [fill]: https://docs.julialang.org/en/v1/base/arrays/#Base.fill
 [foldl]: https://docs.julialang.org/en/v1/base/collections/#Base.foldl-Tuple{Any,Any}
+[functional_ds]: https://github.com/JuliaCollections/FunctionalCollections.jl
 [graphs_jl]: https://graphsjl-docs.readthedocs.io/en/latest/
 [heisenbug4]: https://stackoverflow.com/questions/65140849/
 [ImmutableDict]: https://docs.julialang.org/en/v1/base/collections/#Base.ImmutableDict
-[iterators]: https://julialang.org/blog/2018/07/iterators-in-julia-0.7/
 [julia]: https://julialang.org/
 [lightgraphs_jl]: https://github.com/JuliaGraphs/LightGraphs.jl
 [notco]: https://groups.google.com/g/julia-dev/c/POP6YXCnP-k/m/vTxLngw_jSIJ
 [operator]: https://docs.julialang.org/en/v1/devdocs/ast/#Operators
-[optimization]: https://techytok.com/code-optimisation-in-julia/
 [overflows]: https://docs.julialang.org/en/v1/manual/integers-and-floating-point-numbers/#Overflow-behavior
 [overloading]: https://docs.julialang.org/en/v1/manual/methods/
-[overzealous]: https://stackoverflow.com/a/56430371/581002
 [progress]: https://adventofcode.com/2020
 [reddit10]: https://www.reddit.com/r/adventofcode/comments/kd0ksw/2020_day_10_part_2_always_the_same_wrong_example/
 [reduce]: https://docs.julialang.org/en/v1/base/collections/#Base.reduce-Tuple{Any,Any}
 [saferintegers_jl]: https://github.com/JeffreySarnoff/SaferIntegers.jl
-[strange]: https://github.com/JuliaLang/julia/pull/23337]
+[shunting]: https://en.wikipedia.org/wiki/Shunting-yard_algorithm
+[strings]: https://docs.julialang.org/en/v1/manual/metaprogramming/#Non-Standard-String-Literals
 [subarrays]: https://docs.julialang.org/en/v1/devdocs/subarrays/
 [tco]: https://en.wikipedia.org/wiki/Tail_call
+[threading]: https://docs.julialang.org/en/v1/manual/parallel-computing/
 [underscores]: https://c42f.github.io/Underscores.jl/stable/
 [warntype]: https://docs.julialang.org/en/v1/manual/performance-tips/#man-code-warntype
-[threading]: https://docs.julialang.org/en/v1/manual/parallel-computing/
-[shunting]: https://en.wikipedia.org/wiki/Shunting-yard_algorithm
-[functional_ds]: https://github.com/JuliaCollections/FunctionalCollections.jl
-[dispatch]: https://docs.julialang.org/en/v1/manual/methods/
-[strings]: https://docs.julialang.org/en/v1/manual/metaprogramming/#Non-Standard-String-Literals
-[debuggers]: https://julialang.org/blog/2019/03/debuggers/
-[revise_jl]: https://github.com/timholy/Revise.jl
