@@ -139,10 +139,16 @@ The whole splitting into rows and seats is nonsense.
 ### 23
 
 - Finally came around to implementing [non-standard string literals][strings]—nice.
+- First solutions with arrays or linked list weren't finished after hours.
+- Then I had the diea of a single array (index maps to slot content) and it takes a second.
 
 ### 24
 
 - Nothing interesting except how to get hexagonal indexing right. Theoretically I could make it with half the memory.
+
+### 25
+
+- Very quickly solved thanks to the even exponent trick.
 
 [aoc]: https://adventofcode.com/
 [chain_jl]: https://github.com/jkrumbiegel/Chain.jl
