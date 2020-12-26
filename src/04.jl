@@ -1,5 +1,5 @@
-using Utils
 using Underscores
+using Utils
 
 const Mappings = Dict{String,String}
 

@@ -1,5 +1,5 @@
 using Underscores
-using  Utils
+using Utils
 
 function parse_file(f)
     @_ map(parse(Int16, _), eachline(f))
