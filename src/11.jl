@@ -1,6 +1,6 @@
 using Chain
 using Underscores
-using  Utils
+using Utils
 
 @enum Seat::Int8 floor=Int('.') empty=Int('L') occupied=Int('#') void=Int('?')
 

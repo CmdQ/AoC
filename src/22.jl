@@ -1,4 +1,5 @@
 using Underscores
+using Utils
 
 const Num = Int8
 const Deck = Array{Num,1}

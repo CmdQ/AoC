@@ -1,5 +1,5 @@
-using Utils
 using Underscores
+using Utils
 
 const Edge = Tuple{Int,String}
 const Edges = Array{Edge,1}
