@@ -15,6 +15,17 @@ This repo is to keep track of my [AoC 2020][aoc] [progress] while learning [Juli
 - I need to try [Revise](https://github.com/timholy/Revise.jl)
 - [Composable multi-threaded parallelism in Julia](https://julialang.org/blog/2019/07/multithreading/)
 
+## Post-event thoughts
+
+- I could have used [Transducers](https://github.com/JuliaFolds/Transducers.jl).
+- Not needed, but an [interesting take on AoS/SoA](https://github.com/JuliaArrays/StructArrays..jl)
+- [TypedTables](https://github.com/JuliaData/TypedTables.jl) seem similar to Pandas.
+- I should have used [SplitApplyCombine](https://github.com/JuliaData/SplitApplyCombine.jl) for that grouping problem I had.
+- Maybe [AcceleratedArrays indices](https://github.com/andyferris/AcceleratedArrays.jl) would have helped in finding stuff in arrays.
+- There are [IterTools](https://github.com/JuliaCollections/IterTools.jl) after all ([docs](https://juliacollections.github.io/IterTools.jl/latest/)).
+- Easier definition of structs and parameter unpacking with [Parameters.jl](https://github.com/mauro3/Parameters.jl).
+- Setters for immutable structs with [lenses](https://github.com/jw3126/Setfield.jl).
+
 ### 1
 
 - [x] Could the variable number of nested loops be an opportunity for macros?
