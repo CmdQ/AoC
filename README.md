@@ -26,6 +26,8 @@ This repo is to keep track of my [AoC 2020][aoc] [progress] while learning [Juli
 - Easier definition of structs and parameter unpacking with [Parameters.jl](https://github.com/mauro3/Parameters.jl).
 - Setters for immutable structs with [lenses](https://github.com/jw3126/Setfield.jl).
 - There would have been [a combinatorics library](https://github.com/JuliaMath/Combinatorics.jl).
+- [Modular arithmetic](https://github.com/scheinerman/Mods.jl) include CRT would have been available.
+- Julia has [powermod](https://docs.julialang.org/en/v1/base/math/#Base.powermod).
 
 Somebody else solved it using Julia and [blogged](https://blog.kdheepak.com/advent-of-code-2020-retrospective.html) about it.
 
