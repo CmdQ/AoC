@@ -25,6 +25,9 @@ This repo is to keep track of my [AoC 2020][aoc] [progress] while learning [Juli
 - There are [IterTools](https://github.com/JuliaCollections/IterTools.jl) after all ([docs](https://juliacollections.github.io/IterTools.jl/latest/)).
 - Easier definition of structs and parameter unpacking with [Parameters.jl](https://github.com/mauro3/Parameters.jl).
 - Setters for immutable structs with [lenses](https://github.com/jw3126/Setfield.jl).
+- There would have been [a combinatorics library](https://github.com/JuliaMath/Combinatorics.jl).
+
+Somebody else solved it using Julia and [blogged](https://blog.kdheepak.com/advent-of-code-2020-retrospective.html) about it.
 
 ### 1
 
