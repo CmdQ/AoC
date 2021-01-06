@@ -12,7 +12,7 @@ function parse_file(f, combiner)
 end
 
 function load(combiner)
-    open(aoc"06_customs-declarations", "r") do f
+    open(joinpath(@__DIR__, "06_customs-declarations.txt"), "r") do f
         parse_file(f, combiner)
     end
 end

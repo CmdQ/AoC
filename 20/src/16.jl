@@ -42,7 +42,7 @@ function parse_file(f::IO)
 end
 
 function load()
-    open(aoc"16", "r") do f
+    open(joinpath(@__DIR__, "16.txt"), "r") do f
         parse_file(f)
     end
 end

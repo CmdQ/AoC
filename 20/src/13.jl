@@ -16,7 +16,7 @@ function parse_file(f)
 end
 
 function load()
-    open(aoc"13_bus-ids", "r") do f
+    open(joinpath(@__DIR__, "13_bus-ids.txt"), "r") do f
         parse_file(f)
     end
 end

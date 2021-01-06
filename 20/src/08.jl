@@ -6,7 +6,7 @@ function parse_file(f)
 end
 
 function load()
-    open(aoc"08_bootcode", "r") do f
+    open(joinpath(@__DIR__, "08_bootcode.txt"), "r") do f
         parse_file(f)
     end
 end

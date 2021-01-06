@@ -8,7 +8,7 @@ function parse_file(f)
 end
 
 function load()
-    open(aoc"04_passports", "r") do f
+    open(joinpath(@__DIR__, "04_passports.txt"), "r") do f
         parse_file(f)
     end
 end

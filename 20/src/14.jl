@@ -76,13 +76,13 @@ function run_decoder2(f)
 end
 
 function run_decoder()
-    open(aoc"14_docking-data", "r") do f
+    open(joinpath(@__DIR__, "14_docking-data.txt"), "r") do f
         run_decoder(f)
     end
 end
 
 function run_decoder2()
-    open(aoc"14_docking-data", "r") do f
+    open(joinpath(@__DIR__, "14_docking-data.txt"), "r") do f
         run_decoder2(f)
     end
 end

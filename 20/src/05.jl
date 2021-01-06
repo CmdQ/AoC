@@ -11,7 +11,7 @@ end
 
 function load()
     re = []
-    open(aoc"05_plane-seats", "r") do f
+    open(joinpath(@__DIR__, "05_plane-seats.txt"), "r") do f
         for line in eachline(f)
             push!(re, convert_seat(line))
         end

@@ -3,7 +3,7 @@ using Utils
 
 function load()
     re = Int[]
-    open(aoc"01_expense-report", "r") do f
+    open(joinpath(@__DIR__, "01_expense-report.txt"), "r") do f
         for i in eachline(f)
             push!(re, parse(Int, i))
         end

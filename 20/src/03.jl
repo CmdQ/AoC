@@ -2,7 +2,7 @@ using Underscores
 using Utils
 
 function load()
-    open(aoc"03_tree-map", "r") do f
+    open(joinpath(@__DIR__, "03_tree-map.txt"), "r") do f
         permutedims(reduce(hcat, collect.(eachline(f))))
     end
 end
