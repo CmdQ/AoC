@@ -1,5 +1,6 @@
-using Underscores
 using Utils
+
+const Num = Int
 
 function parse_file(f)
     collect(eachline(f))
@@ -10,6 +11,8 @@ function load()
         parse_file(f)
     end
 end
+
+isnodigit = !isdigit
 
 is_paren(c) = c == '(' || c == ')'
 
@@ -24,15 +27,13 @@ function find_matching(s, from)
     end
 end
 
-isnodigit(c) = !isdigit(c)
-
-function tokenize_(expr)
+function tokenize_l2r(expr)
     re = []
-    cursor::Int = 1
+    cursor = 1
     while cursor <= length(expr)
         if expr[cursor] == '('
             close = find_matching(expr, cursor)
-            push!(re, tokenize_(expr[cursor+1:close-1]))
+            push!(re, tokenize_l2r(expr[cursor+1:close-1]))
             cursor = close + 1
         elseif expr[cursor] == '+'
             push!(re, :plus)
@@ -40,28 +41,27 @@ function tokenize_(expr)
         elseif expr[cursor] == '*'
             push!(re, :times)
             cursor += 1
-        else
-            @assert isdigit(expr[cursor])
+        elseif isdigit(expr[cursor])
             after = something(findnext(isnodigit, expr, cursor), length(expr) + 1)
             push!(re, parse(Int, expr[cursor:after-1]))
             cursor = after
+        else
+            cursor += 1
         end
     end
     re
 end
 
-tokenize(expr) = tokenize_(replace(expr, " " => ""))
+evaluate_l2r(term::Int) = term
 
-evaluate(term::Int) = term
-
-function evaluate(terms::Array)
-    acc = evaluate(terms[1])
+function evaluate_l2r(terms::Array)
+    acc = evaluate_l2r(terms[1])
     i = 2
     while i <= length(terms)
         if terms[i] == :plus
-            acc += evaluate(terms[i + 1])
+            acc += evaluate_l2r(terms[i + 1])
         elseif terms[i] == :times
-            acc *= evaluate(terms[i + 1])
+            acc *= evaluate_l2r(terms[i + 1])
         end
         i += 2
     end
@@ -89,12 +89,27 @@ function reduce_stack(ops, operands)
     end
 end
 
-function tokenize(expr, precedence=false)
-    expr = replace(expr, " " => "")
-    ops = Symbol[]
-    operands = Union{Int,Symbol}[]
+function evaluate(terms::Array)
+    stack = Num[]
+    for t in terms
+        if isa(t, Num)
+            push!(stack, t)
+        else
+            a = pop!(stack)
+            b = pop!(stack)
+            push!(stack, t == :+ ? a + b : a * b)
+        end
+    end
 
-    cursor::Int = 1
+    only(stack)
+end
+
+function tokenize(expr)
+    expr = replace(expr, " " => "")
+    operands = Union{Num,Symbol}[]
+    ops = Symbol[]
+
+    cursor::Num = 1
     while cursor <= length(expr)
         if expr[cursor] == '('
             push!(ops, :open)
@@ -104,19 +119,18 @@ function tokenize(expr, precedence=false)
                 top == :open && break
                 push!(operands, top)
             end
+        elseif isdigit(expr[cursor])
+            after = something(findnext(isnodigit, expr, cursor), length(expr) + 1)
+            push!(operands, parse(Num, expr[cursor:after-1]))
+            cursor = after
+            continue
         elseif expr[cursor] == '+'
             push!(ops, :+)
         elseif expr[cursor] == '*'
-            while precedence && !isempty(ops) && ops[end] == :+
+            while !isempty(ops) && ops[end] == :+
                 push!(operands, pop!(ops))
             end
             push!(ops, :*)
-        else
-            @assert isdigit(expr[cursor])
-            after = something(findnext(isnodigit, expr, cursor), length(expr) + 1)
-            push!(operands, parse(Int, expr[cursor:after-1]))
-            cursor = after
-            continue
         end
         cursor += 1
     end
@@ -128,28 +142,12 @@ function tokenize(expr, precedence=false)
     operands
 end
 
-function evaluate_with_precedence(terms::Array)
-    stack = Int[]
-
-    for i in terms
-        if i == :+
-            push!(stack, pop!(stack) + pop!(stack))
-        elseif i == :*
-            push!(stack, pop!(stack) * pop!(stack))
-        else
-            push!(stack, i)
-        end
-    end
-
-    stack[1]
-end
-
 function ex1(eqs)
-    sum(eq -> tokenize(eq, false) |> evaluate, eqs)
+    sum(eq -> tokenize_l2r(eq) |> evaluate_l2r, eqs)
 end
 
 function ex2(eqs)
-    sum(eq -> tokenize(eq, true) |> evaluate, eqs)
+    sum(eq -> tokenize(eq) |> evaluate, eqs)
 end
 
 eqs = load()
@@ -166,12 +164,12 @@ println("With precedence: ", ex2(eqs))
 using Test
 
 @testset "Operation Order" begin
-    @test find_matching("(3+5)", 1) == 5
-    @test find_matching("((3+5))", 1) == 7
-    @test find_matching("((3+5))", 1) == 7
-    @test find_matching("((3+5))", 2) == 6
-    
-    @testset "example 1" begin
+@test find_matching("(3+5)", 1) == 5
+@test find_matching("((3+5))", 1) == 7
+@test find_matching("((3+5))", 1) == 7
+@test find_matching("((3+5))", 2) == 6
+
+@testset "example 1" begin
         @test ex1(parse_file(IOBuffer("1 + 2 * 3 + 4 * 5 + 6"))) == 71
         @test ex1(parse_file(IOBuffer("1 + (2 * 3) + (4 * (5 + 6))"))) == 51
         @test ex1(parse_file(IOBuffer("2 * 3 + (4 * 5)"))) == 26
