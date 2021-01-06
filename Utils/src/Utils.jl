@@ -4,6 +4,7 @@ export @something
 export @something_nothing
 export @aoc_str
 export memoize
+export split_blocks
 
 using Underscores
 
@@ -52,7 +53,7 @@ macro something_nothing(things...)
     _something_nothing_impl(things...)
 end
 
-function Base.split(f, buffer::Base.IO)
+function split_blocks(f, buffer::Base.IO)
     re = String[]
     block = String[]
     for line in eachline(buffer)
@@ -67,12 +68,12 @@ function Base.split(f, buffer::Base.IO)
     re
 end
 
-function Base.split(str::Base.String, buffer::Base.IO)
-    @_ split(_ == str, buffer)
+function split_blocks(str::Base.String, buffer::Base.IO)
+    @_ split_blocks(_ == str, buffer)
 end
 
-function Base.split(buffer::Base.IO)
-    split(isempty, buffer)
+function split_blocks(buffer::Base.IO)
+    split_blocks(isempty, buffer)
 end
 
 function memoize(f::Function)::Function

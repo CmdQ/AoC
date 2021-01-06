@@ -2,7 +2,7 @@ using Utils
 using Chain
 
 function parse_file(f, combiner)
-    map(split(f)) do block
+    map(split_blocks(f)) do block
         @chain block begin
             split
             map(Set, _)

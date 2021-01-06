@@ -25,7 +25,7 @@ struct Problem
 end
 
 function parse_file(f::IO)
-    prules, pmine, pnearby = @_ split(f) |> map(IOBuffer(_), __) |> map(eachline(_), __)
+    prules, pmine, pnearby = @_ split_blocks(f) |> map(IOBuffer(_), __) |> map(eachline(_), __)
 
     rules = Rule[]
     for rule in prules
