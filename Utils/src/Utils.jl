@@ -7,10 +7,6 @@ export memoize
 
 using Underscores
 
-macro aoc_str(s)
-    "$(@__DIR__)/../../inputs/" * s * (endswith(s, ".txt") ? "" : ".txt")
-end
-
 function _something_impl(thing)
     :(something($(esc(thing))))
 end
