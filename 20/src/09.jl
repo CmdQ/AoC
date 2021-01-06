@@ -6,7 +6,7 @@ function parse_file(f)
 end
 
 function load()
-    open(aoc"09_encrypted", "r") do f
+    open(joinpath(@__DIR__, "09_encrypted.txt"), "r") do f
         parse_file(f)
     end
 end

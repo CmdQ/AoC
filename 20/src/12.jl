@@ -27,7 +27,7 @@ function parse_file(f)
 end
 
 function load()
-    open(aoc"12_ship-movement", "r") do f
+    open(joinpath(@__DIR__, "12_ship-movement.txt"), "r") do f
         parse_file(f)
     end
 end

@@ -16,7 +16,7 @@ end
 
 
 function load()
-    open(aoc"17", "r") do f
+    open(joinpath(@__DIR__, "17.txt"), "r") do f
         parse_file(f)
     end
 end
