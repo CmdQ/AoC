@@ -4,7 +4,7 @@ using Utils
 const Mappings = Dict{String,String}
 
 function parse_file(f)
-    @_ split(f) |> map(Dict(split(item, ':') for item=split(_)), __)
+    @_ split_blocks(f) |> map(Dict(split(item, ':') for item=split(_)), __)
 end
 
 function load()

@@ -21,7 +21,7 @@ struct Messages
 end
 
 function parse_file(f)
-    rules, messages = split(f)
+    rules, messages = split_blocks(f)
 
     rls = Rules()
     for line in eachline(IOBuffer(rules))

@@ -12,7 +12,7 @@ struct Tile
 end    
 
 function parse_file(f)
-    tiles = split(f)
+    tiles = split_blocks(f)
 
     re = Tile[]
     for tile in tiles
