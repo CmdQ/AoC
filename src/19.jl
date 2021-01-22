@@ -94,7 +94,6 @@ function rule_walker(rules::Rules, str, current::Rule, pos)::Array{Int,1}
     end
     positions
 end
-@code_warntype rule_walker(Rules(), "", Rule([2]), 1)
 
 rule_walker(rules, str) = (length(str) + 1) in rule_walker(rules, str, 0, 1)
 
