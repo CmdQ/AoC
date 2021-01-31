@@ -1,3 +1,4 @@
 /.vscode/
 *Zone.Identifier
-/JuliaSysimage.*
+JuliaSysimage.*
+.DS_Store
