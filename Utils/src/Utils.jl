@@ -1,10 +1,15 @@
 module Utils
+using OffsetArrays
 
 export @something
 export @something_nothing
 export @aoc_str
-export memoize
 export split_blocks
+export slurp
+export per_split
+export per_line
+export per_split_parse
+export per_line_parse
 
 using Underscores
 
@@ -76,17 +81,32 @@ function split_blocks(buffer::Base.IO)
     split_blocks(isempty, buffer)
 end
 
-function memoize(f::Function)::Function
-    cache = Dict()
-    function(args...)
-        if haskey(cache, args)
-            cache[args]
-        else
-            re = f(args...)
-            cache[args] = re
-            re
-        end
+slurp(filename::AbstractString) = read(filename, String)
+
+per_split(str::AbstractString, sep=isspace, keepempty=true) = @_ str |> split(__, sep, keepempty=keepempty)
+
+per_split(f::Function, str::AbstractString, sep=isspace, keepempty=true) = @_ str |> split(__, sep, keepempty=keepempty) |> map(f, __)
+
+const NEWLINE = r"\r?\n"
+
+per_line(str::AbstractString, keepempty=true) = per_split(str, NEWLINE, keepempty)
+
+per_line(f::Function, str::AbstractString, keepempty=true) = per_split(f, str, NEWLINE, keepempty)
+
+function per_split_parse(str::AbstractString, sep, ::Type{T} = Int) where {T <: Number}
+    per_split(str, sep, false) do line
+        parse(T, line)
     end
 end
+
+function per_line_parse(str::AbstractString, ::Type{T} = Int) where {T <: Number}
+    per_line(str, false) do line
+        parse(T, line)
+    end
+end
+
+zerobased(array::AbstractArray{T,1}) where {T} = OffsetArray(array, OffsetArrays.Origin(0))
+zerobased(array::AbstractArray{T,2}) where {T} = OffsetArray(array, OffsetArrays.Origin(0, 0))
+zerobased(array::AbstractArray{T,3}) where {T} = OffsetArray(array, OffsetArrays.Origin(0, 0, 0))
 
 end
