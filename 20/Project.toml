@@ -1,3 +1,5 @@
+name = "AoC 2020"
+
 [deps]
 Chain = "8be319e6-bccf-4806-a6f7-6fae938471bc"
 DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
