@@ -3,7 +3,7 @@ using Utils
 using Chain
 import IterTools
 
-inputfile = "$(replace(@__FILE__, r".jl$" => "")).txt"
+inputfile = find_input(@__FILE__)
 input = @chain inputfile slurp per_line_parse
 
 function one(input)
