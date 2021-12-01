@@ -1,7 +1,7 @@
 using Chain
 using Utils
 
-inputfile = "$(replace(@__FILE__, r".jl$" => "")).txt"
+inputfile = replace(@__FILE__, r"\.jl$" => ".txt")
 load(text = slurp(inputfile)) = @chain text begin
     per_line_parse(Int)
 end
