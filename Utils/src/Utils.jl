@@ -10,7 +10,9 @@ export per_split
 export per_line
 export per_split_parse
 export per_line_parse
+export find_input
 
+using Chain
 using Underscores
 
 function _something_impl(thing)
@@ -58,6 +60,23 @@ macro something_nothing(things...)
     _something_nothing_impl(things...)
 end
 
+function find_input(julia_file)
+    num = escape_string(match(r"(\d+)\.jl$", julia_file)[1])
+    regex = Regex("\\Q$num\\E[^\\/]*\\.txt\$")
+    dir, _, files = @chain julia_file begin
+        dirname
+        walkdir
+        Iterators.only
+    end
+    @chain files begin
+        filter(fname -> occursin(regex, fname), _)
+        Iterators.only
+        joinpath(dir, _)
+    end
+end
+
+slurp(filename::AbstractString) = read(filename, String)
+
 function split_blocks(f, buffer::Base.IO)
     re = String[]
     block = String[]
@@ -80,8 +99,6 @@ end
 function split_blocks(buffer::Base.IO)
     split_blocks(isempty, buffer)
 end
-
-slurp(filename::AbstractString) = read(filename, String)
 
 per_split(str::AbstractString, sep=isspace, keepempty=true) = @_ str |> split(__, sep, keepempty=keepempty)
 
