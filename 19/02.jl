@@ -1,7 +1,7 @@
 using Chain
 using Utils
 
-inputfile = "$(replace(@__FILE__, r".jl$" => "")).txt"
+inputfile = replace(@__FILE__, r"\.jl$" => ".txt")
 load(text) = @chain text begin
     per_split_parse(_, ',')
 end
