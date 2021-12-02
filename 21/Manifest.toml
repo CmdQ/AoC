@@ -39,6 +39,12 @@ version = "3.40.0"
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
 
+[[deps.CompositeStructs]]
+deps = ["MacroTools"]
+git-tree-sha1 = "6d4723da3447c84b47a00ea20679c4ccd5ef04ba"
+uuid = "534720e6-2374-40c5-8712-bf9a2f1643c6"
+version = "0.1.2"
+
 [[deps.CompositionsBase]]
 git-tree-sha1 = "455419f7e328a1a2493cabc6428d79e951349769"
 uuid = "a33af91c-f02d-484b-be07-31d278c5ca2b"
@@ -212,7 +218,7 @@ version = "3.0.0"
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
 [[deps.Utils]]
-deps = ["OffsetArrays", "Underscores"]
+deps = ["Chain", "OffsetArrays", "Underscores"]
 path = "../Utils"
 uuid = "c4255648-aa77-49a3-8633-17feb5ee199d"
 version = "0.1.0"

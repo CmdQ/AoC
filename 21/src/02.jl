@@ -2,6 +2,7 @@ using Utils
 
 using Accessors
 using Chain
+using CompositeStructs
 
 const FORWARD = "forward"
 const UP = "up"
@@ -31,9 +32,8 @@ function Base.:+(pos::Position, directions::Tuple{AbstractString, Int})
     end
 end
 
-@Base.kwdef struct AimingPosition
-    position::Int = 0
-    depth::Int = 0
+@composite @Base.kwdef struct AimingPosition
+    Position...
     aim::Int = 0
 end
 
