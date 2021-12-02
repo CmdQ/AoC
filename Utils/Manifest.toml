@@ -1,25 +1,48 @@
 # This file is machine-generated - editing it directly is not advised
 
-[[Adapt]]
-deps = ["LinearAlgebra"]
-git-tree-sha1 = "345a14764e43fe927d6f5c250fe4c8e4664e6ee8"
-uuid = "79e6a3ab-5dfb-504d-930d-738a2a938a0e"
-version = "2.4.0"
+julia_version = "1.7.0-rc3"
+manifest_format = "2.0"
 
-[[Libdl]]
+[[deps.Adapt]]
+deps = ["LinearAlgebra"]
+git-tree-sha1 = "84918055d15b3114ede17ac6a7182f68870c16f7"
+uuid = "79e6a3ab-5dfb-504d-930d-738a2a938a0e"
+version = "3.3.1"
+
+[[deps.Artifacts]]
+uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
+
+[[deps.Chain]]
+git-tree-sha1 = "cac464e71767e8a04ceee82a889ca56502795705"
+uuid = "8be319e6-bccf-4806-a6f7-6fae938471bc"
+version = "0.4.8"
+
+[[deps.CompilerSupportLibraries_jll]]
+deps = ["Artifacts", "Libdl"]
+uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
+
+[[deps.Libdl]]
 uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 
-[[LinearAlgebra]]
-deps = ["Libdl"]
+[[deps.LinearAlgebra]]
+deps = ["Libdl", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
-[[OffsetArrays]]
+[[deps.OffsetArrays]]
 deps = ["Adapt"]
-git-tree-sha1 = "5b644e46f71e744fac0775b885809fd82c4ca904"
+git-tree-sha1 = "043017e0bdeff61cfbb7afeb558ab29536bbb5ed"
 uuid = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
-version = "1.5.0"
+version = "1.10.8"
 
-[[Underscores]]
-git-tree-sha1 = "986a17a99a20d2c588f12585ff32458140eb9603"
+[[deps.OpenBLAS_jll]]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
+uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
+
+[[deps.Underscores]]
+git-tree-sha1 = "6e6de5a5e7116dcff8effc99f6f55230c61f6862"
 uuid = "d9a01c3f-67ce-4d8c-9b55-35f6e4050bb1"
-version = "2.0.0"
+version = "3.0.0"
+
+[[deps.libblastrampoline_jll]]
+deps = ["Artifacts", "Libdl", "OpenBLAS_jll"]
+uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
