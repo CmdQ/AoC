@@ -11,9 +11,7 @@ const DOWN = "down"
 inputfile = find_input(@__FILE__)
 input = @_ inputfile |>
     slurp |>
-    per_line(__, false) |>
-    map(split(_), __) |>
-    map((_[1], parse(Int, _[2])), __)
+    per_line(((cmd, num) = split(_); (cmd, parse(Int, num))), __, false)
 
 @Base.kwdef struct Position
     position::Int = 0
