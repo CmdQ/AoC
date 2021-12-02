@@ -9,6 +9,7 @@ input = @chain inputfile slurp per_line_parse
 function one(input)
     sum((@view input[2:end]) .> (@view input[1:end-1]))
 end
+@assert one(input) == 1298
 
 function two(input)
     @chain input begin
@@ -17,6 +18,7 @@ function two(input)
         one
     end
 end
+@assert two(input) == 1248
 
 for f in [one, two]
     @chain input f println

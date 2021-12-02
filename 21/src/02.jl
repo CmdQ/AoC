@@ -59,8 +59,10 @@ function solve(input, type)
 end
 
 one(input) = solve(input, Position)
+@assert one(input) == 2039912
 
 two(input) = solve(input, AimingPosition)
+@assert two(input) == 1942068080
 
 for f in [one, two]
     commands |> f |> println
