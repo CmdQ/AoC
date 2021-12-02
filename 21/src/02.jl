@@ -15,12 +15,9 @@ input = @chain inputfile begin
     map(((n, s),) -> (n, parse(Int, s)), _)
 end
 
-struct Position
-    position::Int
-    depth::Int
-end
-function Position(pos=0, depth=0)
-    Position(pos, depth)
+@Base.kwdef struct Position
+    position::Int = 0
+    depth::Int = 0
 end
 
 function Base.:+(pos::Position, directions::Tuple{AbstractString, Int})
@@ -34,13 +31,10 @@ function Base.:+(pos::Position, directions::Tuple{AbstractString, Int})
     end
 end
 
-struct AimingPosition
-    position::Int
-    depth::Int
-    aim::Int
-end
-function AimingPosition(pos=0, depth=0, aim=0)
-    AimingPosition(pos, depth, aim)
+@Base.kwdef struct AimingPosition
+    position::Int = 0
+    depth::Int = 0
+    aim::Int = 0
 end
 
 function Base.:+(pos::AimingPosition, directions::Tuple{AbstractString, Int})
