@@ -1,20 +1,19 @@
 using Utils
 
 using Accessors
-using Chain
 using CompositeStructs
+using Underscores
 
 const FORWARD = "forward"
 const UP = "up"
 const DOWN = "down"
 
 inputfile = find_input(@__FILE__)
-input = @chain inputfile begin
-    slurp
-    per_line(false)
-    map(line -> split(line), _)
-    map(((n, s),) -> (n, parse(Int, s)), _)
-end
+input = @_ inputfile |>
+    slurp |>
+    per_line(__, false) |>
+    map(split(_), __) |>
+    map((_[1], parse(Int, _[2])), __)
 
 @Base.kwdef struct Position
     position::Int = 0
