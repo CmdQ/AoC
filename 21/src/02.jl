@@ -1,5 +1,6 @@
 using Utils
 
+using Accessors
 using Chain
 
 const FORWARD = "forward"
@@ -7,7 +8,7 @@ const UP = "up"
 const DOWN = "down"
 
 inputfile = find_input(@__FILE__)
-commands = @chain inputfile begin
+input = @chain inputfile begin
     slurp
     per_line(false)
     map(line -> split(line), _)
@@ -25,11 +26,11 @@ end
 function Base.:+(pos::Position, directions::Tuple{AbstractString, Int})
     command, amount = directions
     if command == FORWARD
-        Position(pos.position + amount, pos.depth)
+        @set pos.position += amount
     elseif command == DOWN
-        Position(pos.position, pos.depth + amount)
+        @set pos.depth += amount
     elseif command == UP
-        Position(pos.position, pos.depth - amount)
+        @set pos.depth -= amount
     end
 end
 
@@ -47,9 +48,9 @@ function Base.:+(pos::AimingPosition, directions::Tuple{AbstractString, Int})
     if command == FORWARD
         AimingPosition(pos.position + amount, pos.depth + pos.aim * amount, pos.aim)
     elseif command == DOWN
-        AimingPosition(pos.position, pos.depth, pos.aim + amount)
+        @set pos.aim += amount
     elseif command == UP
-        AimingPosition(pos.position, pos.depth, pos.aim - amount)
+        @set pos.aim -= amount
     end
 end
 
@@ -65,5 +66,5 @@ two(input) = solve(input, AimingPosition)
 @assert two(input) == 1942068080
 
 for f in [one, two]
-    commands |> f |> println
+    input |> f |> println
 end
