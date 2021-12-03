@@ -9,7 +9,7 @@ lines = @> inputfile slurp per_line(false)
 
 function one(lines)
     matrix = @_ lines |>
-        map(map(_ -> _ == '1', collect(_)), __) |>
+        map(map(==('1'), collect(_)), __) |>
         reduce(hcat, __) |>
         transpose
     len = size(matrix, 1)
