@@ -126,4 +126,8 @@ zerobased(array::AbstractArray{T,1}) where {T} = OffsetArray(array, OffsetArrays
 zerobased(array::AbstractArray{T,2}) where {T} = OffsetArray(array, OffsetArrays.Origin(0, 0))
 zerobased(array::AbstractArray{T,3}) where {T} = OffsetArray(array, OffsetArrays.Origin(0, 0, 0))
 
+curry(f::Function, x)::Function = (xs...) -> f(x, xs...)
+currylast(f::Function, x)::Function = (xs...) -> f(xs..., x)
+flip(f::Function)::Function = (x, y, zs...) -> f(y, x, zs...)
+
 end
