@@ -4,27 +4,23 @@ using Accessors
 using CompositeStructs
 using Underscores
 
-const FORWARD = "forward"
-const UP = "up"
-const DOWN = "down"
-
 inputfile = find_input(@__FILE__)
 input = @_ inputfile |>
     slurp |>
-    per_line(((cmd, num) = split(_); (cmd, parse(Int, num))), __, false)
+    per_line(((cmd, num) = split(_); (Symbol(cmd), parse(Int, num))), __, false)
 
 @Base.kwdef struct Position
     position::Int = 0
     depth::Int = 0
 end
 
-function Base.:+(pos::Position, directions::Tuple{AbstractString, Int})
+function Base.:+(pos::Position, directions::Tuple{Symbol, Int})
     command, amount = directions
-    if command == FORWARD
+    if command == :forward
         @set pos.position += amount
-    elseif command == DOWN
+    elseif command == :down
         @set pos.depth += amount
-    elseif command == UP
+    elseif command == :up
         @set pos.depth -= amount
     end
 end
@@ -34,13 +30,13 @@ end
     aim::Int = 0
 end
 
-function Base.:+(pos::AimingPosition, directions::Tuple{AbstractString, Int})
+function Base.:+(pos::AimingPosition, directions::Tuple{Symbol, Int})
     command, amount = directions
-    if command == FORWARD
+    if command == :forward
         AimingPosition(pos.position + amount, pos.depth + pos.aim * amount, pos.aim)
-    elseif command == DOWN
+    elseif command == :down
         @set pos.aim += amount
-    elseif command == UP
+    elseif command == :up
         @set pos.aim -= amount
     end
 end
