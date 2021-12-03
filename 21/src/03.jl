@@ -4,11 +4,11 @@ using Lazy
 using Underscores
 
 inputfile = find_input(@__FILE__)
-lines = @> inputfile slurp per_line(false)
-@assert @_ map(length(_), lines) |> Set |> length == 1
+input = @> inputfile slurp per_line(false)
+@assert @_ map(length(_), input) |> Set |> length == 1
 
-function one(lines)
-    matrix = @_ lines |>
+function one(input)
+    matrix = @_ input |>
         map(map(==('1'), collect(_)), __) |>
         reduce(hcat, __) |>
         transpose
@@ -16,36 +16,36 @@ function one(lines)
 
     gamma =
         @_ [sum(matrix[:,r]) > len ÷ 2 for r in axes(matrix, 2)] |>
-        map(Char(_ + '0'), __) |>
+        map(Base.Fix1(+, '0'), __) |>
         String |>
         parse(Int, __; base=2)
     epsilon = gamma ⊻ (2^size(matrix, 2) - 1)
     gamma * epsilon
 end
-@assert one(lines) == 693486
+@assert one(input) == 693486
 
-function sortdown(digit1, lines)
-    lines = sort(lines)
+function sortdown(digit1, input)
+    input = sort(input)
     pos = 1
-    while length(lines) > 1
-        first1 = @_ findfirst(_[pos] == '1', lines)
+    while length(input) > 1
+        first1 = @_ findfirst(_[pos] == '1', input)
         num0 = first1 - 1
-        if digit1 ⊻ (num0 <= length(lines) ÷ 2)
-            lines = lines[begin:num0]
+        if digit1 ⊻ (num0 <= length(input) ÷ 2)
+            input = input[begin:num0]
         else
-            lines = lines[first1:end]
+            input = input[first1:end]
         end
         pos += 1
     end
-    parse(Int, lines[begin]; base=2)
+    parse(Int, input[begin]; base=2)
 end
 
-function two(lines)
-    oxygen = sortdown(true, lines)
-    co2 = sortdown(false, lines)
+function two(input)
+    oxygen = sortdown(true, input)
+    co2 = sortdown(false, input)
     oxygen * co2
 end
-@assert two(lines) == 3379326
+@assert two(input) == 3379326
 
-println(one(lines))
-println(two(lines))
+println(one(input))
+println(two(input))
