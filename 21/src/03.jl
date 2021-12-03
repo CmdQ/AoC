@@ -5,14 +5,14 @@ using Underscores
 
 inputfile = find_input(@__FILE__)
 lines = @> inputfile slurp per_line(false)
-matrix = falses(length(lines), length(lines[1]))
-for (i, num) in enumerate(lines)
-    @_ matrix[i,:] = map(parse(Bool, _), collect(num))
-end
-matrix
 
-function one(matrix)
+function one(lines)
+    matrix = @_ lines |>
+        map(map(_ -> _ == '1', collect(_)), __) |>
+        reduce(hcat, __) |>
+        transpose
     len = size(matrix, 1)
+
     gamma =
         @_ [sum(matrix[:,r]) > len ÷ 2 for r in axes(matrix, 2)] |>
         map(Char(_ + '0'), __) |>
@@ -21,7 +21,7 @@ function one(matrix)
     epsilon = gamma ⊻ (2^size(matrix, 2) - 1)
     gamma * epsilon
 end
-@assert one(matrix) == 693486
+@assert one(lines) == 693486
 
 function sortdown(digit, lines)
     pos = firstindex(lines)
