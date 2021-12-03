@@ -23,14 +23,13 @@ function one(lines)
 end
 @assert one(lines) == 693486
 
-function sortdown(digit, lines)
+function sortdown(digit1, lines)
     pos = firstindex(lines)
     while length(lines) > 1
         @_ sort!(lines; by=_[pos])
         first1 = @_ findfirst(_[pos] == '1', lines)
         num0 = first1 - 1
-        half = length(lines) ÷ 2
-        if digit == 0 && num0 <= half || digit == 1 && num0 > half
+        if digit1 ⊻ (num0 <= length(lines) ÷ 2)
             lines = lines[begin:num0]
         else
             lines = lines[first1:end]
@@ -41,11 +40,11 @@ function sortdown(digit, lines)
 end
 
 function two(lines)
-    oxygen = sortdown(1, copy(lines))
-    co2 = sortdown(0, copy(lines))
+    oxygen = sortdown(true, lines)
+    co2 = sortdown(false, lines)
     oxygen * co2
 end
 @assert two(lines) == 3379326
 
-println(one(matrix))
+println(one(lines))
 println(two(lines))
