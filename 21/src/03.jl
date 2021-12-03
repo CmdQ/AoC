@@ -5,6 +5,7 @@ using Underscores
 
 inputfile = find_input(@__FILE__)
 lines = @> inputfile slurp per_line(false)
+@assert @_ map(length(_), lines) |> Set |> length == 1
 
 function one(lines)
     matrix = @_ lines |>
@@ -24,9 +25,9 @@ end
 @assert one(lines) == 693486
 
 function sortdown(digit1, lines)
-    pos = firstindex(lines)
+    lines = sort(lines)
+    pos = 1
     while length(lines) > 1
-        @_ sort!(lines; by=_[pos])
         first1 = @_ findfirst(_[pos] == '1', lines)
         num0 = first1 - 1
         if digit1 ⊻ (num0 <= length(lines) ÷ 2)
