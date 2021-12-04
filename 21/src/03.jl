@@ -16,7 +16,7 @@ function one(input)
 
     gamma =
         @_ [sum(matrix[:,r]) > len ÷ 2 for r in axes(matrix, 2)] |>
-        map(Base.Fix1(+, '0'), __) |>
+        map(curry(+, '0'), __) |>
         String |>
         parse(Int, __; base=2)
     epsilon = gamma ⊻ (2^size(matrix, 2) - 1)
