@@ -92,13 +92,9 @@ function split_blocks(f, buffer::Base.IO)
     re
 end
 
-function split_blocks(str::Base.String, buffer::Base.IO)
-    @_ split_blocks(_ == str, buffer)
-end
+split_blocks(str::Base.String, buffer::Base.IO) = @_ split_blocks(==(str), buffer)
 
-function split_blocks(buffer::Base.IO)
-    split_blocks(isempty, buffer)
-end
+split_blocks(buffer::Base.IO) = split_blocks(isempty, buffer)
 
 per_split(str::AbstractString, sep=isspace, keepempty=true) = @_ str |> split(__, sep, keepempty=keepempty)
 
