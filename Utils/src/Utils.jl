@@ -66,7 +66,7 @@ function find_input(julia_file)
     dir, _, files = @chain julia_file begin
         dirname
         walkdir
-        Iterators.only
+        first
     end
     @chain files begin
         filter(fname -> occursin(regex, fname), _)
