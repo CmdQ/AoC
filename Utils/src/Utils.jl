@@ -11,6 +11,9 @@ export per_line
 export per_split_parse
 export per_line_parse
 export find_input
+export curry
+export curry2nd
+export currylast
 
 using Chain
 using Underscores
@@ -122,8 +125,8 @@ zerobased(array::AbstractArray{T,1}) where {T} = OffsetArray(array, OffsetArrays
 zerobased(array::AbstractArray{T,2}) where {T} = OffsetArray(array, OffsetArrays.Origin(0, 0))
 zerobased(array::AbstractArray{T,3}) where {T} = OffsetArray(array, OffsetArrays.Origin(0, 0, 0))
 
-curry(f::Function, x)::Function = (xs...) -> f(x, xs...)
+curry(f::Function, x)::Function = Base.Fix1(f, x)
+curry2nd(f::Function, x)::Function = Base.Fix2(f, x)
 currylast(f::Function, x)::Function = (xs...) -> f(xs..., x)
-flip(f::Function)::Function = (x, y, zs...) -> f(y, x, zs...)
 
 end
