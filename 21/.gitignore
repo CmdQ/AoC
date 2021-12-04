@@ -1,0 +1,6 @@
+/.ipynb_checkpoints/
+/.vscode/
+/.pytest_cache/
+
+__pycache__/
+*:Zone.Identifier
