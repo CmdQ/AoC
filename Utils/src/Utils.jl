@@ -11,6 +11,7 @@ export per_line
 export per_split_parse
 export per_line_parse
 export find_input
+export zerobased
 export curry
 export curry2nd
 export currylast
