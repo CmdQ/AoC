@@ -83,7 +83,7 @@ def test_score():
         [22, None, 13, 6, None],
         [None, None, 12, 3, None],
     ]
-    assert score(board) == 188
+    assert score(board, 1) == 188
     assert score(board, 24) == 4512
 
 
