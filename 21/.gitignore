@@ -4,3 +4,5 @@
 
 __pycache__/
 *:Zone.Identifier
+
+/src/example.txt
