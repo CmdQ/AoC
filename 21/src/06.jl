@@ -11,12 +11,8 @@ function solve(input, days)
         ages[age] += 1
     end
     for _ in 1:days
-        reproducer = ages[0]
-        for a in 1:8
-            ages[a-1] = ages[a]
-        end
-        ages[6] += reproducer
-        ages[8] = reproducer
+        ages = circshift(ages, -1)
+        ages[6] += ages[8]
     end
     sum(ages)
 end
