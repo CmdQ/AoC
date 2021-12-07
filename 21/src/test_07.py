@@ -15,8 +15,8 @@ print(one(input))
 def triangular(n):
     return n*(n+1)//2
 
-def two(input, average=None):
-    average = average or int(sum(input)/len(input))
+def two(input):
+    average = int(sum(input)/len(input))
     return sum(triangular(abs(average - pos)) for pos in input)
 
 
