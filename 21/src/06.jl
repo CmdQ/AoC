@@ -16,5 +16,6 @@ function solve(input, days)
     end
     sum(ages)
 end
+
 solve(input, 80) |> println
 solve(input, 256) |> println
