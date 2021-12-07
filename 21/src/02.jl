@@ -46,12 +46,12 @@ function solve(input, type)
     final.position * final.depth
 end
 
-one(input) = solve(input, Position)
-@assert one(input) == 2039912
+part1(input) = solve(input, Position)
+@assert part1(input) == 2039912
 
-two(input) = solve(input, AimingPosition)
-@assert two(input) == 1942068080
+part2(input) = solve(input, AimingPosition)
+@assert part2(input) == 1942068080
 
-for f in [one, two]
+for f in [part1, part2]
     input |> f |> println
 end
