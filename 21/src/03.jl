@@ -7,7 +7,7 @@ inputfile = find_input(@__FILE__)
 input = @> inputfile slurp per_line(false)
 @assert @_ map(length(_), input) |> Set |> length == 1
 
-function one(input)
+function part1(input)
     matrix = @_ input |>
         map(map(==('1'), collect(_)), __) |>
         reduce(hcat, __) |>
@@ -22,7 +22,7 @@ function one(input)
     epsilon = gamma ⊻ (2^size(matrix, 2) - 1)
     gamma * epsilon
 end
-@assert one(input) == 693486
+@assert part1(input) == 693486
 
 function sortdown(digit1, input)
     input = sort(input)
@@ -40,12 +40,12 @@ function sortdown(digit1, input)
     parse(Int, input[begin]; base=2)
 end
 
-function two(input)
+function part2(input)
     oxygen = sortdown(true, input)
     co2 = sortdown(false, input)
     oxygen * co2
 end
-@assert two(input) == 3379326
+@assert part2(input) == 3379326
 
-println(one(input))
-println(two(input))
+println(part1(input))
+println(part2(input))

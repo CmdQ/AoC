@@ -38,16 +38,16 @@ end
 
 score(board, num) = sum(filter(>=(0), board)) * num
 
-function one(input)
+function part1(input)
     boards = deepcopy(input.boards)
     for draw in input.draws, board in boards
         cross(board, draw)
         winner(board) && return score(board, draw)
     end
 end
-@assert one(input) == 8136
+@assert part1(input) == 8136
 
-function two(input)
+function part2(input)
     boards::Vector{Matrix{Int64}} = deepcopy(input.boards)
     for draw in input.draws
         next::typeof(boards) = []
@@ -62,7 +62,7 @@ function two(input)
         boards = next
     end
 end
-@assert two(input) == 12738
+@assert part2(input) == 12738
 
-println(one(input))
-println(two(input))
+println(part1(input))
+println(part2(input))
