@@ -64,16 +64,18 @@ macro something_nothing(things...)
     _something_nothing_impl(things...)
 end
 
-function find_input(julia_file)
-    num = escape_string(match(r"(\d+)\.jl$", julia_file)[1])
-    regex = Regex("\\Q$num\\E[^\\/]*\\.txt\$")
+function find_input(julia_file, lookfor=nothing)
+    if isnothing(lookfor)
+        num = escape_string(match(r"(\d+)\.jl$", julia_file)[1])
+        lookfor = Regex("\\Q$num\\E[^\\/]*\\.txt\$")
+    end
     dir, _, files = @chain julia_file begin
         dirname
         walkdir
         first
     end
     @chain files begin
-        filter(fname -> occursin(regex, fname), _)
+        filter(fname -> occursin(lookfor, fname), _)
         Iterators.only
         joinpath(dir, _)
     end
