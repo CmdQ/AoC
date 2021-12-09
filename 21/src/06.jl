@@ -17,5 +17,5 @@ function solve(input, days)
     sum(ages)
 end
 
-solve(input, 80) |> println
-solve(input, 256) |> println
+assertequal(solve(input, 80), 350917)
+assertequal(solve(input, 256), 1592918715629)

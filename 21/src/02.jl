@@ -47,11 +47,7 @@ function solve(input, type)
 end
 
 part1(input) = solve(input, Position)
-@assert part1(input) == 2039912
+assertequal(part1(input), 2039912)
 
 part2(input) = solve(input, AimingPosition)
-@assert part2(input) == 1942068080
-
-for f in [part1, part2]
-    input |> f |> println
-end
+assertequal(part2(input), 1942068080)

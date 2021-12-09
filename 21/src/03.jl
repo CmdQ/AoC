@@ -22,7 +22,7 @@ function part1(input)
     epsilon = gamma ⊻ (2^size(matrix, 2) - 1)
     gamma * epsilon
 end
-@assert part1(input) == 693486
+assertequal(part1(input), 693486)
 
 function sortdown(digit1, input)
     input = sort(input)
@@ -45,7 +45,4 @@ function part2(input)
     co2 = sortdown(false, input)
     oxygen * co2
 end
-@assert part2(input) == 3379326
-
-println(part1(input))
-println(part2(input))
+assertequal(part2(input), 3379326)

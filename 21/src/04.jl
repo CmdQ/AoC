@@ -45,7 +45,7 @@ function part1(input)
         winner(board) && return score(board, draw)
     end
 end
-@assert part1(input) == 8136
+assertequal(part1(input), 8136)
 
 function part2(input)
     boards::Vector{Matrix{Int64}} = deepcopy(input.boards)
@@ -62,7 +62,4 @@ function part2(input)
         boards = next
     end
 end
-@assert part2(input) == 12738
-
-println(part1(input))
-println(part2(input))
+assertequal(part2(input), 12738)

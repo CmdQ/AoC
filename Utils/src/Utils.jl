@@ -15,6 +15,7 @@ export zerobased
 export curry
 export curry2nd
 export currylast
+export assertequal
 
 using Chain
 using Underscores
@@ -131,5 +132,25 @@ zerobased(array::AbstractArray{T,3}) where {T} = OffsetArray(array, OffsetArrays
 curry(f::Function, x)::Function = Base.Fix1(f, x)
 curry2nd(f::Function, x)::Function = Base.Fix2(f, x)
 currylast(f::Function, x)::Function = (xs...) -> f(xs..., x)
+
+function assertequal(result, compareto=nothing, _ = Union{})
+    if !isnothing(compareto)
+        if result == compareto
+            println("Correct   result: $(result)")
+        else
+            println("INCORRECT result: $(result) should be $(compareto)")
+        end
+    else
+        println("Unchecked result: $(result)")
+    end
+end
+
+function assertequal(result::AbstractString)
+    assertequal("\"$(escape_string(result))\"", nothing)
+end
+
+function assertequal(result::AbstractString, compareto::AbstractString)
+    assertequal("\"$(escape_string(result))\"", "\"$(escape_string(compareto))\"", Union{})
+end
 
 end

@@ -62,11 +62,8 @@ end
 
 field = drawAA(input)
 answer1 = count(>=(2), field)
-@assert answer1 == 8350
+assertequal(answer1, 8350)
 
 drawdiag!(field, input)
 answer2 = count(>=(2), field)
-@assert answer2 == 19374
-
-println(answer1)
-println(answer2)
+assertequal(answer2, 19374)
