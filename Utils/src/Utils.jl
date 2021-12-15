@@ -16,6 +16,7 @@ export curry
 export curry2nd
 export currylast
 export assertequal
+export boundaryconditions
 
 using Chain
 using Underscores
@@ -152,5 +153,27 @@ end
 function assertequal(result::AbstractString, compareto::AbstractString)
     assertequal("\"$(escape_string(result))\"", "\"$(escape_string(compareto))\"", Union{})
 end
+
+function boundaryconditions(vector::AbstractArray{T,1}, fillvalue::Union{Nothing,T}=nothing) where T
+    if fillvalue === nothing
+        [vector[begin]; vector; vector[end]]
+    else
+        [fillvalue; vector; fillvalue]
+    end
+end
+
+function boundaryconditions(matrix::AbstractArray{T,2}, fillvalue::Union{Nothing,T}=nothing) where T
+    sub = mapslices(curry2nd(boundaryconditions, fillvalue), matrix, dims=2)
+    if fillvalue === nothing
+        head = permutedims(sub[firstindex(sub, 1),:])
+        tail = permutedims(sub[lastindex(sub, 1),:])
+        cat(head, sub, tail; dims=1)
+    else
+        filler = permutedims(fill(fillvalue, size(sub, 2)))
+        cat(filler, sub, filler; dims=1)
+    end
+end
+
+boundaryconditions(matrix, fillvalue::T) where T = boundaryconditions(matrix, convert(T, fillvalue))
 
 end
