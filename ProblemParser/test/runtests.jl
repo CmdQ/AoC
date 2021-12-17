@@ -1,7 +1,5 @@
-module ProjectParserTests
-
-using Test
 using ProjectParser
+using Test
 
 @testset "Convert" begin
     @test parse(Convert(), "42") == 42
@@ -193,5 +191,3 @@ end
         ([3, 4], "h")  => "hrht",
     )
 end
-
-end # module

@@ -1,3 +1,2 @@
-name = "test"
-uuid = "ee4a27be-1adc-4b0f-8230-348bbf710c18"
-authors = ["Tobias Becker <nullpointeracception@gmail.com>"]
+[deps]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
