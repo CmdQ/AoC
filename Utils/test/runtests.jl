@@ -62,21 +62,3 @@ end
         @test (@something_nothing nothing (1 - val)) == -1
     end
 end
-
-@testset "split" begin
-    @testset "test default empty line" begin
-        @test split(IOBuffer("")) == [""]
-        @test split(IOBuffer("\n")) == ["", ""]
-        @test split(IOBuffer("hello\nworld\n\nyou're big\n")) == ["hello\nworld", "you're big"]
-        @test split(IOBuffer("hello\nworld\n\nyou're big")) == ["hello\nworld", "you're big"]
-        @test split(IOBuffer("hello\nworld\n\n\nyou're big")) == ["hello\nworld", "", "you're big"]
-    end
-
-    @testset "test given separator" begin
-        @test split("###", IOBuffer("")) == [""]
-        @test split("###", IOBuffer("###")) == ["", ""]
-        @test split("###", IOBuffer("hello\nworld\n###\nyou're big\n")) == ["hello\nworld", "you're big"]
-        @test split("###", IOBuffer("hello\nworld\n###\nyou're big")) == ["hello\nworld", "you're big"]
-        @test split("###", IOBuffer("hello\nworld\n###\n###\nyou're big")) == ["hello\nworld", "", "you're big"]
-    end
-end
