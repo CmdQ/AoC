@@ -1,4 +1,4 @@
-using ProjectParser
+using ProblemParser
 using Test
 
 @testset "Convert" begin
