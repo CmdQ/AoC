@@ -1,4 +1,4 @@
-module ProjectParser
+module ProblemParser
 
 export Blocks
 export Convert
