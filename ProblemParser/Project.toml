@@ -1,0 +1,4 @@
+name = "ProblemParser"
+uuid = "16064a1e-6b5f-4a50-97c7-fe66cda9553b"
+authors = ["Tobias Becker <nullpointeracception@gmail.com>"]
+version = "0.1.0"
