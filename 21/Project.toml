@@ -1,4 +1,6 @@
 name = "AoC 2021"
+uuid = "41a58b40-7dc3-4436-ad88-bfcb058a9b2b"
+authors = ["Tobias Becker <nullpointeracception@gmail.com>"]
 
 [deps]
 Accessors = "7d9f7c33-5ae7-4f3b-8dc6-eff91059b697"
