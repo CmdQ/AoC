@@ -2,7 +2,7 @@ using Utils
 
 using Chain
 
-inputfile = find_input(@__FILE__)
+file = find_input(@__FILE__)
 
 function load(fname)
     dotlist = Tuple{Int,Int}[]
@@ -28,7 +28,7 @@ function load(fname)
     end
     (dots=dots, folds=folds)
 end
-input = load(inputfile)
+input = load(file)
 
 function part2(input, onlyone=false)
     dots = copy(input.dots)

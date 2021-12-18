@@ -1,9 +1,10 @@
+using ProblemParser
 using Utils
 
 using Underscores
 
-inputfile = find_input(@__FILE__)
-input = @_ read(inputfile, String) |> split(__, ",") |> map(parse(Int, _), __)
+file = find_input(@__FILE__)
+input = parse(Split(",", Convert(Int16)), slurp(file))
 
 function part1(input)
     sort!(input)

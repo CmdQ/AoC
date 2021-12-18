@@ -1,26 +1,20 @@
+using ProblemParser
 using Utils
 
 using Chain
 import IterTools
 
-inputfile = find_input(@__FILE__,"example.txt")
-function load(fname)
-    open(fname) do io
-        line, rules = split_blocks(io)
-        split2 = map(split(rules, '\n')) do line
-            from, to = split(line, " -> ")
-            ((from[1], from[2]), to[1])
-        end
-        (line=line, rules=Dict(split2))
-    end
-end
-input = load(inputfile)
+file = find_input(@__FILE__)#,"example.txt")
+input = parse(FirstRest(Blocks(),
+        nothing,
+        LineMappings(Split(" -> "), Apply(two -> tuple(two...)), Apply(c -> c[begin])),
+    ), slurp(file))
 
 function polymerize(line, rules)
     next = IOBuffer(sizehint=2length(line))
     write(next, line[begin])
     for (a,b) in IterTools.partition(line, 2, 1)
-        write(next, rules[String([a, b])], b)
+        write(next, rules[(a,b)], b)
     end
     take!(next) |> String
 end
@@ -34,9 +28,9 @@ function counter(data)
 end
 
 function part1(input, rounds=10)::Int
-    line = input.line
+    line = input[1]
     for _ in 1:rounds
-        line = polymerize(line, input.rules)
+        line = polymerize(line, input[2])
         end
     mi, ma = extrema(kv -> kv[2], counter(line))
     ma - mi
@@ -45,7 +39,7 @@ end
 assertequal(part1(input), 3048)
 
 function part2(input, rounds=10)
-    line = input.line
+    line = input[1]
     pairs = Dict{Tuple{Char,Char},Int}()
     for tup in IterTools.partition(line, 2, 1)
         pairs[tup] = get(pairs, tup, 0) + 1
@@ -54,7 +48,7 @@ function part2(input, rounds=10)
     for _ in 1:rounds
         next = Dict{Tuple{Char,Char},Int}() # ('#', line[begin]) => 1, (line[end], '#') => 1
         for pair in keys(pairs)
-            middle = input.rules[pair]
+            middle = input[2][pair]
             tup = pair[1], middle
             next[tup] = get(pairs, tup, 0) + 1
             tup = middle, pair[2]
@@ -74,7 +68,6 @@ function part2(input, rounds=10)
     letters
 end
 
-@run assertequal(part2(input, 3), 1588)
 assertequal(part2(input, 3), 1588)
 
 """

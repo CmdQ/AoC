@@ -1,13 +1,12 @@
+using ProblemParser
 using Utils
 
 using Accessors
 using CompositeStructs
 using Underscores
 
-inputfile = find_input(@__FILE__)
-input = @_ inputfile |>
-    slurp |>
-    per_line(((cmd, num) = split(_); (Symbol(cmd), parse(Int, num))), __, false)
+file = find_input(@__FILE__)
+input = @_ file |> slurp |> parse(Lines(FirstRest(Split(), Apply(Symbol), Convert())), __)
 
 @Base.kwdef struct Position
     position::Int = 0

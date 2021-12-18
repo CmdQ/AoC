@@ -1,14 +1,10 @@
+using ProblemParser
 using Utils
 
 using Chain
 
-inputfile = find_input(@__FILE__    )#,"example.txt")
-input = @chain inputfile begin
-    slurp
-    per_line(line -> map(curry(parse, Int8), collect(line)), _)
-    reduce(hcat, _)
-    permutedims
-end
+file = find_input(@__FILE__    )#,"example.txt")
+input = parse(Rectangular(Convert(Int8)), slurp(file))
 
 NEIGHBORS = CartesianIndices((-1:1, -1:1))
 

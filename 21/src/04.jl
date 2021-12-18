@@ -1,25 +1,15 @@
+using ProblemParser
 using Utils
 
 using Chain
 using Lazy
 using Underscores
 
-function load()
-    inputfile = find_input(@__FILE__)
-    open(inputfile, "r") do f
-        draws, boardstr... = split_blocks(f)
-        boards = map(boardstr) do block
-            @chain block begin
-                split("\n")
-                map(line -> parse.(Int, split(line)), _)
-                reduce(hcat, _)
-                transpose
-            end
-        end
-        (draws=parse.(Int, split(draws, ",")), boards=boards)
-    end
-end
-input = load()
+file = find_input(@__FILE__)
+input = parse(FirstRest(Blocks(),
+        Split(",", Convert(Int8)),
+        Blocks(Rectangular(Lines(Split(Convert(Int8)))))
+    ), file |> slurp)
 
 function cross(board, num)
     for i in eachindex(board)
@@ -39,8 +29,8 @@ end
 score(board, num) = sum(filter(>=(0), board)) * num
 
 function part1(input)
-    boards = deepcopy(input.boards)
-    for draw in input.draws, board in boards
+    boards = deepcopy(input[2])
+    for draw in input[1], board in boards
         cross(board, draw)
         winner(board) && return score(board, draw)
     end
@@ -48,8 +38,8 @@ end
 assertequal(part1(input), 8136)
 
 function part2(input)
-    boards::Vector{Matrix{Int64}} = deepcopy(input.boards)
-    for draw in input.draws
+    boards::Vector{Matrix{Int64}} = deepcopy(input[2])
+    for draw in input[1]
         next::typeof(boards) = []
         for board in boards
             cross(board, draw)

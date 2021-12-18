@@ -1,10 +1,11 @@
+using ProblemParser
 using Utils
 
 using Chain
 import IterTools
 
-inputfile = find_input(@__FILE__)
-input = @chain inputfile slurp per_line_parse
+file = find_input(@__FILE__)
+input = @chain file slurp parse(Lines(Convert()), _)
 
 function part1(input)
     sum((@view input[2:end]) .> (@view input[1:end-1]))
