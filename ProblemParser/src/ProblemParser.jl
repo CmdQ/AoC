@@ -23,16 +23,13 @@ struct Split <: GrammarElement
     splitter
     per_element::Union{GrammarElement,Nothing}
     keepempty::Bool
+    limit::Int
 end
-Split(splitter=isspace; keepempty=false) = Split(splitter, nothing, keepempty)
-Split(per_element::GrammarElement; keepempty=false) = Split(isspace, per_element, keepempty)
-Split(splitter, per_element::GrammarElement; keepempty=false) = Split(splitter, per_element, keepempty)
+Split(splitter=isspace; keepempty=false, limit=0) = Split(splitter, nothing, keepempty, limit)
+Split(per_element::GrammarElement; keepempty=false, limit=0) = Split(isspace, per_element, keepempty, limit)
+Split(splitter, per_element::GrammarElement; keepempty=false, limit=0) = Split(splitter, per_element, keepempty, limit)
 
-struct Max1 <: GrammarElement
-    splitter::Split
-end
-
-Lines(per_line::Union{GrammarElement,Nothing}=nothing; keepempty=false) = Split(universal_newlines, per_line, keepempty)
+Lines(per_line::Union{GrammarElement,Nothing}=nothing; keepempty=false) = Split(universal_newlines, per_line, keepempty, 0)
 
 Base.@kwdef struct Convert <: GrammarElement
     target_type::Type = Int
@@ -42,7 +39,7 @@ Base.@kwdef struct Rectangular <: GrammarElement
     per_entry::Union{GrammarElement,Nothing} = nothing
 end
 
-Blocks(per_block=nothing; keepempty=false) = Split(doubled_newlines, per_block, keepempty)
+Blocks(per_block=nothing; keepempty=false) = Split(doubled_newlines, per_block, keepempty, 0)
 
 struct FirstRest <: GrammarElement
     splitter
@@ -71,15 +68,8 @@ Base.parse(operation::GrammarElement, list::AbstractArray) = map(Base.Fix1(Base.
 Base.parse(convert::Convert, text::Union{AbstractString, Char}) = parse(convert.target_type, text)
 
 function Base.parse(split::Split, text::AbstractString)
-    parts = Base.split(text, split.splitter; keepempty=split.keepempty)
+    parts = Base.split(text, split.splitter; keepempty=split.keepempty, limit=split.limit)
     parse(split.per_element, parts)
-end
-
-function Base.parse(max1::Max1, text::AbstractString)
-    max1.splitter.per_element === nothing || throw(
-        ArgumentError("the Split of Max1 mustn't have a per_element")
-    )
-    split(text, max1.splitter.splitter; limit=2)
 end
 
 function Base.parse(rectangular::Rectangular, text::AbstractString)
@@ -95,7 +85,7 @@ function Base.parse(rectangular::Rectangular, text::AbstractString)
 end
 
 function Base.parse(firstrest::FirstRest, text::AbstractString)
-    first, rest = parse(Max1(firstrest.splitter), text)
+    first, rest = split(text, firstrest.splitter.splitter; keepempty=true, limit=2)
     parse(firstrest.for_first, first), parse(firstrest.per_rest, rest)
 end
 
