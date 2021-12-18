@@ -1,9 +1,10 @@
+using ProblemParser
 using Utils
 
 using Underscores
 
-inputfile = find_input(@__FILE__)
-input = @_ read(inputfile, String) |> split(__, ",") |> map(parse(Int, _), __)
+file = find_input(@__FILE__)
+input = parse(Split(",", Convert(Int8)), slurp(file))
 
 function solve(input, days)
     ages = zeros(Int, 9) |> zerobased

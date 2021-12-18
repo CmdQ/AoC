@@ -1,19 +1,10 @@
+using ProblemParser
 using Utils
 
 using Underscores
 
-inputfile = find_input(@__FILE__)
-function load(fname)
-    re = Tuple{Vector{SubString},Vector{SubString}}[]
-    open(fname) do io
-        for line in eachline(io)
-            left, right = @_ line |> split(__, "|") |> map(split, __)
-            push!(re, (left, right))
-        end
-    end
-    re
-end
-input = load(inputfile)
+file = find_input(@__FILE__)
+input = parse(Lines(Split(" | ", Split())), slurp(file))
 
 function part1(input)
     @chain input begin

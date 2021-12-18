@@ -1,10 +1,11 @@
+using ProblemParser
 using Utils
 
 using Lazy
 using Underscores
 
-inputfile = find_input(@__FILE__)
-input = @> inputfile slurp per_line(false)
+file = find_input(@__FILE__)
+input = @>> file slurp parse(Lines())
 @assert @_ map(length(_), input) |> Set |> length == 1
 
 function part1(input)

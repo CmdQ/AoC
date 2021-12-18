@@ -1,17 +1,11 @@
+using ProblemParser
 using Utils
 
 using Chain
 using DataStructures
 
-inputfile = find_input(@__FILE__)
-input = @chain inputfile begin
-    slurp
-    per_line(_, false) do line
-        map(curry(parse, Int8), collect(line))
-    end
-    reduce(hcat, _)
-    permutedims
-end
+file = find_input(@__FILE__)
+input = parse(Rectangular(Convert(Int8)), slurp(file))
 
 const NSEW = [CartesianIndex(lr...) for lr in ((0,-1),(0,1),(-1,0),(1,0))]
 

@@ -1,9 +1,10 @@
+using ProblemParser
 using Utils
 
 using Chain
 
-inputfile = find_input(@__FILE__)
-input = @chain inputfile slurp per_line(_)
+file = find_input(@__FILE__)
+input = @chain file slurp parse(Lines(), _)
 
 const opening = "([{<"
 const closing = ")]}>"
