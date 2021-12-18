@@ -59,7 +59,7 @@ struct Map <: GrammarElement
     func
 end
 
-struct _Mappings
+struct _Mappings <: GrammarElement
     splitter::Union{GrammarElement,Nothing}
     first_rest::FirstRest
 end
