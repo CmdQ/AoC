@@ -160,6 +160,14 @@ end
 
 end
 
+@testset "Apply and Map" begin
+    @test parse(Apply(Symbol), "test") == :test
+
+    @test parse(Map(Symbol), "test") == [:t, :e, :s, :t]
+
+    @test parse(Lines(Map(Symbol)), "one\ntwo\nthree") == [:one, :two, :three]
+end
+
 @testset "Mappings" begin
     complex = """
         3-4 h: hrht

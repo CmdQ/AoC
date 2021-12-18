@@ -1,10 +1,12 @@
 module ProblemParser
 
+export Apply
 export Blocks
 export Convert
 export FirstRest
 export LineMappings
 export Lines
+export Map
 export Mappings
 export Noop
 export Rectangular
@@ -15,7 +17,7 @@ const doubled_newlines = Regex("(?:" * universal_newlines.pattern * "){2}")
 
 abstract type GrammarElement end
 
-Base.@kwdef struct Noop
+Base.@kwdef struct Noop <: GrammarElement
     inspect::Bool = false
 end
 
@@ -49,6 +51,14 @@ end
 FirstRest() = FirstRest(Lines(), nothing, nothing)
 FirstRest(split_on, per_rest=nothing) = FirstRest(split_on, nothing, per_rest)
 
+struct Apply <: GrammarElement
+    func
+end
+
+struct Map <: GrammarElement
+    func
+end
+
 struct _Mappings
     splitter::Union{GrammarElement,Nothing}
     first_rest::FirstRest
@@ -63,7 +73,7 @@ function Base.parse(noop::Noop, anything)
     anything
 end
 
-Base.parse(operation::GrammarElement, list::AbstractArray) = map(Base.Fix1(Base.parse, operation), list)
+Base.parse(operation::GrammarElement, list) = map(Base.Fix1(Base.parse, operation), list)
 
 Base.parse(convert::Convert, text::Union{AbstractString, Char}) = parse(convert.target_type, text)
 
@@ -88,6 +98,10 @@ function Base.parse(firstrest::FirstRest, text::AbstractString)
     first, rest = split(text, firstrest.splitter.splitter; keepempty=true, limit=2)
     parse(firstrest.for_first, first), parse(firstrest.per_rest, rest)
 end
+
+Base.parse(apply::Apply, thing) = apply.func(thing)
+Base.parse(map::Map, list::AbstractArray) = Base.map(map.func, list)
+Base.parse(map::Map, text::AbstractString) = Base.map(map.func, collect(text))
 
 function Base.parse(mappings::_Mappings, text::AbstractString)
     kv_pairs = parse(mappings.splitter, text)
