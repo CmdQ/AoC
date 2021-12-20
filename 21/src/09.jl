@@ -10,7 +10,7 @@ input = parse(Rectangular(Convert(Int8)), slurp(file))
 const NSEW = [CartesianIndex(lr...) for lr in ((0,-1),(0,1),(-1,0),(1,0))]
 
 function findmins(input)::BitMatrix
-    extended = boundaryconditions(input, convert(Int8, 10))
+    extended = boundaryconditions(input, 10)
     center = keys(input) .+ CartesianIndex(1, 1)
     @chain NSEW begin
         map(ci -> input .< getindex(extended, center .+ ci), _)
@@ -30,7 +30,7 @@ end
 assertequal(part1(input), 530)
 
 function fill_basins(input)
-    extended = boundaryconditions(input, convert(Int8, 10))
+    extended = boundaryconditions(input, 10)
     seeds = findmins(extended)
     todo = findall(seeds)
     basins = DisjointSets(todo)
