@@ -154,6 +154,6 @@ function boundaryconditions(matrix::AbstractArray{T,2}, fillvalue::Union{Nothing
     end
 end
 
-boundaryconditions(matrix, fillvalue::T) where T = boundaryconditions(matrix, convert(T, fillvalue))
+boundaryconditions(matrix::AbstractArray{T,N}, fillvalue::U) where {N,T,U} = boundaryconditions(matrix, convert(T, fillvalue))
 
 end

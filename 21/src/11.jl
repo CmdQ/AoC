@@ -3,7 +3,7 @@ using Utils
 
 using Chain
 
-file = find_input(@__FILE__    )#,"example.txt")
+file = find_input(@__FILE__)
 input = parse(Rectangular(Convert(Int8)), slurp(file))
 
 NEIGHBORS = CartesianIndices((-1:1, -1:1))
@@ -34,7 +34,7 @@ Aoc2111(input) = Aoc2111(input,
     CartesianIndices((firstindex(input, 1) + 1:lastindex(input, 2) + 1, firstindex(input, 1) + 1:lastindex(input, 2) + 1))
 )
 
-function Base.iterate(aoc::Aoc2111, state=boundaryconditions(aoc.matrix, convert(Int8, 0)))
+function Base.iterate(aoc::Aoc2111, state=boundaryconditions(aoc.matrix, 0))
     state[aoc.inner] .+= 1
     flashers = findall(>(9), state)
     flashes = flash(state, flashers)
