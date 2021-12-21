@@ -3,6 +3,7 @@ using Utils
 
 using Accessors
 using Chain
+using DataStructures
 using Memoize
 using StaticArrays
 
@@ -53,8 +54,7 @@ end
 
 assertequal(part1(input), 1_073_709)
 
-const threesums = @chain 1:3 begin
-    [_]
+const threesums = @chain [1:3] begin
     repeat(_, 3)
     IterTools.product(_...)
     collect
@@ -64,12 +64,12 @@ const threesums = @chain 1:3 begin
 end
 
 @memoize function part2(input::Tuple{Player,Player}, which)::Dict{Int8, Int}
-    wins = Dict{Int8, Int}()
+    wins = DefaultDict{Int8,Int}(0)
     for s in threesums
         active = advance(input[which], s)
 
         if active.score >= 21
-            wins[which] = get(wins, which, 0) + 1
+            wins[which] += + 1
         else
             updated = @set input[which] = active
             other = part2(updated, 3 - which)

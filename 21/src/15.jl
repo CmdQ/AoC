@@ -3,6 +3,7 @@ using Utils
 
 using Chain
 using DataStructures
+using Dictionaries
 using StaticArrays
 
 const file = find_input(@__FILE__)
@@ -10,7 +11,7 @@ const input = parse(Rectangular(Convert(Int8)), slurp(file))
 
 const NSEW = SVector{4,CartesianIndex}(CartesianIndex(lr...) for lr in ((0,-1),(0,1),(-1,0),(1,0)))
 
-function part1(input)
+function part1(input)::Int
     pq = @chain begin
         input
         size
@@ -19,7 +20,7 @@ function part1(input)
         PriorityQueue
     end
     pq[CartesianIndex(1,1)] = input[1,1]
-    prev = Dict()
+    prev = Dictionary{CartesianIndex,CartesianIndex}()
 
     while !isempty(pq)
         u,dist = dequeue_pair!(pq)
@@ -28,11 +29,11 @@ function part1(input)
             alt = dist + input[v]
             if alt < pq[v]
                 pq[v] = alt
-                prev[v] = u
+                set!(prev, v, u)
             end
         end
     end
-    risk = 0
+    risk::Int = 0
     backtrace = CartesianIndex(size(input))
     while backtrace != CartesianIndex(1,1)
         risk += input[backtrace]
