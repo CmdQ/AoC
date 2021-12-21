@@ -13,8 +13,8 @@ struct Player
     score::Int16
 end
 
-file = find_input(@__FILE__)
-input = MVector{2,Player}(undef)
+const file = find_input(@__FILE__)
+const input = MVector{2,Player}(undef)
 for m in eachmatch(r"Player ([12]) starting position: (\d+)", slurp(file))
     input[parse(Int, m[1])] = Player(parse(Int16, m[2]), 0)
 end

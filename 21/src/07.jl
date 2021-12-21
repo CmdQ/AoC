@@ -3,8 +3,8 @@ using Utils
 
 using Underscores
 
-file = find_input(@__FILE__)
-input = parse(Split(",", Convert(Int16)), slurp(file))
+const file = find_input(@__FILE__)
+const input = parse(Split(",", Convert(Int16)), slurp(file))
 
 function part1(input)
     sort!(input)

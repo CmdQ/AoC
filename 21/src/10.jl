@@ -4,8 +4,8 @@ using Utils
 using Chain
 using StaticArrays
 
-file = find_input(@__FILE__)
-input = @chain file slurp parse(Lines(), _)
+const file = find_input(@__FILE__)
+const input = @chain file slurp parse(Lines(), _)
 
 const opening = "([{<"
 const closing = ")]}>"

@@ -19,10 +19,10 @@ horizontal(line::Line) = line.a.x == line.b.x
 vertical(line::Line) = line.a.y == line.b.y
 axisaligned(line) = horizontal(line) || vertical(line)
 
-file = find_input(@__FILE__)
+const file = find_input(@__FILE__)
 content = @> file slurp
 width = height = 0
-input = per_line(content, false) do line
+const input = per_line(content, false) do line
     x1, y1, x2, y2 = @_ line |>
         split(__, " -> ") |>
         map(split(_, ","), __) |>

@@ -5,8 +5,8 @@ using Chain
 using DataStructures
 using StaticArrays
 
-file = find_input(@__FILE__)
-input = parse(Rectangular(Convert(Int8)), slurp(file))
+const file = find_input(@__FILE__)
+const input = parse(Rectangular(Convert(Int8)), slurp(file))
 
 const NSEW = SVector{4,CartesianIndex}(CartesianIndex(lr...) for lr in ((0,-1),(0,1),(-1,0),(1,0)))
 

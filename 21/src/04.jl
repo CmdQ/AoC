@@ -5,8 +5,8 @@ using Chain
 using Lazy
 using Underscores
 
-file = find_input(@__FILE__)
-input = parse(FirstRest(Blocks(),
+const file = find_input(@__FILE__)
+const input = parse(FirstRest(Blocks(),
         Split(",", Convert(Int8)),
         Blocks(Rectangular(Lines(Split(Convert(Int8)))))
     ), file |> slurp)

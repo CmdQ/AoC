@@ -11,9 +11,9 @@ struct Off0Matrix
 end
 Off0Matrix(rules, matrix) = Off0Matrix(rules, matrix, false)
 
-file = find_input(@__FILE__)
+const file = find_input(@__FILE__)
 tobool = Map(e -> e == '#')
-input = Off0Matrix(parse(FirstRest(Blocks(), tobool, Rectangular(tobool)), slurp(file))...)
+const input = Off0Matrix(parse(FirstRest(Blocks(), tobool, Rectangular(tobool)), slurp(file))...)
 
 Base.size(matrix::Off0Matrix) = size(matrix.parent)
 

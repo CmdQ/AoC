@@ -3,8 +3,8 @@ using Utils
 
 import IterTools
 
-file = find_input(@__FILE__)
-input = parse(FirstRest(Blocks(),
+const file = find_input(@__FILE__)
+const input = parse(FirstRest(Blocks(),
         nothing,
         LineMappings(Split(" -> "), Apply(Tuple), Apply(c -> c[begin])),
     ), slurp(file))

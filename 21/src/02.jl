@@ -5,8 +5,8 @@ using Accessors
 using CompositeStructs
 using Underscores
 
-file = find_input(@__FILE__)
-input = @_ file |> slurp |> parse(Lines(FirstRest(Split(), Apply(Symbol), Convert())), __)
+const file = find_input(@__FILE__)
+const input = @_ file |> slurp |> parse(Lines(FirstRest(Split(), Apply(Symbol), Convert())), __)
 
 @Base.kwdef struct Position
     position::Int = 0

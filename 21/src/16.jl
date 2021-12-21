@@ -4,8 +4,8 @@ using Chain
 using CompositeStructs
 import IterTools
 
-inputfile = find_input(@__FILE__)
-input = inputfile |> slurp
+const file = find_input(@__FILE__)
+const input = file |> slurp
 
 function bitvector(input::AbstractString)
     @assert length(input) % 2 == 0 "input has length $(length(input))"
