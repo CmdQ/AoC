@@ -1,6 +1,10 @@
 using ProblemParser
 using Utils
 
+using DataStructures
+using Dictionaries
+using SplitApplyCombine
+
 import IterTools
 
 const file = find_input(@__FILE__)
@@ -11,27 +15,24 @@ const input = parse(FirstRest(Blocks(),
 
 function solve(input, rounds)
     line = input[1]
-    pairs = Dict{Tuple{Char,Char},Int}()
+    pairs = DefaultDict{Tuple{Char,Char},Int}(0)
     for tup in IterTools.partition(line, 2, 1)
-        pairs[tup] = get(pairs, tup, 0) + 1
+        pairs[tup] = pairs[tup] = pairs[tup] + 1
     end
     for _ in 1:rounds
-        next = Dict{Tuple{Char,Char},Int}()
+        next = DefaultDict{Tuple{Char,Char},Int}(0)
         for (pair, count) in pairs
             middle = input[2][pair]
             tup = pair[1], middle
-            next[tup] = get(next, tup, 0) + count
+            next[tup] = next[tup] + count
             tup = middle, pair[2]
-            next[tup] = get(next, tup, 0) + count
+            next[tup] = next[tup] + count
         end
         pairs = next
     end
-    letters = Dict{Char, Int}()
-    for ((a,_),count) in pairs
-        letters[a] = get(letters, a, 0) + count
-    end
-    letters[line[end]] = get(letters, line[end], 0) + 1
-    mi, ma = extrema(kv -> kv[2], letters)
+    letters = groupsum(tup -> tup[1][1], tup -> tup[2], pairs)
+    set!(letters, line[end], get(letters, line[end], 0) + 1)
+    mi, ma = extrema(letters)
     ma - mi
 end
 

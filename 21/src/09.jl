@@ -30,7 +30,7 @@ end
 
 assertequal(part1(input), 530)
 
-function fill_basins(input)
+function fill_basins(input)::DisjointSets{CartesianIndex{2}}
     extended = boundaryconditions(input, 10)
     seeds = findmins(extended)
     todo = findall(seeds)
@@ -52,11 +52,11 @@ function fill_basins(input)
 end
 
 function part2(input)::Int
-    roots = Dict()
+    roots = DefaultDict{CartesianIndex{2},Int}(0)
     basins = fill_basins(input)
     for basin in unique(basins)
         root = find_root!(basins, basin)
-        roots[root] = get(roots, root, 0) + 1
+        roots[root] += 1
     end
     sizes = roots |> values |> collect
     len = length(sizes)
