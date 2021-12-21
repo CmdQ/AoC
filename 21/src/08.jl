@@ -4,8 +4,8 @@ using Utils
 using Chain
 using Underscores
 
-file = find_input(@__FILE__)
-input = parse(Lines(Split(" | ", Split())), slurp(file))
+const file = find_input(@__FILE__)
+const input = parse(Lines(Split(" | ", Split())), slurp(file))
 
 function part1(input)
     @chain input begin

@@ -4,8 +4,8 @@ using Utils
 using Chain
 import IterTools
 
-file = find_input(@__FILE__)
-input = @chain file slurp parse(Lines(Convert()), _)
+const file = find_input(@__FILE__)
+const input = @chain file slurp parse(Lines(Convert()), _)
 
 function part1(input)
     sum((@view input[2:end]) .> (@view input[1:end-1]))

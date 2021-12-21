@@ -4,8 +4,8 @@ using Utils
 using Lazy
 using Underscores
 
-file = find_input(@__FILE__)
-input = @>> file slurp parse(Lines())
+const file = find_input(@__FILE__)
+const input = @>> file slurp parse(Lines())
 @assert @_ map(length(_), input) |> Set |> length == 1
 
 function part1(input)

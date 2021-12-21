@@ -3,8 +3,8 @@ using Utils
 
 using Chain
 
-file = find_input(@__FILE__)
-input = parse(Rectangular(Convert(Int8)), slurp(file))
+const file = find_input(@__FILE__)
+const input = parse(Rectangular(Convert(Int8)), slurp(file))
 
 const NEIGHBORS = CartesianIndices((-1:1, -1:1))
 
