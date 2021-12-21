@@ -1,6 +1,7 @@
 using ProblemParser
 using Utils
 
+using Chain
 using Underscores
 
 file = find_input(@__FILE__)

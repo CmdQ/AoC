@@ -62,7 +62,7 @@ function decode(bv::BitVector, pos=1; limit=-1)
     pos, found
 end
 decode(string::AbstractString) = string |> bitvector |> decode
-@run decode("620080001611562C8802118E34")
+decode("620080001611562C8802118E34")
 decode("620080001611562C8802118E34" |> bitvector)
 
 decode("EE00D40C823060")
