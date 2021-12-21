@@ -4,6 +4,7 @@ using Utils
 using Accessors
 using Chain
 using Memoize
+using StaticArrays
 
 import IterTools
 
@@ -13,7 +14,7 @@ struct Player
 end
 
 file = find_input(@__FILE__)
-input = Vector{Player}(undef, 2)
+input = MVector{2,Player}(undef)
 for m in eachmatch(r"Player ([12]) starting position: (\d+)", slurp(file))
     input[parse(Int, m[1])] = Player(parse(Int16, m[2]), 0)
 end
@@ -78,6 +79,6 @@ end
     wins
 end
 
-part2(input::Vector{Player}) = part2(Tuple(input), 1) |> values |> maximum
+part2(input::AbstractVector{Player}) = part2(Tuple(input), 1) |> values |> maximum
 
 assertequal(part2(input), 148_747_830_493_442)
