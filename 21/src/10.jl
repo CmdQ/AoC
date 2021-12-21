@@ -2,13 +2,14 @@ using ProblemParser
 using Utils
 
 using Chain
+using StaticArrays
 
 file = find_input(@__FILE__)
 input = @chain file slurp parse(Lines(), _)
 
 const opening = "([{<"
 const closing = ")]}>"
-const scores = [3,57,1197,25137]
+const scores = SA[3,57,1197,25137]
 
 function corrupted(line::AbstractString)
     stack = Char[]

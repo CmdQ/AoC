@@ -6,7 +6,7 @@ using Chain
 file = find_input(@__FILE__)
 input = parse(Rectangular(Convert(Int8)), slurp(file))
 
-NEIGHBORS = CartesianIndices((-1:1, -1:1))
+const NEIGHBORS = CartesianIndices((-1:1, -1:1))
 
 function flash(input, locations)
     length(locations) == 0 && return 0

@@ -3,11 +3,12 @@ using Utils
 
 using Chain
 using DataStructures
+using StaticArrays
 
 file = find_input(@__FILE__)
 input = parse(Rectangular(Convert(Int8)), slurp(file))
 
-const NSEW = [CartesianIndex(lr...) for lr in ((0,-1),(0,1),(-1,0),(1,0))]
+const NSEW = SVector{4,CartesianIndex}(CartesianIndex(lr...) for lr in ((0,-1),(0,1),(-1,0),(1,0)))
 
 function part1(input)
     pq = @chain begin
