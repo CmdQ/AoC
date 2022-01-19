@@ -1,7 +1,6 @@
 using Utils
 
 using Chain
-using CompositeStructs
 
 import IterTools
 
