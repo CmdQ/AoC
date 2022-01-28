@@ -7,6 +7,7 @@ export FirstRest
 export LineMappings
 export Lines
 export Map
+export Extract
 export Mappings
 export Noop
 export Rectangular
@@ -59,6 +60,13 @@ struct Map <: GrammarElement
     func
 end
 
+struct Extract <: GrammarElement
+    regex::Regex
+    after::Union{GrammarElement,Nothing}
+end
+Extract() = Extract(r"\d+", Convert())
+Extract(regex::Regex) = Extract(regex, nothing)
+
 struct _Mappings <: GrammarElement
     splitter::Union{GrammarElement,Nothing}
     first_rest::FirstRest
@@ -102,6 +110,8 @@ end
 Base.parse(apply::Apply, thing) = apply.func(thing)
 Base.parse(map::Map, list::AbstractArray) = Base.map(map.func, list)
 Base.parse(map::Map, text::AbstractString) = Base.map(map.func, collect(text))
+
+Base.parse(extract::Extract, text::AbstractString) = parse(extract.after, match(extract.regex, text).match)
 
 function Base.parse(mappings::_Mappings, text::AbstractString)
     kv_pairs = parse(mappings.splitter, text)
