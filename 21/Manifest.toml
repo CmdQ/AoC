@@ -5,9 +5,9 @@ manifest_format = "2.0"
 
 [[deps.Accessors]]
 deps = ["Compat", "CompositionsBase", "ConstructionBase", "Future", "LinearAlgebra", "MacroTools", "Requires", "Test"]
-git-tree-sha1 = "2e427a6196c7aad4ee35054a9a90e9cb5df5c607"
+git-tree-sha1 = "0fa53d25794bf1c754f909ee4b0ac31eabff952f"
 uuid = "7d9f7c33-5ae7-4f3b-8dc6-eff91059b697"
-version = "0.1.7"
+version = "0.1.8"
 
 [[deps.Adapt]]
 deps = ["LinearAlgebra"]
@@ -58,9 +58,9 @@ version = "0.4.10"
 
 [[deps.ChainRulesCore]]
 deps = ["Compat", "LinearAlgebra", "SparseArrays"]
-git-tree-sha1 = "926870acb6cbcf029396f2f2de030282b6bc1941"
+git-tree-sha1 = "6e39c91fb4b84dcb870813c91674bdebb9145895"
 uuid = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
-version = "1.11.4"
+version = "1.11.5"
 
 [[deps.ChangesOfVariables]]
 deps = ["ChainRulesCore", "LinearAlgebra", "Test"]
@@ -395,9 +395,9 @@ uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [[deps.SplitApplyCombine]]
 deps = ["Dictionaries", "Indexing"]
-git-tree-sha1 = "dec0812af1547a54105b4a6615f341377da92de6"
+git-tree-sha1 = "35efd62f6f8d9142052d9c7a84e35cd1f9d2db29"
 uuid = "03a91e81-4c3e-53e1-a0a4-9c0c8f19dd66"
-version = "1.2.0"
+version = "1.2.1"
 
 [[deps.SplittablesBase]]
 deps = ["Setfield", "Test"]
