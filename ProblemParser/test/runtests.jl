@@ -198,4 +198,20 @@ end
         ([8, 10], "k") => "kklxkkkqkkkkk",
         ([3, 4], "h")  => "hrht",
     )
+
+    not_just_lines = """
+        --- scanner 0 ---
+        0,2
+        4,1
+        3,3
+
+        --- scanner 1 ---
+        -1,-1
+        -5,0
+        -2,1
+        """
+    @test parse(Blocks(FirstRest(Lines(), Extract(), Lines(Split(',', Convert())))), not_just_lines) == [
+        (0, [[0, 2], [4, 1], [3, 3]]),
+        (1, [[-1, -1], [-5, 0], [-2, 1]]),
+    ]
 end
