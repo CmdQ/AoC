@@ -53,4 +53,3 @@
               (check-equal? (solve1) "f77a0e6e"))
    (test-case "Part 2"
               (check-equal? (solve2) "999828ec"))))
-

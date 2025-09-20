@@ -5,7 +5,7 @@
 (struct room (name sector checksum) #:transparent)
 
 (define (string->room str)
-  (match (regexp-match #rx"([a-z-]+)-([0-9]+)[[]([a-z]+)[]]" str)
+  (match (regexp-match #px"([[:lower:]-]+)-(\\d+)\\[([[:lower:]]+)\\]" str)
     [(list asd name id chk)
      (room name (string->number id) chk)]))
 
@@ -40,9 +40,8 @@
 
 (define (solve1 input)
   (set! input (filter valid? input))
-  (~> input
-      (map room-sector _)
-      (apply + _)))
+  (for/sum ([i input])
+    (room-sector i)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 2
 
