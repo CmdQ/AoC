@@ -3,7 +3,8 @@
 (provide (contract-out
           [digits->number (list? . -> . exact-nonnegative-integer?)]
           [char->value (char? . -> . exact-nonnegative-integer?)]
-          [value->char (exact-nonnegative-integer? . -> . char?)]))
+          [value->char (exact-nonnegative-integer? . -> . char?)]
+          [letter->integer (char? . -> . exact-nonnegative-integer?)]))
 
 (define (digits->number digits)
   (foldl (λ (d res) (+ (* 10 res) d)) 0 digits))
@@ -19,6 +20,23 @@
     [else (raise-arguments-error 'char->value
                                  "only single digits accepted"
                                  "num" num)]))
+
+(define (letter->integer c #:lower-only (lower-only #f) #:upper-only (upper-only #f))
+  (cond
+    [(and lower-only upper-only)
+     (raise-arguments-error 'letter->integer
+                            "these two flags are mutually exclusive"
+                            "#:lower-only" lower-only
+                            "#:upper-only" upper-only)]
+    [(and (char<=? #\a c #\z) (not upper-only))
+     (- (char->integer c) (char->integer #\a))]
+    [(and (char<=? #\A c #\Z) (not lower-only))
+     (- (char->integer c) (char->integer #\A))]
+    [else (raise-arguments-error 'letter->integer
+                                 "char not in expected range"
+                                 "c" c
+                                 "#:lower-only" lower-only
+                                 "#:upper-only" upper-only)]))
 
 (module+ test
   (require rackunit)
