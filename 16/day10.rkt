@@ -2,6 +2,8 @@
 
 (require threading)
 
+(require "utils.rkt")
+
 (struct/contract recipient ((id integer?) (type symbol?)) #:transparent)
 (define (make-recipient) (recipient -1 'unknown))
 (struct/contract bot ((chips (listof integer?)) (low-to recipient?) (high-to recipient?)) #:transparent)
@@ -17,18 +19,21 @@
         file->lines
         (for-each (match-lambda
                     [(pregexp #px"bot (\\d+) gives low to (bot|output) (\\d+) and high to (bot|output) (\\d+)" (list _ from low-type low-id high-type high-id))
-                     (hash-update! bots
-                                   (string->number from)
-                                   (λ (b) (bot
-                                           (bot-chips b)
-                                           (recipient (string->number low-id) (string->symbol low-type))
-                                           (recipient (string->number high-id) (string->symbol high-type))))
-                                   (make-bot))]
+                     (shadow-as ([string->number from low-id high-id])
+                       (hash-update! bots
+                                     from
+                                     (λ (b) (bot
+                                             (bot-chips b)
+                                             (recipient low-id (string->symbol low-type))
+                                             (recipient high-id (string->symbol high-type))))
+                                     (make-bot)))
+                     ]
                     [(pregexp #px"value (\\d+) goes to bot (\\d+)" (list _ value id))
-                     (hash-update! bots
-                                   (string->number id)
-                                   (lambda~> (bot-add-chip (string->number value)))
-                                   (make-bot))])
+                     (shadow-as ([string->number value id])
+                       (hash-update! bots
+                                   id
+                                   (lambda~> (bot-add-chip value))
+                                   (make-bot)))])
                   _))
     (world bots (make-hash))))
 
