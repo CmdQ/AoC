@@ -36,12 +36,12 @@
   (syntax-rules ()
     [(_ body ...)
      (#%module-begin
-      (require rackunit)
       body ...
       (define answer1 (solve1))
       (printf "Answer 1: ~A~%Answer 2:" answer1)
       (solve2)
       (displayln "")
+      (require rackunit)
       (check-equal? answer1 121))]))
 
 (provide rect! rotate-row! rotate-column!
