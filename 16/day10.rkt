@@ -55,13 +55,13 @@
                                   (for/list ([r (list to-low to-high)]
                                              [choice ordered])
                                     (list
-                                     (λ () (hash-set! bots k (bot '() to-low to-high)))
+                                     (thunk (hash-set! bots k (bot '() to-low to-high)))
                                      (match-let ([(recipient id type) r])
                                        (case type
                                          ['bot
-                                          (λ () (to-bot! id choice))]
+                                          (thunk (to-bot! id choice))]
                                          ['output
-                                          (λ () (hash-set! outs id choice))]
+                                          (thunk (hash-set! outs id choice))]
                                          [else (error 'impossible)]))))]
                                  [_ null]))))
 
