@@ -6,7 +6,7 @@
 (define bottom-floor 1)
 (define top-floor 4)
 
-(define elements (mutable-seteq))
+(define elements empty)
 (define input (make-immutable-hasheq
                (append*
                 (list (cons 'elevator bottom-floor))
@@ -18,12 +18,15 @@
                     (define replacer
                       (cond
                         [(string-suffix? item "generator") ; length 9
-                         (set-add! elements (string->symbol
-                                             (substring item 0 (- (string-length item) 10))))
+                         (set! elements (cons (string->symbol
+                                               (substring item 0
+                                                          (- (string-length item) 10)))
+                                              elements))
                          (λ (item) (string-replace item " " "-"))]
                         [else
                          (λ (item) (string-replace item "compatible " ""))]))
                     (cons (string->symbol (replacer item)) i))))))
+(set! elements (sort elements symbol<?))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 1
 
@@ -40,11 +43,11 @@
 (define chip-floor (what-ref chip-for))
 
 (define (danger? state)
-  (for/or ([chip (in-set elements)]
+  (for/or ([chip (in-list elements)]
            #:do ((define floor (chip-floor state chip))
                  (define safe (gen-floor state chip)))
            #:when (and (positive? floor) (not (= floor safe)))
-           [generator (in-set elements)]
+           [generator (in-list elements)]
            #:when (not (eq? chip generator)))
     (define gf (gen-floor state generator))
     (and (positive? gf) (= floor gf))))
@@ -93,7 +96,7 @@
 
 (define (solve2 state)
   (define new-elements '(elerium dilithium))
-  (for-each (lambda~> (set-add! elements _)) new-elements)
+  (set! elements (sort (append '(elerium dilithium) elements) symbol<?))
   (~> new-elements
       (append-map (λ (s) (map (λ (f) (f s)) (list generator-for chip-for))) _)
       (foldl (λ (elm acc) (hash-set acc elm 1)) state _)
@@ -115,6 +118,13 @@
                                (plutonium-microchip . 3)
                                (elevator . 1)))
    (test-case "Part 1"
+              (check-equal? elements '(cobalt
+                                       curium
+                                       ;dilithium
+                                       ;elerium
+                                       plutonium
+                                       promethium
+                                       ruthenium))
               (test-case "Danger"
                          (check-true (danger? #hasheq((promethium-microchip . 3) (cobalt-generator . 3))))
                          (check-false (danger? #hasheq((promethium-microchip . 1) (cobalt-generator . 2))))
