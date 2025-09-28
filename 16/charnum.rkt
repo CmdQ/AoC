@@ -50,10 +50,10 @@
                (check-equal? (value->char i) c))
              (check-exn
               exn:fail:contract?
-              (λ () (value->char -1)))
+              (thunk (value->char -1)))
              (check-exn
               exn:fail:contract?
-              (λ () (value->char 10))))
+              (thunk (value->char 10))))
   (test-case "numeric value of chars"
              (for ([d "0123456789"]
                    [i (in-range 10)])
@@ -61,4 +61,4 @@
              (for ([n "qwe!$#/.,"])
                (check-exn
                 exn:fail:contract?
-                (λ () (char->value n))))))
+                (thunk (char->value n))))))
