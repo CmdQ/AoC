@@ -7,25 +7,41 @@
 (define top-floor 4)
 
 (define elements empty)
-(define input (make-immutable-hasheq
-               (append*
-                (list (cons 'elevator bottom-floor))
-                (for/list ([i (in-naturals bottom-floor)]
-                           [line (file->lines "input11.txt")])
-                  (for/list ([item (regexp-match*
-                                    #px"\\w+(?: generator|-compatible microchip)"
-                                    line)])
-                    (define replacer
-                      (cond
-                        [(string-suffix? item "generator") ; length 9
-                         (set! elements (cons (string->symbol
-                                               (substring item 0
-                                                          (- (string-length item) 10)))
-                                              elements))
-                         (λ (item) (string-replace item " " "-"))]
-                        [else
-                         (λ (item) (string-replace item "compatible " ""))]))
-                    (cons (string->symbol (replacer item)) i))))))
+(define (parse port)
+  (cond
+    [(string? port)
+     (cond
+       [(file-exists? port)
+        (call-with-input-file port parse #:mode 'text)]
+       [else (parse (open-input-string port))])]
+    [else
+     (define input (make-immutable-hasheq
+                    (append*
+                     (for/list ([line (port->lines port)])
+                       (for/list ([item (regexp-match*
+                                         #px"\\w+(?: generator|-compatible microchip| cage)"
+                                         line)])
+                         (define replacer
+                           (cond
+                             [(string-suffix? item "cage")
+                              (λ (item) (string-replace item " cage" ""))]
+                             [(string-suffix? item "generator") ; length 9
+                              (set! elements (cons (string->symbol
+                                                    (substring item 0
+                                                               (- (string-length item) 10)))
+                                                   elements))
+                              (λ (item) (string-replace item " " "-"))]
+                             [else
+                              (λ (item) (string-replace item "compatible " ""))]))
+                         (define i (case (substring line 4 6)
+                                     [("fi") bottom-floor]
+                                     [("se") 2]
+                                     [("th") 3]
+                                     [("fo") top-floor]
+                                     [else (error 'unreachable)]))
+                         (cons (string->symbol (replacer item)) i))))))
+     (hash-update input 'elevator identity 1)]))
+(define input (parse "input11.txt"))
 (set! elements (sort elements symbol<?))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 1
@@ -126,9 +142,9 @@
                                        promethium
                                        ruthenium))
               (test-case "Danger"
-                         (check-true (danger? #hasheq((promethium-microchip . 3) (cobalt-generator . 3))))
-                         (check-false (danger? #hasheq((promethium-microchip . 1) (cobalt-generator . 2))))
-                         (check-false (danger? #hasheq((promethium-microchip . 1) (promethium-generator . 1) (cobalt-generator . 1)))))
+                         (check-true (danger? (parse "The third floor contains a promethium-compatible microchip and a cobalt generator.")))
+                         (check-false (danger? (parse "The first promethium-compatible microchip.\nThe second cobalt generator.")))
+                         (check-false (danger? (parse "The third floor contains a promethium-compatible microchip, promethium generator and a cobalt generator, elevator cage."))))
               (test-case "Elevator"
                          (check-equal? (elevator-moves input) '(2))
                          (check-equal? (sort (elevator-moves 3) <) '(2 4)))
@@ -137,51 +153,18 @@
                          (check-equal? (stuff-on input 1) '(promethium-microchip promethium-generator)))
               (test-case "Generate valid moves"
                          (define single-moves
-                           (set
-                            #hasheq((cobalt-generator . 1)
-                                    (cobalt-microchip . 2)
-                                    (curium-generator . 3) ; this went up
-                                    (curium-microchip . 2)
-                                    (elevator . 3)
-                                    (plutonium-generator . 3))
-                            #hasheq((cobalt-generator . 1)
-                                    (cobalt-microchip . 2)
-                                    (curium-generator . 1) ; this went down
-                                    (curium-microchip . 2)
-                                    (elevator . 1)
-                                    (plutonium-generator . 3))
-                            #hasheq((cobalt-generator . 1)
-                                    (cobalt-microchip . 1) ; this went down
-                                    (curium-generator . 2)
-                                    (curium-microchip . 2)
-                                    (elevator . 1)
-                                    (plutonium-generator . 3))))
+                           (~> '("The first cobalt generator.\nThe second cobalt-compatible microchip, curium-compatible microchip.\nThe third curium generator, plutonium generator, elevator cage."
+                                 "The first cobalt generator, curium generator.\nThe second cobalt-compatible microchip, curium-compatible microchip.\nThe third plutonium generator."
+                                 "The first cobalt generator, cobalt-compatible microchip.\nThe second curium generator, curium-compatible microchip.\nThe third plutonium generator.")
+                               (map parse _)
+                               list->set))
                          (define double-moves
-                           (set
-                            #hasheq((cobalt-generator . 1)
-                                    (cobalt-microchip . 2)
-                                    (curium-generator . 3) ; this and
-                                    (curium-microchip . 3) ; this went up
-                                    (elevator . 3)
-                                    (plutonium-generator . 3))
-                            #hasheq((cobalt-generator . 1)
-                                    (cobalt-microchip . 2)
-                                    (curium-generator . 1) ; this and
-                                    (curium-microchip . 1) ; this went down
-                                    (elevator . 1)
-                                    (plutonium-generator . 3))
-                            #hasheq((cobalt-generator . 1)
-                                    (cobalt-microchip . 1) ; this and
-                                    (curium-generator . 1) ; this went down
-                                    (curium-microchip . 2)
-                                    (elevator . 1)
-                                    (plutonium-generator . 3))))
-                         (check-equal? (list->set (valid-moves #hasheq((cobalt-generator . 1)
-                                                                       (cobalt-microchip . 2)
-                                                                       (curium-generator . 2)
-                                                                       (curium-microchip . 2)
-                                                                       (elevator . 2)
-                                                                       (plutonium-generator . 3))))
+                           (~> '("The first cobalt generator.\nThe second cobalt-compatible microchip.\nThe third curium generator, curium-compatible microchip, plutonium generator, elevator cage."
+                                 "The first cobalt generator, curium generator, curium-compatible microchip, elevator cage.\nThe second cobalt-compatible microchip.\nThe third plutonium generator."
+                                 "The first cobalt generator, cobalt-compatible microchip, curium generator, elevator cage.\nThe second curium-compatible microchip.\nThe third plutonium generator.")
+                               (map parse _)
+                               list->set))
+                         (check-equal? (list->set (valid-moves (parse "The first cobalt generator.\nThe second cobalt-compatible microchip, curium generator, curium-compatible microchip, elevator cage.\nThe third plutonium generator.")))
                                        (set-union single-moves double-moves) "double doesn't work"))
               (check-false (done? input))
               (check-equal? (solve1 input) 33))
