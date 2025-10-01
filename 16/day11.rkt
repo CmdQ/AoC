@@ -177,4 +177,4 @@
               (check-equal? (first (valid-moves input 1)) (valid-moves-to input 1 2))
               (check-equal? (solve1 input) 33))
    (test-case "Part 2"
-              (check-equal? (solve2 input) 33))))
+              (check-equal? (solve2 input) 57))))
