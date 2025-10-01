@@ -41,11 +41,11 @@
                                                             (- (string-length item) 21))))
                              (λ (item) (string-replace item "compatible " ""))]))
                         
-                        (define i (case (substring line 4 6)
-                                    [("fi") bottom-floor]
-                                    [("se") 2]
-                                    [("th") 3]
-                                    [("fo") top-floor]
+                        (define i (case (string-ref line 5)
+                                    [(#\i) bottom-floor]
+                                    [(#\e) 2]
+                                    [(#\h) 3]
+                                    [(#\o) top-floor]
                                     [else (error 'unreachable)]))
                         (cons (string->symbol (replacer item)) i)))))
      (set! elements ((compose list->vector set->list) elements))
@@ -59,12 +59,6 @@
   (let-values ([(only _) (parse2 input)]) only))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 1
-
-(define ((what-ref func) hash element)
-  (hash-ref hash (func element) 0))
-
-(define gen-floor (what-ref generator-for))
-(define chip-floor (what-ref chip-for))
 
 (define (danger? state)
   (define end (vector-length state))
@@ -83,15 +77,6 @@
   (for/and ([t (in-vector state)])
     (= t 4)))
 
-;(danger? #R(parse1 "The third floor contains a promethium-compatible microchip and a cobalt generator."))
-;(error 'stop)
-
-(define/match (elevator-moves state)
-  [((hash* ('elevator floor))) (elevator-moves floor)]
-  [(floor)
-   (filter (λ (i) (<= bottom-floor i top-floor))
-           (map (λ (f) (f floor)) (list add1 sub1)))])
-
 (define (valid-moves-to state floor to)
   ;   g m  g m  g m  g m  g m
   ;   0 1  2 3  4 5  6 7  8 9
@@ -107,7 +92,7 @@
   (define double-moves
     (for*/fold ([acc empty-treelist])
                ([i (in-range len)]
-                [j (in-range (add1 i) len)])
+                [j (in-range (add1 i) len)]) ; TODO have start at same position and get single moves for free?
       (cond
         [(= (vector-ref state i) (vector-ref state j) floor)
          (define copy (vector-copy state))
