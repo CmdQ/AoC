@@ -62,7 +62,7 @@
                                           (thunk (to-bot! id choice))]
                                          ['output
                                           (thunk (hash-set! outs id choice))]
-                                         [else (error 'impossible)]))))]
+                                         [else (assert-unreachable)]))))]
                                  [_ null]))))
 
     (cond
