@@ -125,28 +125,28 @@
   (let loop ([queue (treelist (list state 1 0))])
     (match-define (list current floor depth) (treelist-first queue))
     (cond
-      [(set-member? visited current) (loop (treelist-rest queue))]
+      [(set-member? visited (cons current floor)) (loop (treelist-rest queue))]
       [(done? current) depth]
       [else
-       (set-add! visited current)
+       (set-add! visited (cons current floor))
        (~> (valid-moves current floor)
            (map (match-lambda [(cons elevator states)
                                (treelist-map states (lambda~> (list elevator (add1 depth))))])
                 _)
-           ;(apply treelist-append _)
            (apply treelist-append (treelist-rest queue) _)
            loop)])))
-(solve1 input)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 2
 
 (define (solve2 state)
   (define new-elements '(elerium dilithium))
-  (set! elements (sort (append '(elerium dilithium) (vector->list elements)) symbol<?))
   (~> new-elements
-      (append-map (λ (s) (map (λ (f) (f s)) (list generator-for chip-for))) _)
-      (foldl (λ (elm acc) (hash-set acc elm 1)) state _)
+      length
+      (* 2)
+      (make-vector 1)
+      (vector-append state _)
       solve1))
-
+(solve2 input)
 (module+ test ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Tests
   ; 4 .  .   .   .   .   .   .   .   .    .   . 
   ; 3 .  .  CoM  .  CuM  .  PlM  .   .    .  RuG
@@ -170,10 +170,36 @@
                          (check-false (danger? (parse1 "The first promethium-compatible microchip.\nThe second cobalt generator.")))
                          (check-false (danger? (parse1 "The third floor contains a promethium-compatible microchip, promethium generator and a cobalt generator."))))
               (check-false (done? input))
-              (check-equal? (~> (valid-moves input 1) cdar treelist->list list->set)
-                            (set #(2 3 2 3 2 3 2 2 2 3)
-                                 #(2 3 2 3 2 3 2 1 2 3)))
+              (test-case "Valid moves"
+                         (check-equal? (~> (valid-moves input 1) cdar treelist->list list->set)
+                                       (set #(2 3 2 3 2 3 2 2 2 3)
+                                            #(2 3 2 3 2 3 2 1 2 3)))
+                         (define many (valid-moves input 3))
+                         (check-equal? (~> many cdar treelist->list list->set)
+                                       ;    #(2 3 2 3 2 3 1 1 2 3)
+                                       (set #(2 4 2 3 2 3 1 1 2 3)
+                                            #(2 3 2 4 2 3 1 1 2 3)
+                                            #(2 3 2 3 2 4 1 1 2 3)
+                                            #(2 3 2 3 2 3 1 1 2 4)
+                                            #(2 4 2 4 2 3 1 1 2 3)
+                                            #(2 4 2 3 2 4 1 1 2 3)
+                                            #(2 4 2 3 2 3 1 1 2 4)
+                                            #(2 3 2 4 2 4 1 1 2 3)
+                                            #(2 3 2 4 2 3 1 1 2 4)
+                                            #(2 3 2 3 2 4 1 1 2 4)))
+                         (check-equal? (~> many cdadr treelist->list list->set)
+                                       ;    #(2 3 2 3 2 3 1 1 2 3)
+                                       (set #(2 2 2 3 2 3 1 1 2 3)
+                                            #(2 3 2 2 2 3 1 1 2 3)
+                                            #(2 3 2 3 2 2 1 1 2 3)
+                                            #(2 3 2 3 2 3 1 1 2 2)
+                                            #(2 2 2 2 2 3 1 1 2 3)
+                                            #(2 2 2 3 2 2 1 1 2 3)
+                                            #(2 2 2 3 2 3 1 1 2 2)
+                                            #(2 3 2 2 2 2 1 1 2 3)
+                                            #(2 3 2 2 2 3 1 1 2 2)
+                                            #(2 3 2 3 2 2 1 1 2 2))))
               (check-equal? (first (valid-moves input 1)) (valid-moves-to input 1 2))
               (check-equal? (solve1 input) 33))
    (test-case "Part 2"
-              #;(check-equal? (solve2 input) 33))))
+              (check-equal? (solve2 input) 33))))
