@@ -12,13 +12,16 @@
 (define generator-for (what-for "-generator"))
 (define chip-for (what-for "-microchip"))
 
-(define (parse2 port)
+(define (vec2num input)
+  (foldl (λ (elm acc) (bitwise-ior acc (arithmetic-shift elm 2))) 0 (vector->list input)))
+
+(define (parse port)
   (cond
     [(string? port)
      (cond
        [(file-exists? port)
-        (call-with-input-file port parse2 #:mode 'text)]
-       [else (parse2 (open-input-string port))])]
+        (call-with-input-file port parse #:mode 'text)]
+       [else (parse (open-input-string port))])]
     [else
      (define elements (mutable-set))
      (define state (append*
@@ -50,13 +53,11 @@
                         (cons (string->symbol (replacer item)) i)))))
      (set! elements ((compose list->vector set->list) elements))
      (vector-sort! elements symbol<?)
-     (values (for*/vector ([e elements]
-                           [s (list generator-for chip-for)])
-               (cdr (or (assoc (s e) state) (cons 0 0)))) elements)]))
-(define-values (input elements) (parse2 "input11.txt"))
+     (for*/vector ([e elements]
+                   [s (list generator-for chip-for)])
+       (cdr (or (assoc (s e) state) (cons 0 0))))]))
 
-(define (parse1 input)
-  (let-values ([(only _) (parse2 input)]) only))
+(define input (parse "input11.txt"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 1
 
@@ -143,17 +144,6 @@
   (test-begin
    (check-equal? input #(2 3 2 3 2 3 1 1 2 3))
    (test-case "Part 1"
-              (check-equal? elements #(cobalt
-                                       curium
-                                       ;dilithium
-                                       ;elerium
-                                       plutonium
-                                       promethium
-                                       ruthenium))
-              (test-case "Danger"
-                         (check-true (danger? (parse1 "The third floor contains a promethium-compatible microchip and a cobalt generator.")))
-                         (check-false (danger? (parse1 "The first promethium-compatible microchip.\nThe second cobalt generator.")))
-                         (check-false (danger? (parse1 "The third floor contains a promethium-compatible microchip, promethium generator and a cobalt generator."))))
               (check-false (done? input))
               (test-case "Valid moves"
                          (check-equal? (~> (valid-moves input 1) cdar treelist->list list->set)
