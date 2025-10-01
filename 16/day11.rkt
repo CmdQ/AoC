@@ -13,7 +13,7 @@
 (define chip-for (what-for "-microchip"))
 
 (define (vec2num input)
-  (foldl (λ (elm acc) (bitwise-ior acc (arithmetic-shift elm 2))) 0 (vector->list input)))
+  (foldl (λ (elm acc) #R(bitwise-ior elm (arithmetic-shift acc 2))) 0 (vector->list input)))
 
 (define (parse port)
   (cond
@@ -53,9 +53,9 @@
                         (cons (string->symbol (replacer item)) i)))))
      (set! elements ((compose list->vector set->list) elements))
      (vector-sort! elements symbol<?)
-     (for*/vector ([e elements]
-                   [s (list generator-for chip-for)])
-       (cdr (or (assoc (s e) state) (cons 0 0))))]))
+     (vec2num (for*/vector ([e elements]
+                            [s (list generator-for chip-for)])
+                (cdr (or (assoc (s e) state) (cons 0 0)))))]))
 
 (define input (parse "input11.txt"))
 
@@ -132,7 +132,7 @@
       (make-vector 1)
       (vector-append state _)
       solve1))
-(solve2 input)
+
 (module+ test ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Tests
   ; 4 .  .   .   .   .   .   .   .   .    .   . 
   ; 3 .  .  CoM  .  CuM  .  PlM  .   .    .  RuG
@@ -142,7 +142,7 @@
   (require rackunit)
 
   (test-begin
-   (check-equal? input #(2 3 2 3 2 3 1 1 2 3))
+   (check-equal? input #xBBB5B)
    (test-case "Part 1"
               (check-false (done? input))
               (test-case "Valid moves"
