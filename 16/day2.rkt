@@ -48,10 +48,10 @@
 (define (move2 p by)
   (define new
     (case by
-      [(#\L) (point (sub1 (point-x p)) (point-y p))]
-      [(#\R) (point (add1 (point-x p)) (point-y p))]
-      [(#\D) (point (point-x p) (add1 (point-y p)))]
-      [(#\U) (point (point-x p) (sub1 (point-y p)))]))
+      [(#\L) (struct-copy point p (x (sub1 (point-x p))))]
+      [(#\R) (struct-copy point p (x (add1 (point-x p))))]
+      [(#\D) (struct-copy point p (y (add1 (point-y p))))]
+      [(#\U) (struct-copy point p (y (sub1 (point-y p))))]))
   (if (eq? (matrix-ref diamond (point-y new) (point-x new)) #\0)
       p
       new))
