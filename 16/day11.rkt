@@ -49,7 +49,7 @@
                                     [(#\e) 2]
                                     [(#\h) 3]
                                     [(#\o) top-floor]
-                                    [else (error 'unreachable)]))
+                                    [else (assert-unreachable)]))
                         (cons (string->symbol (replacer item)) i)))))
      (set! elements ((compose list->vector set->list) elements))
      (vector-sort! elements symbol<?)
