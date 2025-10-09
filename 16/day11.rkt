@@ -1,5 +1,7 @@
 #lang debug racket
 
+(provide (all-defined-out))
+
 (require threading)
 (require racket/treelist)
 
@@ -68,7 +70,7 @@
              [sofar 0])
     (cond
       [(zero? number)
-       (vector-append (make-vector (- (*state-size*) sofar) 0)
+       (vector-append (make-vector (- (*state-size*) sofar) bottom-floor)
                       (list->vector acc))]
       [else
        (define cur (bitwise-and 3 number))
@@ -158,8 +160,8 @@
                        (* 2)
                        (make-vector 1)
                        (vector-append (num2vec state) _)
-                       vec2num))
-  (parameterize ([*state-size* (length extended)]) (solve1 extended)))
+                       ))
+  (parameterize ([*state-size* (vector-length extended)]) (solve1 (vec2num extended))))
 
 (module+ test ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Tests
   ; 4 .  .   .   .   .   .   .   .   .    .   .
@@ -171,6 +173,9 @@
 
   (test-begin
    (check-equal? (num2vec input) #(2 3 2 3 2 3 1 1 2 3))
+   (test-case "Check round tripping"
+              (check-equal? (num2vec (vec2num #(4 3 2 3 2 3 1 1 2 4))) #(4 3 2 3 2 3 1 1 2 4))
+              (check-equal? (vec2num (num2vec input)) input))
    (check-equal? input #x66606)
    (test-case "Part 1"
               (test-case "Success checking"
@@ -212,3 +217,7 @@
               (check-equal? (solve1 input) 33))
    (test-case "Part 2"
               (check-equal? (solve2 input) 57))))
+
+(module+ main
+  (printf "Part one: ~A~%" (solve1 input))
+  (printf "Part two: ~A~%" (solve2 input)))
