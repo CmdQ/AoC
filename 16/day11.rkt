@@ -13,7 +13,9 @@
 (define chip-for (what-for "-microchip"))
 
 (define (vec2num input)
-  (foldl (λ (elm acc) #R(bitwise-ior elm (arithmetic-shift acc 2))) 0 (vector->list input)))
+  (foldl (λ (elm acc) (bitwise-ior (sub1 elm) (arithmetic-shift acc 2)))
+         0
+         (vector->list input)))
 
 (define (parse port)
   (cond
@@ -43,7 +45,7 @@
                                                  (substring item 0
                                                             (- (string-length item) 21))))
                              (λ (item) (string-replace item "compatible " ""))]))
-                        
+
                         (define i (case (string-ref line 5)
                                     [(#\i) bottom-floor]
                                     [(#\e) 2]
@@ -53,11 +55,25 @@
                         (cons (string->symbol (replacer item)) i)))))
      (set! elements ((compose list->vector set->list) elements))
      (vector-sort! elements symbol<?)
-     (vec2num (for*/vector ([e elements]
-                            [s (list generator-for chip-for)])
-                (cdr (or (assoc (s e) state) (cons 0 0)))))]))
+     (values (vec2num (for*/vector ([e elements]
+                                    [s (list generator-for chip-for)])
+                        (cdr (or (assoc (s e) state) (cons 0 0))))) (vector-length elements))]))
 
-(define input (parse "input11.txt"))
+(define-values (input element-count) (parse "input11.txt"))
+
+(define *state-size* (make-parameter (* 2 element-count)))
+
+(define (num2vec number)
+  (let loop ([acc empty]
+             [sofar 0])
+    (cond
+      [(zero? number)
+       (vector-append (make-vector (- (*state-size*) sofar) 0)
+                      (list->vector acc))]
+      [else
+       (define cur (bitwise-and 3 number))
+       (set! number (arithmetic-shift number -2))
+       (loop (cons (add1 cur) acc) (add1 sofar))])))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 1
 
@@ -75,8 +91,14 @@
            (= c (vector-ref state j))))))
 
 (define (done? state)
-  (for/and ([t (in-vector state)])
-    (= t 4)))
+  (let loop ([count (*state-size*)])
+    (cond
+      [(zero? count) (zero? state)]
+      [(zero? state) #f]
+      [else
+       (define cur (bitwise-and 3 state))
+       (set! state (arithmetic-shift state -2))
+       (and (= cur 3) (loop (sub1 count)))])))
 
 (define (valid-moves-to state floor to)
   ;   g m  g m  g m  g m  g m
@@ -101,10 +123,15 @@
          (vector-set! copy j to)
          (treelist-add acc copy)]
         [else acc])))
-  (cons to (treelist-filter (negate danger?) (treelist-append single-moves double-moves))))
+  (cons to (treelist-map
+            (treelist-filter
+             (negate danger?)
+             (treelist-append single-moves double-moves))
+            vec2num)))
 
 (define (valid-moves state floor)
-  (map (λ (to) (valid-moves-to state floor to)) (filter (lambda~> (<= 1 _ 4)) (list (add1 floor) (sub1 floor)))))
+  (map (λ (to) (valid-moves-to (num2vec state) floor to))
+       (filter (lambda~> (<= 1 _ 4)) (list (add1 floor) (sub1 floor)))))
 
 (define (solve1 state)
   (define visited (mutable-set))
@@ -126,31 +153,38 @@
 
 (define (solve2 state)
   (define new-elements '(elerium dilithium))
-  (~> new-elements
-      length
-      (* 2)
-      (make-vector 1)
-      (vector-append state _)
-      solve1))
+  (define extended (~> new-elements
+                       length
+                       (* 2)
+                       (make-vector 1)
+                       (vector-append (num2vec state) _)
+                       vec2num))
+  (parameterize ([*state-size* (length extended)]) (solve1 extended)))
 
 (module+ test ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Tests
-  ; 4 .  .   .   .   .   .   .   .   .    .   . 
+  ; 4 .  .   .   .   .   .   .   .   .    .   .
   ; 3 .  .  CoM  .  CuM  .  PlM  .   .    .  RuG
-  ; 2 . CoG  .  CuG  .  PlG  .   .   .   RuG  . 
-  ; 1 E  .   .   .   .   .   .  PrG PrM   .   . 
+  ; 2 . CoG  .  CuG  .  PlG  .   .   .   RuG  .
+  ; 1 E  .   .   .   .   .   .  PrG PrM   .   .
 
   (require rackunit)
 
   (test-begin
-   (check-equal? input #xBBB5B)
+   (check-equal? (num2vec input) #(2 3 2 3 2 3 1 1 2 3))
+   (check-equal? input #x66606)
    (test-case "Part 1"
-              (check-false (done? input))
+              (test-case "Success checking"
+                         (check-false (done? input))
+                         (check-false (done? 0))
+                         (check-false (done? #xFFFF))
+                         (check-true (done? #xFFFFF))
+                         (check-false (done? #xFFFFFF)))
               (test-case "Valid moves"
-                         (check-equal? (~> (valid-moves input 1) cdar treelist->list list->set)
+                         (check-equal? (~> (valid-moves input 1) cdar treelist->list (map num2vec _) list->set)
                                        (set #(2 3 2 3 2 3 2 2 2 3)
                                             #(2 3 2 3 2 3 2 1 2 3)))
                          (define many (valid-moves input 3))
-                         (check-equal? (~> many cdar treelist->list list->set)
+                         (check-equal? (~> many cdar treelist->list (map num2vec _) list->set)
                                        ;    #(2 3 2 3 2 3 1 1 2 3)
                                        (set #(2 4 2 3 2 3 1 1 2 3)
                                             #(2 3 2 4 2 3 1 1 2 3)
@@ -162,7 +196,7 @@
                                             #(2 3 2 4 2 4 1 1 2 3)
                                             #(2 3 2 4 2 3 1 1 2 4)
                                             #(2 3 2 3 2 4 1 1 2 4)))
-                         (check-equal? (~> many cdadr treelist->list list->set)
+                         (check-equal? (~> many cdadr treelist->list (map num2vec _) list->set)
                                        ;    #(2 3 2 3 2 3 1 1 2 3)
                                        (set #(2 2 2 3 2 3 1 1 2 3)
                                             #(2 3 2 2 2 3 1 1 2 3)
@@ -174,7 +208,7 @@
                                             #(2 3 2 2 2 2 1 1 2 3)
                                             #(2 3 2 2 2 3 1 1 2 2)
                                             #(2 3 2 3 2 2 1 1 2 2))))
-              (check-equal? (first (valid-moves input 1)) (valid-moves-to input 1 2))
+              (check-equal? (first (valid-moves input 1)) (valid-moves-to (num2vec input) 1 2))
               (check-equal? (solve1 input) 33))
    (test-case "Part 2"
               (check-equal? (solve2 input) 57))))
