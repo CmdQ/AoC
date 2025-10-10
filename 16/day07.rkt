@@ -2,7 +2,7 @@
 
 (require threading)
 
-(define input (~> "input7.txt"
+(define input (~> "input07.txt"
                   file->lines))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 1

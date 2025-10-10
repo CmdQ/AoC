@@ -34,7 +34,7 @@
 (define ((solve solver) (input #f))
   (if input
       (solver (open-input-string input))
-      (call-with-input-file "input9.txt" solver #:mode 'text)))
+      (call-with-input-file "input09.txt" solver #:mode 'text)))
 
 (define solve1 (solve decompress1))
   

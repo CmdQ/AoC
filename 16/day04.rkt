@@ -9,7 +9,7 @@
     [(list asd name id chk)
      (room name (string->number id) chk)]))
 
-(define input (~> "input4.txt"
+(define input (~> "input04.txt"
                   file->lines
                   (map string->room _)))
 

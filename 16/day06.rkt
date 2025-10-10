@@ -4,7 +4,7 @@
 
 (require "charnum.rkt")
 
-(define input (~> "input6.txt"
+(define input (~> "input06.txt"
                   file->lines))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 1

@@ -5,7 +5,7 @@
 (require "matrix.rkt")
 (require "charnum.rkt")
 
-(define input (~> "input2.txt"
+(define input (~> "input02.txt"
                   file->lines))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 1
