@@ -2,7 +2,7 @@
 
 (require threading)
 
-(define input (~> "input1.txt"
+(define input (~> "input01.txt"
                   file->string
                   string-trim
                   (string-split ", ")

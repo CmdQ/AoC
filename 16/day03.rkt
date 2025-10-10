@@ -4,7 +4,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 1
 
-(define input (~> "input3.txt"
+(define input (~> "input03.txt"
                 file->lines
                 (map string-split _)
                 (map (lambda~> (map string->number _)) _)))
