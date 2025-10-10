@@ -102,6 +102,10 @@
        (set! state (arithmetic-shift state -2))
        (and (= cur 3) (loop (sub1 count)))])))
 
+(define (heuristic tl)
+  ; The thinking is: the more stuff is on higher floors, the closer we might be to being done.
+  (treelist-sort tl > #:key (λ (v) (for/sum ([e (in-vector v)]) e))))
+
 (define (valid-moves-to state floor to)
   ;   g m  g m  g m  g m  g m
   ;   0 1  2 3  4 5  6 7  8 9
@@ -126,9 +130,9 @@
          (treelist-add acc copy)]
         [else acc])))
   (cons to (treelist-map
-            (treelist-filter
-             (negate danger?)
-             (treelist-append single-moves double-moves))
+            (heuristic (treelist-filter
+                        (negate danger?)
+                        (treelist-append single-moves double-moves)))
             vec2num)))
 
 (define (valid-moves state floor)
