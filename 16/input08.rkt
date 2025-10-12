@@ -1,4 +1,4 @@
-#lang reader "day8.rkt"
+#lang reader "day08.rkt"
 
 rect 1x1
 rotate row y=0 by 10
