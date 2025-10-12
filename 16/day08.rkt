@@ -23,7 +23,7 @@
 
 (define (read-syntax path port)
   (define src-datums (filter-map parse (port->lines port)))
-  (define module-datum `(module day8-mod "day8-runtime.rkt"
+  (define module-datum `(module day8-mod "day08-runtime.rkt"
                           ,@src-datums))
   (datum->syntax (quote-syntax here) module-datum))
 
