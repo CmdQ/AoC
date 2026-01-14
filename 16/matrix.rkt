@@ -1,6 +1,9 @@
-#lang racket
+#lang racket/base
 
 (require racket/generator)
+(require racket/vector)
+(require racket/contract)
+(require racket/math)
 
 (provide (contract-out
           [make-matrix
