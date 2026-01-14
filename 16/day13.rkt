@@ -9,31 +9,37 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 1
 
+(define +free+ #\.)
+(define +wall+ #\#)
+
+(define (free? block) (char=? +free+ block))
+
 (define (bit-count num)
   (let loop ([n num]
              [count 0])
     (cond
       [(negative? n) (error "no negative numbers")]
       [(zero? n) count]
-      [else (loop (arithmetic-shift n -1) (+ count (bitwise-and 1 n)))])))
+      [else
+       (loop (arithmetic-shift n -1)
+             (+ count (bitwise-and 1 n)))])))
 
-(define +free+ #\.)
-(define +wall+ #\#)
-
-(define (free? block) (char=? +free+ block))
-
-(define (brick? x y)
+(define (which-brick x y)
   (let ([formula (+ (sqr x) (* 3 x) (* 2 x y) y (sqr y) (input))])
-    (if (even? (bit-count formula))
-        +free+
-        +wall+)))
+    (if (even? (bit-count formula)) +free+ +wall+)))
 
 (define (create-room width height)
   (define re (make-matrix height width))
   (for* ([r (in-range height)]
          [c (in-range width)])
-    (matrix-set! re r c (brick? c r)))
+    (matrix-set! re r c (which-brick c r)))
   re)
+
+; The given example room has these dimentions.
+(define example-room (create-room 10 7))
+; Increased until it didn't crash anymore.
+(define big-enough (create-room 52 52))
+
 
 (define (visualize room #:path [path #()])
   (let* ([unit 16]
@@ -46,12 +52,11 @@
          [path-set (list->set (vector->list path))]
          [start-point (and (> (vector-length path) 0) (vector-ref path 0))]
          [goal-point (and (> (vector-length path) 0) (vector-ref path (sub1 (vector-length path))))]
-         [h (matrix-rows room)]
-         [w (matrix-cols room)])
+         [width (matrix-cols room)])
     (apply above
-           (for/list ([r (in-range h)])
+           (for/list ([r (in-range (matrix-rows room))])
              (apply beside
-                    (for/list ([c (in-range w)])
+                    (for/list ([c (in-range width)])
                       (let* ([cell (matrix-ref room r c)]
                              [base (if (char=? cell +wall+) wall open)]
                              [p (point c r)])
@@ -104,29 +109,33 @@
                    (priority-queue-insert! Q (node alt v))))))
            (loop))]))))
 
+; 31/39 is the target from part 1.
 (define (solve1 room (x 31) (y 39))
-  (define dist-prev (dijkstra room))
-  (hash-ref (car dist-prev) (point x y)))
-
-(define example-room (create-room 10 7))
-(parameterize ([input 10])
-  (define prev (second (dijkstra example-room)))
-  (define path (let loop ([current (point 7 4)]
-                          [acc null])
-                 (cond
-                   [(equal? current +source+) (list->vector (cons +source+ acc))]
-                   [else
-                    (define pred (hash-ref prev current))
-                    (loop pred (cons current acc))])))
-  (visualize example-room #:path path))
-
-(define big-enough (create-room 52 52))
+  (hash-ref (first (dijkstra room)) (point x y)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 2
 
 (define (solve2)
-  (for/sum ([kv (in-hash-pairs (car (dijkstra big-enough)))])
+  ; How many are reachable in at most 50 steps?
+  (for/sum ([kv (in-hash-pairs (first (dijkstra big-enough)))])
     (if (<= (cdr kv) 50) 1 0)))
+
+(define (build-path current prevs (acc null))
+  (cond
+    [(equal? current +source+) (list->vector (cons +source+ acc))]
+    [else
+     (define pred (hash-ref prevs current))
+     (build-path pred prevs (cons current acc))]))
+
+(module+ main ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Visualization
+  ; For the viz, switch to the example's favorite number.
+  (parameterize ([input 10])
+    (visualize example-room
+               #:path (build-path (point 7 4)
+                                  (second (dijkstra example-room)))))
+  #;(visualize big-enough
+             #:path (build-path (point 31 39)
+                                (second (dijkstra big-enough)))))
 
 (module+ test ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Tests
   (require rackunit)
