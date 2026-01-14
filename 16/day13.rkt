@@ -35,15 +35,31 @@
     (matrix-set! re r c (brick? c r)))
   re)
 
-(define (visualize room)
-  (define unit 16)
-  (define wall (rectangle unit unit "solid" "black"))
-  (define open (rectangle unit unit "solid" "light gray"))
-  (~> room
-      (matrix-map (λ (c) (if (equal? c +free+) open wall)) _)
-      matrix->list-lists
-      (map (curry apply beside) _)
-      (apply above _)))
+(define (visualize room #:path [path #()])
+  (let* ([unit 16]
+         [wall (rectangle unit unit "solid" "black")]
+         [open (rectangle unit unit "solid" "light gray")]
+         [marker-size (/ unit 3)]
+         [start-marker (circle marker-size "solid" "yellow")]
+         [goal-marker (circle marker-size "solid" "purple")]
+         [path-marker (circle marker-size "solid" "cyan")]
+         [path-set (list->set (vector->list path))]
+         [start-point (and (> (vector-length path) 0) (vector-ref path 0))]
+         [goal-point (and (> (vector-length path) 0) (vector-ref path (sub1 (vector-length path))))]
+         [h (matrix-rows room)]
+         [w (matrix-cols room)])
+    (apply above
+           (for/list ([r (in-range h)])
+             (apply beside
+                    (for/list ([c (in-range w)])
+                      (let* ([cell (matrix-ref room r c)]
+                             [base (if (char=? cell +wall+) wall open)]
+                             [p (point c r)])
+                        (cond
+                          [(equal? p start-point) (overlay start-marker base)]
+                          [(equal? p goal-point) (overlay goal-marker base)]
+                          [(set-member? path-set p) (overlay path-marker base)]
+                          [else base]))))))))
 
 (struct point (x y) #:transparent)
 (struct node (weight point) #:transparent)
@@ -58,11 +74,12 @@
 (define (node<? a b)
   (< (node-weight a) (node-weight b)))
 
+(define +source+ (point 1 1))
+
 (define (dijkstra room)
-  (let* ([source (point 1 1)]
-         [Q (make-priority-queue node<? (node 0 source))]
+  (let* ([Q (make-priority-queue node<? (node 0 +source+))]
          [prev (make-hash)]
-         [dist (make-hash (list (cons source 0)))]
+         [dist (make-hash (list (cons +source+ 0)))]
          [w (matrix-cols room)]
          [h (matrix-rows room)])
     (let loop ()
@@ -93,8 +110,15 @@
 
 (define example-room (create-room 10 7))
 (parameterize ([input 10])
-  (match-define (list dist prev) (dijkstra example-room))
-  (visualize example-room))
+  (define prev (second (dijkstra example-room)))
+  (define path (let loop ([current (point 7 4)]
+                          [acc null])
+                 (cond
+                   [(equal? current +source+) (list->vector (cons +source+ acc))]
+                   [else
+                    (define pred (hash-ref prev current))
+                    (loop pred (cons current acc))])))
+  (visualize example-room #:path path))
 
 (define big-enough (create-room 52 52))
 
