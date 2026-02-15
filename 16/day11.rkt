@@ -82,15 +82,12 @@
 (define (danger? state)
   (define end (vector-length state))
   (for/or ([i (in-range 0 end 2)])
-    (match-define
-      (list g c)
-      (~> '(0 1)
-          (map (lambda~> (+ i)) _)
-          (map (lambda~> (vector-ref state _)) _)))
-    (and (positive? c) ; no chip cannot be fried
+    (let ([g (vector-ref state i)]
+          [c (vector-ref state (add1 i))])
+        (and (positive? c) ; no chip cannot be fried
          (not (= c g)) ; but it's safe with its generator
          (for/or ([j (in-range 0 end 2)] #:when (not (= i j)))
-           (= c (vector-ref state j))))))
+           (= c (vector-ref state j)))))))
 
 (define (done? state)
   (let loop ([count (*state-size*)])
