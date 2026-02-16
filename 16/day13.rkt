@@ -1,4 +1,4 @@
-#lang debug racket
+#lang racket
 
 (require "matrix.rkt")
 (require 2htdp/image)
