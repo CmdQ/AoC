@@ -3,7 +3,7 @@
 (provide (all-defined-out))
 
 (require threading)
-(require racket/treelist)
+(require data/queue)
 
 (define bottom-floor 1)
 (define top-floor 4)
@@ -15,9 +15,9 @@
 (define chip-for (what-for "-microchip"))
 
 (define (vec2num input)
-  (foldl (λ (elm acc) (bitwise-ior (sub1 elm) (arithmetic-shift acc 2)))
-         0
-         (vector->list input)))
+  (for/fold ([acc 0])
+            ([elm (in-vector input)])
+    (bitwise-ior (sub1 elm) (arithmetic-shift acc 2))))
 
 (define (parse port)
   (cond
@@ -105,48 +105,52 @@
   ; #(2 3  2 3  2 3  1 1  2 3)
   (define len (vector-length state))
   (define single-moves
-    (for/fold ([acc empty-treelist])
-              ([i (in-range len)])
-      (cond
-        [(= (vector-ref state i) floor)
-         (treelist-add acc (vector-set/copy state i to))]
-        [else acc])))
+    (for/list ([i (in-range len)]
+               #:when (= (vector-ref state i) floor))
+      (vector-set/copy state i to)))
   (define double-moves
-    (for*/fold ([acc empty-treelist])
-               ([i (in-range len)]
-                [j (in-range (add1 i) len)]) ; TODO have start at same position and get single moves for free?
-      (cond
-        [(= (vector-ref state i) (vector-ref state j) floor)
-         (define copy (vector-copy state))
-         (vector-set! copy i to)
-         (vector-set! copy j to)
-         (treelist-add acc copy)]
-        [else acc])))
-  (cons to (treelist-map
-            (treelist-filter
-             (negate danger?)
-             (treelist-append single-moves double-moves))
-            vec2num)))
+    (for*/list ([i (in-range len)]
+                [j (in-range (add1 i) len)]
+                #:when (= (vector-ref state i) (vector-ref state j) floor))
+      (define copy (vector-copy state))
+      (vector-set! copy i to)
+      (vector-set! copy j to)
+      copy))
+  (cons to (for/list ([candidate (in-list (append single-moves double-moves))]
+                      #:when (not (danger? candidate)))
+              (vec2num candidate))))
 
 (define (valid-moves state floor)
   (map (λ (to) (valid-moves-to (num2vec state) floor to))
        (filter (lambda~> (<= 1 _ 4)) (list (add1 floor) (sub1 floor)))))
 
+;; Canonicalize state by sorting (generator, chip) pairs.
+;; States that differ only in which element is which are equivalent.
+(define (canonicalize state)
+  (define vec (num2vec state))
+  (define pairs
+    (for/list ([i (in-range 0 (vector-length vec) 2)])
+      (cons (vector-ref vec i) (vector-ref vec (add1 i)))))
+  (sort pairs (λ (a b) (or (< (car a) (car b))
+                            (< (cdr a) (cdr b))))))
+
 (define (solve1 state)
   (define visited (mutable-set))
-  (let loop ([queue (treelist (list state 1 0))])
-    (match-define (list current floor depth) (treelist-first queue))
+  (define q (make-queue))
+  (enqueue! q (list state 1 0))
+  (let loop ()
+    (match-define (list current floor depth) (dequeue! q))
+    (define key (cons (canonicalize current) floor))
     (cond
-      [(set-member? visited (cons current floor)) (loop (treelist-rest queue))]
+      [(set-member? visited key) (loop)]
       [(done? current) depth]
       [else
-       (set-add! visited (cons current floor))
-       (~> (valid-moves current floor)
-           (map (match-lambda [(cons elevator states)
-                               (treelist-map states (lambda~> (list elevator (add1 depth))))])
-                _)
-           (apply treelist-append (treelist-rest queue) _)
-           loop)])))
+       (set-add! visited key)
+       (for ([move (in-list (valid-moves current floor))])
+         (match-define (cons elevator states) move)
+         (for ([s (in-list states)])
+           (enqueue! q (list s elevator (add1 depth)))))
+       (loop)])))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 2
 
@@ -182,11 +186,11 @@
                          (check-true (done? #xFFFFF))
                          (check-false (done? #xFFFFFF)))
               (test-case "Valid moves"
-                         (check-equal? (~> (valid-moves input 1) cdar treelist->list (map num2vec _) list->set)
+                         (check-equal? (~> (valid-moves input 1) cdar (map num2vec _) list->set)
                                        (set #(2 3 2 3 2 3 2 2 2 3)
                                             #(2 3 2 3 2 3 2 1 2 3)))
                          (define many (valid-moves input 3))
-                         (check-equal? (~> many cdar treelist->list (map num2vec _) list->set)
+                         (check-equal? (~> many cdar (map num2vec _) list->set)
                                        ;    #(2 3 2 3 2 3 1 1 2 3)
                                        (set #(2 4 2 3 2 3 1 1 2 3)
                                             #(2 3 2 4 2 3 1 1 2 3)
@@ -198,7 +202,7 @@
                                             #(2 3 2 4 2 4 1 1 2 3)
                                             #(2 3 2 4 2 3 1 1 2 4)
                                             #(2 3 2 3 2 4 1 1 2 4)))
-                         (check-equal? (~> many cdadr treelist->list (map num2vec _) list->set)
+                         (check-equal? (~> many cdadr (map num2vec _) list->set)
                                        ;    #(2 3 2 3 2 3 1 1 2 3)
                                        (set #(2 2 2 3 2 3 1 1 2 3)
                                             #(2 3 2 2 2 3 1 1 2 3)
