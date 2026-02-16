@@ -45,7 +45,7 @@
      (vector-set! data start element)
      (set-ring-buffer-start! buffer (wrap (add1 start)))]))
 
-(define (ref buffer idx)
+(define (warp-index buffer idx)
   (match-define (ring-buffer data start count) buffer)
   (when (not (< -1 idx count))
     (raise-range-error 'ring-buffer-ref
@@ -54,7 +54,18 @@
                        idx
                        buffer
                        0 (sub1 count)))
-  (vector-ref data (modulo (+ start idx) (vector-length data))))
+  (modulo (+ start idx) (vector-length data)))
+
+(define (delete! buffer pos)
+  (match-define (ring-buffer data start count) buffer)
+  (cond
+    [(zero? pos)
+     (set-ring-buffer-start! buffer (warp-index buffer (add1 start)))
+     (set-ring-buffer-count! buffer (sub1 count))]))
+
+(define (ref buffer idx)
+  (match-define (ring-buffer data start count) buffer)
+  (vector-ref data (warp-index buffer idx)))
 
 (define (->list buffer)
   (for/list ([i (in-range (length buffer))])
@@ -84,4 +95,6 @@
   (check-exn exn:fail:contract? (thunk (ref fill-to-3 4)))
   (append fill-to-3 13)
   (check-equal? (length fill-to-3) 3)
-  (check-equal? (->list fill-to-3) '(11 12 13)))
+  (check-equal? (->list fill-to-3) '(11 12 13))
+  (delete! fill-to-3 0)
+  (check-equal? (->list fill-to-3) '(12 13)))
