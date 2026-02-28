@@ -6,6 +6,8 @@ Advent of Code 2016 solutions in **Racket**. This is a learning project — the 
 
 **Important:** Do not implement solutions or write code unless explicitly asked. When answering questions, give general guidance, explain concepts, and point in the right direction without solving the problem.
 
+**Housekeeping:** At the start of each session, check for new `dayNN.rkt` files that aren't yet documented in `README.md`. For each new completed puzzle, add a section following the existing format (linked title, description, Concepts/Racket sub-lists, and update the Quick Concept Index).
+
 ## Setup
 
 This uses **minimal Racket**. Packages must be installed manually:

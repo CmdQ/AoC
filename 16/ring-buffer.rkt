@@ -4,6 +4,7 @@
 (require racket/match)
 (require racket/function)
 (require racket/contract)
+(require racket/sequence)
 
 (provide (contract-out
           [ring-buffer? (any/c . -> . boolean?)]
@@ -13,6 +14,7 @@
           [rename full? ring-buffer-full? (ring-buffer? . -> . boolean?)]
           [rename append ring-buffer-append (ring-buffer? any/c . -> . void?)]
           [rename ref ring-buffer-ref (ring-buffer? exact-nonnegative-integer? . -> . any/c)]
+          [rename in in-ring-buffer (ring-buffer? . -> . sequence?)]
           [rename ->list ring-buffer->list (ring-buffer? . -> . list?)]))
 
 (struct ring-buffer (data start count) #:mutable)
@@ -57,19 +59,27 @@
   (modulo (+ start idx) (vector-length data)))
 
 (define (delete! buffer pos)
-  (match-define (ring-buffer data start count) buffer)
+  (match-define (ring-buffer _ start count) buffer)
   (cond
     [(zero? pos)
-     (set-ring-buffer-start! buffer (warp-index buffer (add1 start)))
-     (set-ring-buffer-count! buffer (sub1 count))]))
+     (set-ring-buffer-start! buffer (warp-index buffer 1))
+     (set-ring-buffer-count! buffer (sub1 count))]
+    [else (assert-unreachable)]))
 
 (define (ref buffer idx)
-  (match-define (ring-buffer data start count) buffer)
+  (match-define (ring-buffer data start _) buffer)
   (vector-ref data (warp-index buffer idx)))
 
-(define (->list buffer)
-  (for/list ([i (in-range (length buffer))])
-    (ref buffer i)))
+(define (in buffer)
+  (define len (length buffer))
+  (make-do-sequence (λ ()
+                      (initiate-sequence
+                       #:pos->element (curry ref buffer)
+                       #:next-pos add1
+                       #:init-pos 0
+                       #:continue-with-pos? (curryr < len)))))
+
+(define ->list (compose1 sequence->list in))
 
 (module+ test
   (require rackunit)
