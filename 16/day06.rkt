@@ -70,3 +70,7 @@
    (test-case "Part 2"
               (check-equal? (solve2 input) "fykjtwyn"))))
 
+(module+ main
+  (printf "Part one: ~A~%" (solve1 input))
+  (printf "Part two: ~A~%" (solve2 input)))
+

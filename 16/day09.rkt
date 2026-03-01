@@ -71,3 +71,7 @@
                     [ex (list 9 (string-length "XABCABCABCABCABCABCY") 241920 445)])
                 (check-equal? (solve2 in) ex in))
               (check-equal? (solve2 #f) 10964557606))))
+
+(module+ main
+  (printf "Part one: ~A~%" (solve1))
+  (printf "Part two: ~A~%" (solve2 #f)))

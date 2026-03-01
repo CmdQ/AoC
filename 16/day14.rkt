@@ -68,7 +68,6 @@
                  (append next (list new-pair-or-false))
                  next))])))
 
-(solve1 (input))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 2
 
 (define (stretch str (repeat 2016))
@@ -79,7 +78,9 @@
 (define (solve2 input)
   (solve1 input #:stretch-function stretch))
 
-(solve2 (input))
+(module+ main
+  (printf "Part one: ~A~%" (solve1 (input)))
+  (printf "Part two: ~A~%" (solve2 (input))))
 
 (module+ test ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Tests
   (require rackunit)

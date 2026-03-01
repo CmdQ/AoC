@@ -53,3 +53,7 @@
               (check-equal? (solve1) "f77a0e6e"))
    (test-case "Part 2"
               (check-equal? (solve2) "999828ec"))))
+
+(module+ main
+  (printf "Part one: ~A~%" (solve1))
+  (printf "Part two: ~A~%" (solve2)))

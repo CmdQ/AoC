@@ -72,3 +72,7 @@
 
   (check-eq? (solve2 '((#\R . 8) (#\R . 4) (#\R . 4) (#\R . 8))) 4)
   (check-eq? (solve2 input) 136))
+
+(module+ main
+  (printf "Part one: ~A~%" (solve1))
+  (printf "Part two: ~A~%" (solve2 input)))

@@ -77,3 +77,7 @@
                 (check-true (supports-ssl? ex) ex))
               (check-false (supports-ssl? "xyx[xyx]xyx"))
               (check-equal? (solve2 input) 258))))
+
+(module+ main
+  (printf "Part one: ~A~%" (solve1 input))
+  (printf "Part two: ~A~%" (solve2 input)))
