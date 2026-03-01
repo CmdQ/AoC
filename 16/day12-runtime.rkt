@@ -1,4 +1,4 @@
-#lang debug racket
+#lang racket
 
 (define (make-env)
   (foldl (λ (c acc) (hash-set acc c 0)) (hasheq) '(a b c d)))
