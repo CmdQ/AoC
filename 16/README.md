@@ -151,7 +151,7 @@ Navigate a procedurally generated maze (bit-count parity); shortest path and rea
   - `data/priority-queue`
   - `make-parameter`/`parameterize` for swapping example vs real input
   - `2htdp/image` visualization (`overlay`, `rectangle`, `circle`)
-  - `module+ main` for viz
+  - `in-drracket?` (`utils.rkt`) to suppress visualization when run from CLI
 
 ### Day 14 — [One-Time Pad](https://adventofcode.com/2016/day/14)
 Find one-time pad keys by mining MD5 hashes for triple/quintuple character runs. Part 2 uses key stretching (2016 extra MD5 rounds).
@@ -168,6 +168,35 @@ Find one-time pad keys by mining MD5 hashes for triple/quintuple character runs.
   - `cond` with `=>` to bind and use test result in one clause
   - `quote` symbols (`'done`) as type tags to distinguish confirmed vs unconfirmed candidates
   - `byte-regexp` / `make-bytes` for bytes-native regex matching
+
+## Project Infrastructure
+
+### `run.rkt` — Benchmark runner
+Optionally precompile first to reduce loading time:
+```
+raco make day*.rkt ring-buffer.rkt utils.rkt matrix.rkt charnum.rkt
+```
+Run all days or a specific day:
+```
+racket run.rkt        # benchmark all days
+racket run.rkt 14     # run day 14 only
+```
+- Reports module loading time separately from execution time
+- Falls back to `inputNN.rkt` for custom `#lang` days (08, 12) that have no `module+ main`
+- Uses `find-system-path 'run-file` to locate day files relative to the script, not CWD
+- `dynamic-require` with `(submod f main)` for submodule execution
+
+### `utils.rkt` — Shared utilities
+- `shadow-as` — macro to apply a transform function to multiple bindings in one expression
+- `in-drracket?` — detects DrRacket vs CLI via `find-system-path 'exec-file`
+
+### `ring-buffer.rkt` — Mutable ring buffer
+Fixed-capacity circular buffer with `make-do-sequence` / `initiate-sequence` for `for` loop integration.
+
+### Convention: `module+ main` and `module+ test`
+Every day file has:
+- `module+ test` — `rackunit` checks including example inputs and real answers
+- `module+ main` — prints answers with `printf`; runs only when the file is executed directly or via `run.rkt`
 
 ## Quick Concept Index
 
@@ -190,6 +219,7 @@ Find one-time pad keys by mining MD5 hashes for triple/quintuple character runs.
 | `2htdp/image` visualization | 13 |
 | Curried definitions | 07, 09 |
 | `shadow-as` macro (`utils.rkt`) | 04, 08, 10, 12 |
+| `in-drracket?` (`utils.rkt`) | 13 |
 | `treelist` (functional sequence) | 11 |
 | Sets (`mutable-set`) | 01, 11 |
 | `struct-copy` | 02 |
