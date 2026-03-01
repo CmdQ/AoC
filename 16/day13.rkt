@@ -1,6 +1,7 @@
 #lang racket
 
 (require "matrix.rkt")
+(require "utils.rkt")
 (require 2htdp/image)
 (require threading)
 (require data/priority-queue)
@@ -142,10 +143,11 @@
   (printf "Part one: ~A~%" (solve1 big-enough))
   (printf "Part two: ~A~%" (solve2))
   ; For the viz, switch to the example's favorite number.
-  (parameterize ([input 10])
-    (visualize example-room
-               #:path (build-path (point 7 4)
-                                  (second (dijkstra example-room)))))
-  #;(visualize big-enough
-             #:path (build-path (point 31 39)
-                                (second (dijkstra big-enough)))))
+  (when (in-drracket?)
+    (parameterize ([input 10])
+      (visualize example-room
+                 #:path (build-path (point 7 4)
+                                    (second (dijkstra example-room)))))
+    #;(visualize big-enough
+               #:path (build-path (point 31 39)
+                                  (second (dijkstra big-enough))))))
