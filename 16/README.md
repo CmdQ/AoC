@@ -153,17 +153,21 @@ Navigate a procedurally generated maze (bit-count parity); shortest path and rea
   - `2htdp/image` visualization (`overlay`, `rectangle`, `circle`)
   - `module+ main` for viz
 
-### Day 14 — [One-Time Pad](https://adventofcode.com/2016/day/14) *(in progress)*
-Find one-time pad keys by mining MD5 hashes for triple/quintuple character runs.
+### Day 14 — [One-Time Pad](https://adventofcode.com/2016/day/14)
+Find one-time pad keys by mining MD5 hashes for triple/quintuple character runs. Part 2 uses key stretching (2016 extra MD5 rounds).
 
 - Concepts:
-  - MD5 hash mining
-  - Sliding window validation
+  - MD5 hash mining with key stretching
+  - Sliding window confirmation (triple → quintuple within 1000 hashes)
+  - Confirmations arrive out of order; must sort by index before selecting 64th key
 - Racket:
-  - **Streams** (again)
-  - `ring-buffer.rkt` module
-  - `lambda~>` for point-free chains
-  - `#lang debug`
+  - **Streams** (lazy hash sequence)
+  - `file/md5` — accepts `bytes?` directly, no port needed; stays in bytes throughout stretch loop
+  - `and~>` for short-circuiting threading on `#f`
+  - `filter-map` + `match-lambda` for combined filter/transform
+  - `cond` with `=>` to bind and use test result in one clause
+  - `quote` symbols (`'done`) as type tags to distinguish confirmed vs unconfirmed candidates
+  - `byte-regexp` / `make-bytes` for bytes-native regex matching
 
 ## Quick Concept Index
 
@@ -174,14 +178,14 @@ Find one-time pad keys by mining MD5 hashes for triple/quintuple character runs.
 | `threading` / `~>` / `lambda~>` | 01, 02, 03, 04, 05, 07, 10, 11, 13, 14 |
 | `matrix.rkt` (2D grid) | 02, 08, 13 |
 | Complex number geometry | 01 |
-| Regex (`regexp-match`, backrefs) | 04, 07, 10, 11, 12 |
+| Regex (`regexp-match`, backrefs, `byte-regexp`) | 04, 07, 10, 11, 12, 14 |
 | BFS / Dijkstra | 11, 13 |
 | `for/fold` with accumulators | 01, 02, 03, 06 |
 | Hash tables (mutable / immutable) | 04, 10, 12, 13 |
 | Contracts (`contract-out`, `struct/contract`) | 10, 12 |
 | Port-based I/O (`read-char`) | 09 |
 | `parameterize` / `make-parameter` | 13, 14 |
-| `match` / `match-lambda` / `match-define` | 03, 04, 10, 11, 13 |
+| `match` / `match-lambda` / `match-define` | 03, 04, 10, 11, 13, 14 |
 | Bit manipulation | 11, 13 |
 | `2htdp/image` visualization | 13 |
 | Curried definitions | 07, 09 |
