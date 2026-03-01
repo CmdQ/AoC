@@ -127,16 +127,6 @@
      (define pred (hash-ref prevs current))
      (build-path pred prevs (cons current acc))]))
 
-(module+ main ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Visualization
-  ; For the viz, switch to the example's favorite number.
-  (parameterize ([input 10])
-    (visualize example-room
-               #:path (build-path (point 7 4)
-                                  (second (dijkstra example-room)))))
-  #;(visualize big-enough
-             #:path (build-path (point 31 39)
-                                (second (dijkstra big-enough)))))
-
 (module+ test ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Tests
   (require rackunit)
 
@@ -147,3 +137,15 @@
               (check-equal? (solve1 big-enough) 92))
    (test-case "Part 2"
               (check-equal? (solve2) 124))))
+
+(module+ main ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Visualization
+  (printf "Part one: ~A~%" (solve1 big-enough))
+  (printf "Part two: ~A~%" (solve2))
+  ; For the viz, switch to the example's favorite number.
+  (parameterize ([input 10])
+    (visualize example-room
+               #:path (build-path (point 7 4)
+                                  (second (dijkstra example-room)))))
+  #;(visualize big-enough
+             #:path (build-path (point 31 39)
+                                (second (dijkstra big-enough)))))

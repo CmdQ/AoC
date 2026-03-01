@@ -76,7 +76,11 @@
                                "not-a-real-room-404[oarel]")])
                 (check-true (valid? (string->room yes))))
               (check-false (valid? (string->room "totally-real-room-200[decoy]")))
-              (= (solve1 input) 361724))
+              (check-equal? (solve1 input) 361724))
    (test-case "Part 2"
               (check-equal? (decrypt 343 "qzmt-zixmtkozy-ivhz") "very encrypted name")
               (check-equal? (solve2 input) 482))))
+
+(module+ main
+  (printf "Part one: ~A~%" (solve1 input))
+  (printf "Part two: ~A~%" (solve2 input)))

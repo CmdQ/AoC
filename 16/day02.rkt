@@ -91,3 +91,7 @@
                 (check-equal? (move2 (point 5 3) d) (point 5 3)))
               (check-equal? (move2 (point 1 3) #\R) (point 2 3))
               (check-equal? (solve2 input) "57DD8"))))
+
+(module+ main
+  (printf "Part one: ~A~%" (solve1 input))
+  (printf "Part two: ~A~%" (solve2 input)))

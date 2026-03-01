@@ -49,3 +49,7 @@
                                 (203 403 603)))
               (check-pred nonnegative-integer? (solve2 example))
               (check-eq? (solve2 input) 1649))))
+
+(module+ main
+  (printf "Part one: ~A~%" (solve1 input))
+  (printf "Part two: ~A~%" (solve2 input)))
