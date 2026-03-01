@@ -1,8 +1,12 @@
 #lang racket/base
 
-(provide shadow-as)
+(provide shadow-as in-drracket?)
 
 (require (for-syntax racket/base syntax/parse))
+
+(define (in-drracket?)
+  (regexp-match? #px"(?i:drracket|gracket)"
+                 (path->string (find-system-path 'exec-file))))
 
 (define-syntax (shadow-as stx)
   (syntax-parse stx
