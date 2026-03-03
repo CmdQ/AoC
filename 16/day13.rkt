@@ -148,6 +148,6 @@
       (visualize example-room
                  #:path (build-path (point 7 4)
                                     (second (dijkstra example-room)))))
-    #;(visualize big-enough
+    (visualize big-enough
                #:path (build-path (point 31 39)
                                   (second (dijkstra big-enough))))))
