@@ -16,14 +16,9 @@
 (define (free? block) (char=? +free+ block))
 
 (define (bit-count num)
-  (let loop ([n num]
-             [count 0])
-    (cond
-      [(negative? n) (error "no negative numbers")]
-      [(zero? n) count]
-      [else
-       (loop (arithmetic-shift n -1)
-             (+ count (bitwise-and 1 n)))])))
+  (for/sum ([i (in-range (integer-length num))]
+            #:when (bitwise-bit-set? num i))
+    1))
 
 (define (which-brick x y)
   (let ([formula (+ (sqr x) (* 3 x) (* 2 x y) y (sqr y) (input))])
