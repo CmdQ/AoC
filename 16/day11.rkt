@@ -66,16 +66,9 @@
 (define *state-size* (make-parameter (* 2 element-count)))
 
 (define (num2vec number)
-  (let loop ([acc empty]
-             [sofar 0])
-    (cond
-      [(zero? number)
-       (vector-append (make-vector (- (*state-size*) sofar) bottom-floor)
-                      (list->vector acc))]
-      [else
-       (define cur (bitwise-and 3 number))
-       (set! number (arithmetic-shift number -2))
-       (loop (cons (add1 cur) acc) (add1 sofar))])))
+  (define size (*state-size*))
+  (for/vector ([i (in-range (sub1 size) -1 -1)])
+    (add1 (bitwise-bit-field number (* i 2) (+ (* i 2) 2)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 1
 
@@ -90,14 +83,7 @@
            (= c (vector-ref state j)))))))
 
 (define (done? state)
-  (let loop ([count (*state-size*)])
-    (cond
-      [(zero? count) (zero? state)]
-      [(zero? state) #f]
-      [else
-       (define cur (bitwise-and 3 state))
-       (set! state (arithmetic-shift state -2))
-       (and (= cur 3) (loop (sub1 count)))])))
+  (= state (sub1 (arithmetic-shift 1 (* 2 (*state-size*))))))
 
 (define (valid-moves-to state floor to)
   ;   g m  g m  g m  g m  g m
