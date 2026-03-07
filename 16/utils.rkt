@@ -1,6 +1,12 @@
 #lang racket/base
 
-(provide shadow-as in-drracket?)
+(require racket/contract)
+(require openssl/md5)
+
+(provide shadow-as
+         (contract-out
+          [in-drracket? (-> boolean?)]
+          [string-md5 (string? . -> . string?)]))
 
 (require (for-syntax racket/base syntax/parse))
 
@@ -17,6 +23,8 @@
          (define f-stx (car (syntax->list grp)))
          #`[#,v (#,f-stx #,v)]))
      #`(let (#,@binding-stxs) body ...)]))
+
+(define string-md5 (compose1 md5 open-input-string))
 
 (module+ test
   (require rackunit)

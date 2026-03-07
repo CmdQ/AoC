@@ -1,7 +1,7 @@
 #lang racket
 
 (require threading)
-(require openssl/md5)
+(require "utils.rkt")
 
 (require "charnum.rkt")
 
@@ -14,7 +14,7 @@
 
 (define (zeros of)
   (let loop ([i 0])
-    (define hash (md5 (open-input-string (string-append of (number->string i)))))
+    (define hash (string-md5 (string-append of (number->string i))))
     (cond
       [(string-prefix? hash prefix)
        (stream-cons #:eager hash (loop (add1 i)))]
@@ -48,7 +48,7 @@
   (require rackunit)
 
   (test-begin
-   (check-true (string-prefix? (md5 (open-input-string "abc5017308")) "00000"))
+   (check-true (string-prefix? (string-md5 "abc5017308") "00000"))
    (test-case "Part 1"
               (check-equal? (solve1) "f77a0e6e"))
    (test-case "Part 2"
