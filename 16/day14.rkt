@@ -1,7 +1,7 @@
 #lang racket
 
-(require threading)
 (require "utils.rkt")
+(require threading)
 
 (define input "qzyelonm")
 
@@ -90,15 +90,11 @@
 (define (solve2 input)
   (solve1 input #:stretcher stretch))
 
-(module+ main
-  (printf "Part one: ~A~%" (solve1 input))
-  (printf "Part two: ~A~%" (solve2 input)))
-
 (module+ test ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Tests
   (require rackunit)
 
   (test-begin
-   (test-case "check consistency"
+   (test-case "Test ring buffer"
               (define foo (make-ring 4))
               (ring-append foo #"12")
               (ring-append foo #"34")
@@ -111,10 +107,10 @@
               (check-equal? (bytes-append* (sequence->list (in-ring foo))) #"3456789ab")
               (check-equal? (bytes-append* (sequence->list (ring-rest foo))) #"56789ab"))
    (test-case "Part 1"
-              (check-equal? (string-md5 "abc0") "577571be4de9dcce85a041ba0410f29f")
-              #;(check-equal? (solve1 "abc") 22728)
-              (check-equal? (solve1 input) 15168))
+              (check-equal? (string-md5 "abc0") "577571be4de9dcce85a041ba0410f29f"))
    (test-case "Part 2"
-              (check-equal? (stretch "abc0" 2017) "a107ff634856bb300138cac6568c0f24")
-              #;(check-equal? (solve2 "abc") 22551)
-              (check-equal? (solve2 input) 20864))))
+              (check-equal? (stretch "abc0" 2017) "a107ff634856bb300138cac6568c0f24"))))
+
+(module+ main
+  (printf "Part one: ~A~%" (must-be (solve1 input) 15168))
+  (printf "Part two: ~A~%" (must-be (solve2 input) 20864)))

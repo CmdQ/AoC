@@ -2,6 +2,7 @@
 
 (provide (all-defined-out))
 
+(require "utils.rkt")
 (require threading)
 (require data/queue)
 
@@ -200,11 +201,8 @@
                                             #(2 3 2 2 2 2 1 1 2 3)
                                             #(2 3 2 2 2 3 1 1 2 2)
                                             #(2 3 2 3 2 2 1 1 2 2))))
-              (check-equal? (first (valid-moves input 1)) (valid-moves-to (num2vec input) 1 2))
-              (check-equal? (solve1 input) 33))
-   (test-case "Part 2"
-              (check-equal? (solve2 input) 57))))
+              (check-equal? (first (valid-moves input 1)) (valid-moves-to (num2vec input) 1 2)))))
 
 (module+ main
-  (printf "Part one: ~A~%" (solve1 input))
-  (printf "Part two: ~A~%" (solve2 input)))
+  (printf "Part one: ~A~%" (must-be (solve1 input) 33))
+  (printf "Part two: ~A~%" (must-be (solve2 input) 57)))

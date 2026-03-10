@@ -1,8 +1,7 @@
 #lang racket
 
-(require threading)
-
 (require "utils.rkt")
+(require threading)
 
 (struct/contract recipient ((id integer?) (type symbol?)) #:transparent)
 (define (make-recipient) (recipient -1 'unknown))
@@ -31,9 +30,9 @@
                     [(pregexp #px"value (\\d+) goes to bot (\\d+)" (list _ value id))
                      (shadow-as ([string->number value id])
                        (hash-update! bots
-                                   id
-                                   (lambda~> (bot-add-chip value))
-                                   (make-bot)))])
+                                     id
+                                     (lambda~> (bot-add-chip value))
+                                     (make-bot)))])
                   _))
     (world bots (make-hash))))
 
@@ -79,14 +78,8 @@
       (apply * _)))
 
 (module+ test ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Tests
-  (require rackunit)
-
-  (test-begin
-   (test-case "Part 1"
-              (check-equal? (solve1 input) 47))
-   (test-case "Part 2"
-              (check-equal? (solve2 input) 2666))))
+  (require rackunit))
 
 (module+ main
-  (printf "Part one: ~A~%" (solve1 input))
-  (printf "Part two: ~A~%" (solve2 input)))
+  (printf "Part one: ~A~%" (must-be (solve1 input) 47))
+  (printf "Part two: ~A~%" (must-be (solve2 input) 2666)))

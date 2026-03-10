@@ -1,5 +1,6 @@
 #lang racket
 
+(require "utils.rkt")
 (require threading)
 
 (require "charnum.rkt")
@@ -65,12 +66,9 @@
   (test-begin
    (check-equal? (last input) "islgcrgm")
    (test-case "Part 1"
-              (check-equal? (solve1 example) "easter")
-              (check-equal? (solve1 input) "gebzfnbt"))
-   (test-case "Part 2"
-              (check-equal? (solve2 input) "fykjtwyn"))))
+              (check-equal? (solve1 example) "easter"))))
 
 (module+ main
-  (printf "Part one: ~A~%" (solve1 input))
-  (printf "Part two: ~A~%" (solve2 input)))
+  (printf "Part one: ~A~%" (must-be (solve1 input) "gebzfnbt"))
+  (printf "Part two: ~A~%" (must-be (solve2 input) "fykjtwyn")))
 

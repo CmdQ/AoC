@@ -1,5 +1,6 @@
 #lang racket
 
+(require "utils.rkt")
 (require threading)
 
 (define input (~> "input07.txt"
@@ -70,14 +71,13 @@
                 (check-true (supports-tls? ex) ex))
               (for ([ex '("abcd[bddb]xyyx" "aaaa[qwer]tyui")])
                 (check-false (supports-tls? ex)))
-              (check-equal? (solve1 input) 105))
+)
    (test-case "Part 2"
               (check-not-false (has-aba? "aaa-eke"))
               (for ([ex '("aba[bab]xyz" "aaa[kek]eke" "zazbz[bzb]cdb")])
                 (check-true (supports-ssl? ex) ex))
-              (check-false (supports-ssl? "xyx[xyx]xyx"))
-              (check-equal? (solve2 input) 258))))
+              (check-false (supports-ssl? "xyx[xyx]xyx")))))
 
 (module+ main
-  (printf "Part one: ~A~%" (solve1 input))
-  (printf "Part two: ~A~%" (solve2 input)))
+  (printf "Part one: ~A~%" (must-be (solve1 input) 105))
+  (printf "Part two: ~A~%" (must-be (solve2 input) 258)))

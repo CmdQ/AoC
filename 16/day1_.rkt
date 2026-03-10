@@ -1,5 +1,6 @@
 #lang racket
 
+(require "utils.rkt")
 (require threading)
 
 (define input (~> "input.txt"))
@@ -21,5 +22,5 @@
    (test-case "Part 2")))
 
 (module+ main
-  (printf "Part one: ~A~%" (solve1 input))
-  (printf "Part two: ~A~%" (solve2 input)))
+  (printf "Part one: ~A~%" (must-be (solve1 input) 'TODO))
+  (printf "Part two: ~A~%" (must-be (solve2 input) 'TODO)))

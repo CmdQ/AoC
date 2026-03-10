@@ -1,5 +1,6 @@
 #lang racket
 
+(require "utils.rkt")
 (require threading)
 
 (require "matrix.rkt")
@@ -82,16 +83,14 @@
                 (check-equal? (move1 (point 3 3) d) (point 3 3)))
               (check-equal? (move1 (point 2 2) #\R) (point 3 2))
               (check-equal? (move1 (point 2 2) #\U) (point 2 1))
-              (check-equal? (solve1 '("ULL" "RRDDD" "LURDL" "UUUUD")) "1985")
-              (check-equal? (solve1 input) "78985"))
+              (check-equal? (solve1 '("ULL" "RRDDD" "LURDL" "UUUUD")) "1985"))
    (test-case "Part 2"
               (for ([d "LU"])
                 (check-equal? (move2 (point 2 2) d) (point 2 2)))
               (for ([d "URD"])
                 (check-equal? (move2 (point 5 3) d) (point 5 3)))
-              (check-equal? (move2 (point 1 3) #\R) (point 2 3))
-              (check-equal? (solve2 input) "57DD8"))))
+              (check-equal? (move2 (point 1 3) #\R) (point 2 3)))))
 
 (module+ main
-  (printf "Part one: ~A~%" (solve1 input))
-  (printf "Part two: ~A~%" (solve2 input)))
+  (printf "Part one: ~A~%" (must-be (solve1 input) "78985"))
+  (printf "Part two: ~A~%" (must-be (solve2 input) "57DD8")))

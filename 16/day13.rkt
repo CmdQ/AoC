@@ -1,7 +1,7 @@
 #lang racket
 
-(require "matrix.rkt")
 (require "utils.rkt")
+(require "matrix.rkt")
 (require 2htdp/image)
 (require threading)
 (require data/priority-queue)
@@ -129,14 +129,11 @@
   (test-begin
    (test-case "Part 1"
               (parameterize ([input 10])
-                (check-equal? (solve1 (create-room 10 7) 7 4) 11))
-              (check-equal? (solve1 big-enough) 92))
-   (test-case "Part 2"
-              (check-equal? (solve2) 124))))
+                (check-equal? (solve1 (create-room 10 7) 7 4) 11)))))
 
 (module+ main ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Visualization
-  (printf "Part one: ~A~%" (solve1 big-enough))
-  (printf "Part two: ~A~%" (solve2))
+  (printf "Part one: ~A~%" (must-be (solve1 big-enough) 92))
+  (printf "Part two: ~A~%" (must-be (solve2) 124))
   ; For the viz, switch to the example's favorite number.
   (when (in-drracket?)
     (parameterize ([input 10])

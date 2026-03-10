@@ -1,5 +1,6 @@
 #lang racket
 
+(require "utils.rkt")
 (require threading)
 
 (define input (~> "input01.txt"
@@ -68,11 +69,8 @@
   (check-eq? (turn 0+1i #\L) -1)
   (check-eq? (turn 0+1i #\R) 1)
 
-  (check-eq? (solve1) 209)
-
-  (check-eq? (solve2 '((#\R . 8) (#\R . 4) (#\R . 4) (#\R . 8))) 4)
-  (check-eq? (solve2 input) 136))
+  (check-eq? (solve2 '((#\R . 8) (#\R . 4) (#\R . 4) (#\R . 8))) 4))
 
 (module+ main
-  (printf "Part one: ~A~%" (solve1))
-  (printf "Part two: ~A~%" (solve2 input)))
+  (printf "Part one: ~A~%" (must-be (solve1) 209))
+  (printf "Part two: ~A~%" (must-be (solve2 input) 136)))

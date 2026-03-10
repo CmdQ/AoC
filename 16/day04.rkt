@@ -1,5 +1,6 @@
 #lang racket
 
+(require "utils.rkt")
 (require threading)
 
 (struct room (name sector checksum) #:transparent)
@@ -75,12 +76,10 @@
                                "a-b-c-d-e-f-g-h-987[abcde]"
                                "not-a-real-room-404[oarel]")])
                 (check-true (valid? (string->room yes))))
-              (check-false (valid? (string->room "totally-real-room-200[decoy]")))
-              (check-equal? (solve1 input) 361724))
+              (check-false (valid? (string->room "totally-real-room-200[decoy]"))))
    (test-case "Part 2"
-              (check-equal? (decrypt 343 "qzmt-zixmtkozy-ivhz") "very encrypted name")
-              (check-equal? (solve2 input) 482))))
+              (check-equal? (decrypt 343 "qzmt-zixmtkozy-ivhz") "very encrypted name"))))
 
 (module+ main
-  (printf "Part one: ~A~%" (solve1 input))
-  (printf "Part two: ~A~%" (solve2 input)))
+  (printf "Part one: ~A~%" (must-be (solve1 input) 361724))
+  (printf "Part two: ~A~%" (must-be (solve2 input) 482)))

@@ -6,7 +6,8 @@
 (provide shadow-as
          (contract-out
           [in-drracket? (-> boolean?)]
-          [string-md5 (string? . -> . string?)]))
+          [string-md5 (string? . -> . string?)]
+          [must-be (any/c any/c . -> . any/c)]))
 
 (require (for-syntax racket/base syntax/parse))
 
@@ -23,6 +24,13 @@
          (define f-stx (car (syntax->list grp)))
          #`[#,v (#,f-stx #,v)]))
      #`(let (#,@binding-stxs) body ...)]))
+
+(define (must-be actual (expected #f))
+  (cond
+    [(eq? expected 'TODO) (eprintf "must-be: TODO — got ~e~%" actual)]
+    [(and expected (not (equal? actual expected)))
+     (raise-user-error 'must-be "expected ~e, got ~e" expected actual)])
+  actual)
 
 (define string-md5 (compose1 md5 open-input-string))
 

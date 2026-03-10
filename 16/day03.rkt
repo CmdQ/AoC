@@ -1,5 +1,6 @@
 #lang racket
 
+(require "utils.rkt")
 (require threading)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 1
@@ -38,8 +39,7 @@
   (test-begin
    (check-equal? (last input) '(356 902 922))
    (test-case "Part 1"
-              (check-false (valid-triangle? '(5 10 25)))
-              (check-eq? (solve1 input) 917))
+              (check-false (valid-triangle? '(5 10 25))))
    (test-case "Part 2"
               (define example '((101 301 501)
                                 (102 302 502)
@@ -47,9 +47,8 @@
                                 (201 401 601)
                                 (202 402 602)
                                 (203 403 603)))
-              (check-pred nonnegative-integer? (solve2 example))
-              (check-eq? (solve2 input) 1649))))
+              (check-pred nonnegative-integer? (solve2 example)))))
 
 (module+ main
-  (printf "Part one: ~A~%" (solve1 input))
-  (printf "Part two: ~A~%" (solve2 input)))
+  (printf "Part one: ~A~%" (must-be (solve1 input) 917))
+  (printf "Part two: ~A~%" (must-be (solve2 input) 1649)))

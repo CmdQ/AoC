@@ -1,5 +1,6 @@
 #lang racket
 
+(require "utils.rkt")
 (require threading)
 
 (define input
@@ -49,13 +50,9 @@
 (module+ test ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Tests
   (require rackunit)
 
-  (test-begin
-   (test-case "Part 1"
-              (check-equal? (solve1 '((4 . 5) (1 . 2))) 5)
-              (check-equal? (solve1 input) 376777))
-   (test-case "Part 2"
-              (check-equal? (solve2 input) 3903937))))
+  (test-case "Part 1"
+             (check-equal? (solve1 '((4 . 5) (1 . 2))) 5)))
 
 (module+ main
-  (printf "Part one: ~A~%" (solve1 input))
-  (printf "Part two: ~A~%" (solve2 input)))
+  (printf "Part one: ~A~%" (must-be (solve1 input) 376777))
+  (printf "Part two: ~A~%" (must-be (solve2 input) 3903937)))

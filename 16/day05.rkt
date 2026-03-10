@@ -1,7 +1,7 @@
 #lang racket
 
-(require threading)
 (require "utils.rkt")
+(require threading)
 
 (require "charnum.rkt")
 
@@ -48,12 +48,8 @@
   (require rackunit)
 
   (test-begin
-   (check-true (string-prefix? (string-md5 "abc5017308") "00000"))
-   (test-case "Part 1"
-              (check-equal? (solve1) "f77a0e6e"))
-   (test-case "Part 2"
-              (check-equal? (solve2) "999828ec"))))
+   (check-true (string-prefix? (string-md5 "abc5017308") "00000"))))
 
 (module+ main
-  (printf "Part one: ~A~%" (solve1))
-  (printf "Part two: ~A~%" (solve2)))
+  (printf "Part one: ~A~%" (must-be (solve1) "f77a0e6e"))
+  (printf "Part two: ~A~%" (must-be (solve2) "999828ec")))

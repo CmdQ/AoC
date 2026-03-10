@@ -1,6 +1,6 @@
 #lang racket
 
-(require)
+(require "utils.rkt")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 1
 
@@ -64,14 +64,12 @@
    (test-case "Part 1"
               (for ([in '("ADVENT" "A(1x5)BC" "(3x3)XYZ" "A(2x2)BCD(2x2)EFG" "(6x1)(1x3)A" "X(8x2)(3x3)ABCY")]
                     [ex '(6 7 9 11 6 18)])
-                (check-equal? (solve1 in) ex in))
-              (check-equal? (solve1) 98135))
+                (check-equal? (solve1 in) ex in)))
    (test-case "Part 2"
               (for ([in '("(3x3)XYZ" "X(8x2)(3x3)ABCY" "(27x12)(20x12)(13x14)(7x10)(1x12)A" "(25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN")]
                     [ex (list 9 (string-length "XABCABCABCABCABCABCY") 241920 445)])
-                (check-equal? (solve2 in) ex in))
-              (check-equal? (solve2 #f) 10964557606))))
+                (check-equal? (solve2 in) ex in)))))
 
 (module+ main
-  (printf "Part one: ~A~%" (solve1))
-  (printf "Part two: ~A~%" (solve2 #f)))
+  (printf "Part one: ~A~%" (must-be (solve1) 98135))
+  (printf "Part two: ~A~%" (must-be (solve2 #f) 10964557606)))
