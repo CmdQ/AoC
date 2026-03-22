@@ -3,150 +3,137 @@
 (require "utils.rkt")
 (require threading)
 
-(define input "10001110011110000")
+(define input #b10001110011110000)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 1
+
+(struct/contract nint ((number integer?)
+                       (bits nonnegative-integer?))
+                 #:transparent)
+
+(define (make-nint num)
+  (nint num (integer-length num)))
 
 (struct mirror-reversed (content) #:transparent)
 (struct/contract capped ((content mirror-reversed?) (cap integer?)) #:transparent)
 
-(define xor10 (hasheq #\0 #\1 #\1 #\0 #t #\1 #f #\0))
+(define (create-alternating-mask freq len)
+  (let loop ([n (~> freq
+                    (arithmetic-shift 1 _)
+                    sub1)]
+             ; Leading 0s count too.
+             [cur (* 2 freq)])
+    (cond
+      [(>= cur len) n]
+      [else
+       (loop (bitwise-ior n (arithmetic-shift n cur)) (* 2 cur))])))
 
-(define (get-char thing at)
-  (match thing
-    [(? string?)
-     (string-ref thing at)]
-    [(capped _ cap)
-     #:when (>= at cap)
-     (raise-arguments-error 'at
-                            "access outside of capped range"
-                            "capped at" cap
-                            "accessed" at)]
-    [(or (mirror-reversed content) (capped (mirror-reversed content) _))
-     (define len (get-length content))
+(define/match (checksum-step num)
+  [((nint n len))
+   #:when (even? len)
+   (let loop ([shift-by 1]
+              [acc n])
      (cond
-       [(< at len)
-        (get-char content at)]
-       [(> at len)
-        (hash-ref xor10 (get-char content (- (* 2 len) at)))]
-       [else #\0])
-     ]))
+       [(>= shift-by len) (nint acc (quotient len 2))]
+       [else
+        (define masked (bitwise-and (create-alternating-mask shift-by len) acc))
+        (loop (arithmetic-shift shift-by 1)
+              (bitwise-ior masked (arithmetic-shift masked (- shift-by))))]))])
+
+(define (xnor-step n len)
+  (define xored (bitwise-xor n (arithmetic-shift n -1)))
+  (define width-mask (sub1 (arithmetic-shift 1 len)))
+  (nint (bitwise-xor xored width-mask) len))
+
+(define/match (checksum thing)
+  [((nint n len))
+   #:when (even? len)
+   (checksum (checksum-step (xnor-step n len)))]
+  [(_) (->string thing)])
+
+(define/match (->string mr)
+  [((nint num bits))
+   (define s (format "~B" num))
+   (string-append (make-string (max 0 (- bits (string-length s))) #\0) s)]
+  [((mirror-reversed content))
+   (define forward (~> content ->string))
+   (define sl (string-length forward))
+   (string-append forward
+                  "0"
+                  (build-string sl (lambda~> (- sl 1 _)
+                                             (string-ref forward _)
+                                             ((λ (c) (if (char=? c #\0) #\1 #\0))))))])
+
+(define (reverse-bits num width)
+  ; Round width up to next power of 2 for SWAR
+  (define pad (arithmetic-shift 1 (integer-length (sub1 width))))
+  (define pad-mask (sub1 (arithmetic-shift 1 pad)))
+  ; Left-align num in pad bits, then SWAR-reverse, then extract bottom width bits
+  (let loop ([x (arithmetic-shift num (- pad width))]
+             [step 1])
+    (if (>= step pad)
+        (bitwise-and x (sub1 (arithmetic-shift 1 width)))
+        (let ([mask (bitwise-and (create-alternating-mask step pad) pad-mask)])
+          (loop (bitwise-and
+                 (bitwise-ior (arithmetic-shift (bitwise-and x mask) step)
+                              (bitwise-and (arithmetic-shift x (- step)) mask))
+                 pad-mask)
+                (* 2 step))))))
+
+(define/match (->nint mr)
+  [((mirror-reversed content))
+   (match-define (nint forward half) (->nint content))
+   (nint (bitwise-ior (arithmetic-shift forward (add1 half))
+                      (bitwise-xor (reverse-bits forward half)
+                                   (sub1 (arithmetic-shift 1 half))))
+         (add1 (* 2 half)))]
+  [(_) mr])
 
 (define/match (get-length thing)
-  [((? string?)) (string-length thing)]
+  [((nint _ len)) len]
   [((capped _ cap)) cap]
   [((mirror-reversed content))
    (add1 (* 2 (get-length content)))])
 
-(define/match (xor-reverse thing)
-  [((? string?))
-   (define len (get-length thing))
-   (build-string len (lambda~> (- len 1 _)
-                               (get-char thing _)
-                               (hash-ref xor10 _)))])
-
-(define/match (step thing)
-  [((? string?))
-   (string-append thing "0" (xor-reverse thing))]
-  [(_)
-   (mirror-reversed thing)])
-
-(define/match (mirror-reversed->sequence mr)
-  [((mirror-reversed content))
-   (define len (get-length content))
-   (sequence-append (~> len
-                        in-range
-                        (sequence-map (curry get-char content) _))
-                    (in-value #\0)
-                    (~> len
-                        in-range
-                        (sequence-map add1 _)
-                        (sequence-map (curry - len) _)
-                        (sequence-map (curry get-char content) _)
-                        (sequence-map (curry hash-ref xor10) _)))])
-
-(define even-length-thing/c
-  (make-flat-contract #:name 'even-length-string/c
-                      #:first-order (λ (thing) (even? (get-length thing)))))
-
-(define/contract (checksum-step thing)
-  ((or/c even-length-thing/c capped?) . -> . string?)
-  (match thing
-    [(? string?)
-     (build-string (quotient (get-length thing) 2)
-                   (lambda~> (* 2)
-                             ; Neat trick: using 2 parens makes this a call of that lambda,
-                             ; since the threaded value becomes the first argument.
-                             ((λ (pos) (hash-ref xor10 (eq? (get-char thing pos)
-                                                            (get-char thing (add1 pos))))))))]
-    [(capped mr cap)
-     (define n (quotient cap 2))
-     (define buf (make-string n))
-     (for ([pair (in-slice 2 (mirror-reversed->sequence mr))]
-           [i (in-range n)])
-       (string-set! buf i (hash-ref xor10 (apply eq? pair))))
-     buf]))
-
-(define (checksum thing)
-  (let loop ([acc thing])
-    (cond
-      [(even? (get-length acc))
-       (loop (checksum-step acc))]
-      [else acc])))
-
 (define (solve input (required-length 272))
-  (let loop ([acc input])
-    (cond
-      [(>= (get-length acc) required-length)
-       (match acc
-         [(? string?)
-          (checksum (substring acc 0 required-length))]
-         [(? mirror-reversed?)
-          (checksum (capped acc required-length))])]
-      [else
-       (loop (step acc))])))
+  (match input
+    [(? integer?) (solve (make-nint input) required-length)]
+    [(? nint?) (solve (mirror-reversed input) required-length)]
+    [_
+     (define len (get-length input))
+     (cond
+       [(< len required-length)
+        (solve (mirror-reversed input) required-length)]
+       [else
+        (match-define (nint bigger longer) (->nint input))
+        (checksum (nint (arithmetic-shift bigger (- required-length len)) required-length))])]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 2
-
-(define (mirror-reversed->string mr)
-  (~> mr
-      mirror-reversed->sequence
-      sequence->list
-      list->string))
 
 (module+ test ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Tests
   (require rackunit)
 
   (test-begin
    (test-case "Part 1"
-              (test-case "checksums"
-                         (check-equal? (checksum-step "110010110100") "110101")
-                         (check-equal? (checksum-step "110101") "100")
-                         (check-equal? (checksum "110010110100") "100"))
-              (check-equal? (step "1") "100")
-              (check-equal? (step "0") "001")
-              (check-equal? (step "11111") "11111000000")
-              (check-equal? (step "111100001010") "1111000010100101011110000")
-              (check-equal? (solve "10000" 20) "01100"))
+              (test-case "checksum-step"
+                         (check-equal? (checksum-step (xnor-step #b110010110100 12)) (nint #b110101 6))
+                         (check-equal? (checksum-step (xnor-step #b110101 6)) (nint #b100 3)))
+              (test-case "checksum"
+                         (check-equal? (checksum (make-nint #b110010110100)) "100"))
+              (test-case "->string dragon steps"
+                         (check-equal? (->string (mirror-reversed (nint 1 1))) "100")
+                         (check-equal? (->string (mirror-reversed (nint 0 1))) "001")
+                         (check-equal? (->string (mirror-reversed (make-nint #b11111))) "11111000000")
+                         (check-equal? (->string (mirror-reversed (make-nint #b111100001010))) "1111000010100101011110000"))
+              (test-case "solve"
+                         (check-equal? (solve #b10000 20) "01100")))
    (test-case "Part 2"
-              ; directly to string
-              (check-equal? (~> "11111"
-                                mirror-reversed
-                                mirror-reversed->sequence
-                                sequence->list
-                                list->string)
-                            "11111000000")
-              ; one level of struct
-              (check-equal? (~> "100"
-                                mirror-reversed
-                                mirror-reversed
-                                mirror-reversed->sequence
-                                sequence->list
-                                list->string)
-                            "100011001001110")
-              (check-equal? (mirror-reversed->string (mirror-reversed "111100001010"))
-                            "1111000010100101011110000"))))
+              (test-case "->nint"
+                         (check-equal? (->nint (mirror-reversed (make-nint #b11111)))
+                                       (nint #b11111000000 11))
+                         (check-equal? (->nint (mirror-reversed (make-nint #b111100001010)))
+                                       (nint #b1111000010100101011110000 25))))))
 
 (module+ main
   (printf "Part one: ~A~%" (must-be (solve input) "10010101010011101"))
-  (printf "Part two: ~A~%" (must-be (solve (mirror-reversed input) 35651584) "01100111101101111")))
+  (printf "Part two: ~A~%" (must-be (solve input 35651584) "01100111101101111")))
