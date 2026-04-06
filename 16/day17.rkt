@@ -15,20 +15,28 @@
 ; The order and char (uppercase) is Up, Down, Left, Right.
 ; The room is 4x4, start is upper left, finished when reaching lower right.
 ; Only first four chars of MD5 result (hex b-f means open).
-(define (solve input xfs)
+(define/contract (solve input xfs)
+  (bytes? (or/c 'DFS 'BFS) . -> . (or/c bytes? positive-integer?))
   (define subtract (bytes-length input))
   (define q (make-queue))
-  (define enqueuer (curry (if (eq? xfs 'dfs) enqueue-front! enqueue!) q))
+  (define enqueuer (curry (if (eq? xfs 'DFS) enqueue-front! enqueue!) q))
   (enqueuer (list 1 1 input))
   (let loop ([longest 0])
     (cond
-      [(queue-empty? q) longest]
+      [(queue-empty? q)
+       (when (zero? longest)
+         (raise-arguments-error 'solve
+                                "input is not solvable"
+                                "input" input))
+       longest]
       [else
        (match-define (list r c buf) (dequeue! q))
        (cond
          [(= r c 4)
-          (if (eq? xfs 'dfs)
+          (if (eq? xfs 'DFS)
+              ; Remember the longest, but don't forget to subtract the length of the nonce.
               (loop (max longest (- (bytes-length buf) subtract)))
+              ; Output the directions without the nonce.
               (subbytes buf (bytes-length input)))]
          [else
           (define hash (md5 buf))
@@ -40,7 +48,10 @@
                 (define nc (+ c dc))
                 (and (<= 1 nr 4) (<= 1 nc 4)
                      (open? (bytes-ref hash idx))
-                     (list nr nc (bytes-append buf (bytes (char->integer ch)))))])
+                     (list nr nc (~> ch
+                                     char->integer
+                                     bytes
+                                     (bytes-append buf _))))])
              '((#\U -1 0 0)
                (#\D +1 0 1)
                (#\L 0 -1 2)
@@ -48,11 +59,12 @@
           (for-each enqueuer moves)
           (loop longest)])])))
 
-(define solve1 (curryr solve 'bfs))
+(define solve1 (curryr solve 'BFS))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 2
 
-(define solve2 (curryr solve 'dfs))
+;; DFS uses less memory.
+(define solve2 (curryr solve 'DFS))
 
 (module+ test ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Tests
   (require rackunit)
