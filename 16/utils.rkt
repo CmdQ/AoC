@@ -7,7 +7,8 @@
          (contract-out
           [in-drracket? (-> boolean?)]
           [string-md5 (string? . -> . string?)]
-          [must-be (any/c any/c . -> . any/c)]))
+          [must-be (any/c any/c . -> . any/c)]
+          [bit-count (integer? . -> . integer?)]))
 
 (require (for-syntax racket/base syntax/parse))
 
@@ -33,6 +34,11 @@
   actual)
 
 (define string-md5 (compose1 md5 open-input-string))
+
+(define (bit-count num)
+  (for/sum ([i (in-range (integer-length num))]
+            #:when (bitwise-bit-set? num i))
+    1))
 
 (module+ test
   (require rackunit)
