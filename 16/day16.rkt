@@ -1,21 +1,14 @@
 #lang racket
 
 (require "utils.rkt")
+(require "nint.rkt")
 (require threading)
 
 (define input #b10001110011110000)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Part 1
 
-(struct/contract nint ((number integer?)
-                       (bits nonnegative-integer?))
-                 #:transparent)
-
-(define (make-nint num)
-  (nint num (integer-length num)))
-
 (struct mirror-reversed (content) #:transparent)
-(struct/contract capped ((content mirror-reversed?) (cap integer?)) #:transparent)
 
 (define (create-alternating-mask freq len)
   (let loop ([n (~> freq
@@ -42,8 +35,7 @@
 
 (define (xnor-step n len)
   (define xored (bitwise-xor n (arithmetic-shift n -1)))
-  (define width-mask (sub1 (arithmetic-shift 1 len)))
-  (nint (bitwise-xor xored width-mask) len))
+  (nint (bitwise-xor xored (nint-mask len)) len))
 
 (define/match (checksum thing)
   [((nint n len))
@@ -67,12 +59,12 @@
 (define (reverse-bits num width)
   ; Round width up to next power of 2 for SWAR
   (define pad (arithmetic-shift 1 (integer-length (sub1 width))))
-  (define pad-mask (sub1 (arithmetic-shift 1 pad)))
+  (define pad-mask (nint-mask pad))
   ; Left-align num in pad bits, then SWAR-reverse, then extract bottom width bits
   (let loop ([x (arithmetic-shift num (- pad width))]
              [step 1])
     (if (>= step pad)
-        (bitwise-and x (sub1 (arithmetic-shift 1 width)))
+        (bitwise-and x (nint-mask width))
         (let ([mask (bitwise-and (create-alternating-mask step pad) pad-mask)])
           (loop (bitwise-and
                  (bitwise-ior (arithmetic-shift (bitwise-and x mask) step)
@@ -82,16 +74,17 @@
 
 (define/match (->nint mr)
   [((mirror-reversed content))
-   (match-define (nint forward half) (->nint content))
+   (define content-nint (->nint content))
+   (define forward (nint-number content-nint))
+   (define half (nint-bits content-nint))
    (nint (bitwise-ior (arithmetic-shift forward (add1 half))
                       (bitwise-xor (reverse-bits forward half)
-                                   (sub1 (arithmetic-shift 1 half))))
+                                   (nint-mask content-nint)))
          (add1 (* 2 half)))]
   [(_) mr])
 
 (define/match (get-length thing)
   [((nint _ len)) len]
-  [((capped _ cap)) cap]
   [((mirror-reversed content))
    (add1 (* 2 (get-length content)))])
 
