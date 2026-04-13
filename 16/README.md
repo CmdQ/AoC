@@ -169,6 +169,67 @@ Find one-time pad keys by mining MD5 hashes for triple/quintuple character runs.
   - `quote` symbols (`'done`) as type tags to distinguish confirmed vs unconfirmed candidates
   - `byte-regexp` / `make-bytes` for bytes-native regex matching
 
+### Day 15 — [Timing is Everything](https://adventofcode.com/2016/day/15)
+Drop a capsule through rotating discs; find the first time all disc slots align.
+
+- Concepts:
+  - Chinese Remainder Theorem (CRT)
+  - Extended Euclidean Algorithm (Bézout coefficients)
+  - Modular inverse
+- Racket:
+  - `define/match` (from `racket/match`)
+  - Multiple return values with `values` / `match-define-values`
+  - Cons pairs as lightweight key-value data
+
+### Day 16 — [Dragon Checksum](https://adventofcode.com/2016/day/16)
+Generate data via the dragon curve, then checksum by pairwise comparison until odd length. Part 2 scales to 35M bits.
+
+- Concepts:
+  - Dragon curve (modified: reverse + flip)
+  - SWAR (SIMD Within A Register) — bulk bit operations on bignums
+  - O(log n) bit compression and bit reversal using alternating masks
+  - Pad-to-power-of-2 trick for arbitrary-width SWAR reversal
+- Racket:
+  - `nint.rkt` module — fixed-width integer struct with `nint-mask`, `logical-shift`
+  - Arbitrary-precision integer bit manipulation (`bitwise-xor`, `bitwise-and`, `arithmetic-shift`)
+  - `bitwise-not` pitfall with bignums (infinite sign extension) — use XOR with mask instead
+  - `make-flat-contract` for custom contracts
+  - `define/match` with `#:when` guards
+
+### Day 17 — [Two Steps Forward](https://adventofcode.com/2016/day/17)
+Navigate a 4×4 vault where doors are determined by MD5 hashes of the path so far. Part 1: shortest path (BFS). Part 2: longest path (DFS).
+
+- Concepts:
+  - BFS for shortest path, DFS for longest path
+  - MD5-determined dynamic maze
+- Racket:
+  - `data/queue` with `enqueue!`/`enqueue-front!` to switch BFS↔DFS
+  - `filter-map` + `match-lambda` over a direction table
+  - `curry` / `curryr` for partial application (`enqueuer`, `solve1`/`solve2`)
+  - `file/md5` on `bytes?`
+  - `bytes-append` / `subbytes` for path accumulation
+  - `define/contract` with `(or/c 'DFS 'BFS)` symbol contracts
+
+### Day 18 — [Like a Rogue](https://adventofcode.com/2016/day/18)
+Generate trap rows where each tile is XOR of its upper-left and upper-right neighbors; count safe tiles.
+
+- Concepts:
+  - Cellular automaton (Rule 90 / XOR of neighbors)
+  - Bit-packed rows for O(1) step computation
+- Racket:
+  - `nint.rkt` for fixed-width bit manipulation
+  - `for/fold` with `#:result` for running count without accumulating rows
+  - Dual dispatch via `define/match` — string and nint implementations
+
+### Day 19 — [An Elephant Named Joseph](https://adventofcode.com/2016/day/19)
+Josephus problem: elves in a circle steal presents. Part 1: steal from neighbor. Part 2: steal from across.
+
+- Concepts:
+  - Josephus problem
+  - Circular elimination
+- Racket:
+  - `data/queue` as circular buffer (dequeue → decide → re-enqueue)
+
 ## Project Infrastructure
 
 ### `run.rkt` — Benchmark runner
@@ -189,6 +250,15 @@ racket run.rkt 14     # run day 14 only
 ### `utils.rkt` — Shared utilities
 - `shadow-as` — macro to apply a transform function to multiple bindings in one expression
 - `in-drracket?` — detects DrRacket vs CLI via `find-system-path 'exec-file`
+- `must-be` — inline assertion that returns the value if it matches expected, errors otherwise. Used in `module+ main` to both print and verify answers. Supports `'TODO` (warning) and `#f` (skip check).
+- `bit-count` — count set bits in an integer
+- `string-md5` — MD5 of a string via `openssl/md5`
+
+### `nint.rkt` — Fixed-width integers
+Struct pairing an integer with an explicit bit width (since `integer-length` drops leading zeros). Provides:
+- `make-nint` — infer width or specify explicitly
+- `nint-mask` — all-ones mask for the width (accepts `nint` or plain integer)
+- `logical-shift` — arithmetic shift with masking to width (no sign extension on right shift)
 
 ### `ring-buffer.rkt` — Mutable ring buffer
 Fixed-capacity circular buffer with `make-do-sequence` / `initiate-sequence` for `for` loop integration.
@@ -204,22 +274,28 @@ Every day file has:
 |---|---|
 | Streams (lazy sequences) | 05, 14 |
 | Custom `#lang` / reader macros | 08, 12 |
-| `threading` / `~>` / `lambda~>` | 01, 02, 03, 04, 05, 07, 10, 11, 13, 14 |
+| `threading` / `~>` / `lambda~>` | 01, 02, 03, 04, 05, 07, 10, 11, 13, 14, 17, 18 |
 | `matrix.rkt` (2D grid) | 02, 08, 13 |
 | Complex number geometry | 01 |
 | Regex (`regexp-match`, backrefs, `byte-regexp`) | 04, 07, 10, 11, 12, 14 |
-| BFS / Dijkstra | 11, 13 |
-| `for/fold` with accumulators | 01, 02, 03, 06 |
+| BFS / Dijkstra | 11, 13, 17 |
+| `for/fold` with accumulators | 01, 02, 03, 06, 18 |
 | Hash tables (mutable / immutable) | 04, 10, 12, 13 |
-| Contracts (`contract-out`, `struct/contract`) | 10, 12 |
+| Contracts (`contract-out`, `struct/contract`, `define/contract`) | 10, 12, 16, 17 |
 | Port-based I/O (`read-char`) | 09 |
 | `parameterize` / `make-parameter` | 13, 14 |
-| `match` / `match-lambda` / `match-define` | 03, 04, 10, 11, 13, 14 |
-| Bit manipulation | 11, 13 |
+| `match` / `match-lambda` / `match-define` | 03, 04, 10, 11, 13, 14, 15, 16, 17, 18 |
+| Bit manipulation | 11, 13, 16, 18 |
+| SWAR (bulk bignum bit ops) | 16 |
 | `2htdp/image` visualization | 13 |
-| Curried definitions | 07, 09 |
+| Curried definitions | 07, 09, 17 |
 | `shadow-as` macro (`utils.rkt`) | 04, 08, 10, 12 |
 | `in-drracket?` (`utils.rkt`) | 13 |
+| `nint.rkt` (fixed-width integers) | 16, 18 |
 | `treelist` (functional sequence) | 11 |
+| `data/queue` | 11, 17, 19 |
 | Sets (`mutable-set`) | 01, 11 |
 | `struct-copy` | 02 |
+| Modular arithmetic / CRT | 15 |
+| MD5 hashing (`file/md5`) | 05, 14, 17 |
+| `curry` / `curryr` (partial application) | 17 |
