@@ -230,6 +230,21 @@ Josephus problem: elves in a circle steal presents. Part 1: steal from neighbor.
 - Racket:
   - `data/queue` as circular buffer (dequeue → decide → re-enqueue)
 
+### Day 20 — [Firewall Rules](https://adventofcode.com/2016/day/20)
+Find the lowest unblocked IP and count all unblocked IPs given a list of blocked ranges. Uses an augmented interval BST with subtree max values.
+
+- Concepts:
+  - Augmented interval tree (BST keyed by `lo`, each node stores subtree max `hi`)
+  - In-order traversal with running ceiling to detect gaps
+  - Escape continuation for early exit (part 1)
+- Racket:
+  - `define-match-expander` for `N` (node), `L` (leaf), `P` (payload) — flattens nested struct patterns
+  - `let/ec` for early-exit in-order traversal
+  - Named `let` + `define-values` for multi-value accumulation (part 2)
+  - `case-lambda` for multi-arity smart constructor
+  - Curried definition `((flip f) a b)` added to `utils.rkt`
+  - `values` / `define-values` for threading ceiling through recursion
+
 ## Project Infrastructure
 
 ### `run.rkt` — Benchmark runner
@@ -253,6 +268,7 @@ racket run.rkt 14     # run day 14 only
 - `must-be` — inline assertion that returns the value if it matches expected, errors otherwise. Used in `module+ main` to both print and verify answers. Supports `'TODO` (warning) and `#f` (skip check).
 - `bit-count` — count set bits in an integer
 - `string-md5` — MD5 of a string via `openssl/md5`
+- `flip` — higher-order function returning a version of `f` with its two arguments swapped; `((flip f) a b)` = `(f b a)`
 
 ### `nint.rkt` — Fixed-width integers
 Struct pairing an integer with an explicit bit width (since `integer-length` drops leading zeros). Provides:
@@ -274,7 +290,7 @@ Every day file has:
 |---|---|
 | Streams (lazy sequences) | 05, 14 |
 | Custom `#lang` / reader macros | 08, 12 |
-| `threading` / `~>` / `lambda~>` | 01, 02, 03, 04, 05, 07, 10, 11, 13, 14, 17, 18 |
+| `threading` / `~>` / `lambda~>` | 01, 02, 03, 04, 05, 07, 10, 11, 13, 14, 17, 18, 20 |
 | `matrix.rkt` (2D grid) | 02, 08, 13 |
 | Complex number geometry | 01 |
 | Regex (`regexp-match`, backrefs, `byte-regexp`) | 04, 07, 10, 11, 12, 14 |
@@ -284,11 +300,15 @@ Every day file has:
 | Contracts (`contract-out`, `struct/contract`, `define/contract`) | 10, 12, 16, 17 |
 | Port-based I/O (`read-char`) | 09 |
 | `parameterize` / `make-parameter` | 13, 14 |
-| `match` / `match-lambda` / `match-define` | 03, 04, 10, 11, 13, 14, 15, 16, 17, 18 |
+| `match` / `match-lambda` / `match-define` | 03, 04, 10, 11, 13, 14, 15, 16, 17, 18, 20 |
 | Bit manipulation | 11, 13, 16, 18 |
 | SWAR (bulk bignum bit ops) | 16 |
 | `2htdp/image` visualization | 13 |
-| Curried definitions | 07, 09, 17 |
+| Curried definitions | 07, 09, 17, 20 |
+| `define-match-expander` | 20 |
+| Escape continuations (`let/ec`) | 20 |
+| `values` / `define-values` (multiple return) | 15, 20 |
+| Augmented BST / interval tree | 20 |
 | `shadow-as` macro (`utils.rkt`) | 04, 08, 10, 12 |
 | `in-drracket?` (`utils.rkt`) | 13 |
 | `nint.rkt` (fixed-width integers) | 16, 18 |

@@ -8,7 +8,8 @@
           [in-drracket? (-> boolean?)]
           [string-md5 (string? . -> . string?)]
           [must-be (any/c any/c . -> . any/c)]
-          [bit-count (integer? . -> . integer?)]))
+          [bit-count (integer? . -> . integer?)]
+          [flip (procedure? . -> . procedure?)]))
 
 (require (for-syntax racket/base syntax/parse))
 
@@ -34,6 +35,8 @@
   actual)
 
 (define string-md5 (compose1 md5 open-input-string))
+
+(define ((flip f) a b) (f b a))
 
 (define (bit-count num)
   (for/sum ([i (in-range (integer-length num))]
