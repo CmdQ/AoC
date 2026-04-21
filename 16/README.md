@@ -245,18 +245,40 @@ Find the lowest unblocked IP and count all unblocked IPs given a list of blocked
   - Curried definition `((flip f) a b)` added to `utils.rkt`
   - `values` / `define-values` for threading ceiling through recursion
 
+### Day 21 — [Scrambled Letters and Hash](https://adventofcode.com/2016/day/21)
+Scramble a password by applying a sequence of string operations; part 2 unscrambles by inverting each operation in reverse.
+
+- Concepts:
+  - String operation inversion (rotate-letter requires brute-force search)
+  - Custom `#lang` combining reader and runtime in one file
+- Racket:
+  - **Custom `#lang`** — reader + runtime + `#%module-begin` all in `day21.rkt`; input file uses `#lang reader "day21.rkt"`
+  - `define-syntax-rule` as simpler alternative to `define-macro` (from `br`)
+  - `(list OP ARG ...) ...` in macro to capture function references (vs `'(OP ARG ...)` which captures symbols)
+  - `match-lambda**` — like `match-lambda*` but uses `match*` with separate patterns per argument
+  - `(== expr)` in `match` to compare against a value rather than bind a variable
+  - `list*` pattern to destructure head + tail without knowing arity
+  - `#:do` clause in `for` to bind intermediate values without re-computing
+  - `foldr` for reverse-order traversal (part 2)
+  - `curry` on `foldl`/`foldr` for point-free solvers
+  - `for/first` with `#:when` for brute-force inversion search
+
 ## Project Infrastructure
 
 ### `run.rkt` — Benchmark runner
 Optionally precompile first to reduce loading time:
-```
+
+```shell
 raco make day*.rkt ring-buffer.rkt utils.rkt matrix.rkt charnum.rkt
 ```
+
 Run all days or a specific day:
-```
+
+```shell
 racket run.rkt        # benchmark all days
 racket run.rkt 14     # run day 14 only
 ```
+
 - Reports module loading time separately from execution time
 - Falls back to `inputNN.rkt` for custom `#lang` days (08, 12) that have no `module+ main`
 - Uses `find-system-path 'run-file` to locate day files relative to the script, not CWD
@@ -289,8 +311,8 @@ Every day file has:
 | Concept | Days |
 |---|---|
 | Streams (lazy sequences) | 05, 14 |
-| Custom `#lang` / reader macros | 08, 12 |
-| `threading` / `~>` / `lambda~>` | 01, 02, 03, 04, 05, 07, 10, 11, 13, 14, 17, 18, 20 |
+| Custom `#lang` / reader macros | 08, 12, 21 |
+| `threading` / `~>` / `lambda~>` | 01, 02, 03, 04, 05, 07, 10, 11, 13, 14, 17, 18, 20, 21 |
 | `matrix.rkt` (2D grid) | 02, 08, 13 |
 | Complex number geometry | 01 |
 | Regex (`regexp-match`, backrefs, `byte-regexp`) | 04, 07, 10, 11, 12, 14 |
@@ -300,7 +322,7 @@ Every day file has:
 | Contracts (`contract-out`, `struct/contract`, `define/contract`) | 10, 12, 16, 17 |
 | Port-based I/O (`read-char`) | 09 |
 | `parameterize` / `make-parameter` | 13, 14 |
-| `match` / `match-lambda` / `match-define` | 03, 04, 10, 11, 13, 14, 15, 16, 17, 18, 20 |
+| `match` / `match-lambda` / `match-define` | 03, 04, 10, 11, 13, 14, 15, 16, 17, 18, 20, 21 |
 | Bit manipulation | 11, 13, 16, 18 |
 | SWAR (bulk bignum bit ops) | 16 |
 | `2htdp/image` visualization | 13 |
@@ -318,4 +340,7 @@ Every day file has:
 | `struct-copy` | 02 |
 | Modular arithmetic / CRT | 15 |
 | MD5 hashing (`file/md5`) | 05, 14, 17 |
-| `curry` / `curryr` (partial application) | 17 |
+| `curry` / `curryr` (partial application) | 17, 21 |
+| `match-lambda**` | 21 |
+| `(== expr)` match pattern (value equality) | 21 |
+| `#:do` in `for` clauses | 21 |
