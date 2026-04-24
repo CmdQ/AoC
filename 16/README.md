@@ -263,6 +263,21 @@ Scramble a password by applying a sequence of string operations; part 2 unscramb
   - `curry` on `foldl`/`foldr` for point-free solvers
   - `for/first` with `#:when` for brute-force inversion search
 
+### Day 22 — [Grid Computing](https://adventofcode.com/2016/day/22)
+Count viable pairs of storage nodes, then move the goal data across the grid by treating the empty node as a sliding puzzle.
+
+- Concepts:
+  - Grid modelling with node capacity/usage metadata
+  - Viable-pair counting by Cartesian product over nodes
+  - Sliding-puzzle reasoning around walls and the empty node
+- Racket:
+  - `struct` for node usage records
+  - `matrix.rkt` for fixed-size 2D grid storage
+  - `for*/sum` over `in-matrix` for pair counting
+  - `2htdp/image` visualization of disk usage in DrRacket
+  - `match-define` for parsed input and matrix cells
+  - `curry` for specialized matrix construction
+
 ## Project Infrastructure
 
 ### `run.rkt` — Benchmark runner
@@ -312,8 +327,8 @@ Every day file has:
 |---|---|
 | Streams (lazy sequences) | 05, 14 |
 | Custom `#lang` / reader macros | 08, 12, 21 |
-| `threading` / `~>` / `lambda~>` | 01, 02, 03, 04, 05, 07, 10, 11, 13, 14, 17, 18, 20, 21 |
-| `matrix.rkt` (2D grid) | 02, 08, 13 |
+| `threading` / `~>` / `lambda~>` | 01, 02, 03, 04, 05, 07, 10, 11, 13, 14, 17, 18, 20, 21, 22 |
+| `matrix.rkt` (2D grid) | 02, 08, 13, 22 |
 | Complex number geometry | 01 |
 | Regex (`regexp-match`, backrefs, `byte-regexp`) | 04, 07, 10, 11, 12, 14 |
 | BFS / Dijkstra | 11, 13, 17 |
@@ -322,10 +337,10 @@ Every day file has:
 | Contracts (`contract-out`, `struct/contract`, `define/contract`) | 10, 12, 16, 17 |
 | Port-based I/O (`read-char`) | 09 |
 | `parameterize` / `make-parameter` | 13, 14 |
-| `match` / `match-lambda` / `match-define` | 03, 04, 10, 11, 13, 14, 15, 16, 17, 18, 20, 21 |
+| `match` / `match-lambda` / `match-define` | 03, 04, 10, 11, 13, 14, 15, 16, 17, 18, 20, 21, 22 |
 | Bit manipulation | 11, 13, 16, 18 |
 | SWAR (bulk bignum bit ops) | 16 |
-| `2htdp/image` visualization | 13 |
+| `2htdp/image` visualization | 13, 22 |
 | Curried definitions | 07, 09, 17, 20 |
 | `define-match-expander` | 20 |
 | Escape continuations (`let/ec`) | 20 |
@@ -340,7 +355,7 @@ Every day file has:
 | `struct-copy` | 02 |
 | Modular arithmetic / CRT | 15 |
 | MD5 hashing (`file/md5`) | 05, 14, 17 |
-| `curry` / `curryr` (partial application) | 17, 21 |
+| `curry` / `curryr` (partial application) | 17, 21, 22 |
 | `match-lambda**` | 21 |
 | `(== expr)` match pattern (value equality) | 21 |
 | `#:do` in `for` clauses | 21 |

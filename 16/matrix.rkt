@@ -23,14 +23,14 @@
   (matrix rows cols (make-vector (* rows cols) init)))
 
 (define (matrix-index m row col)
-  (define rows (matrix-cols m))
+  (define rows (matrix-rows m))
   (define cols (matrix-cols m))
   (cond
     [(>= row rows)
      (error 'matrix-index "invalid row index ~a with height ~a" row rows)]
     [(>= col cols)
      (error 'matrix-index "invalid column index ~a with width ~a" col cols)]
-    [else (+ (* row rows) col)]))
+    [else (+ (* row cols) col)]))
 
 (define (matrix-ref m row col)
   (vector-ref (matrix-data m) (matrix-index m row col)))
