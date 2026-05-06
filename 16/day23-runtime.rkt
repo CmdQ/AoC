@@ -1,6 +1,7 @@
 #lang racket
 
 (require threading)
+(require "utils.rkt")
 (require (except-in "day12-runtime.rkt"
                     #%module-begin
                     run-program))
@@ -81,13 +82,8 @@
     [(_ body)
      (#%module-begin
       (define program body)
-      (define answer1 (solve1 program))
-      (printf "Answer 1: ~A~%" answer1)
-      (define answer2 (solve2 program))
-      (printf "Answer 2: ~A~%" answer2)
-      (require rackunit)
-      (check-equal? answer1 14346)
-      (check-equal? answer2 479010906))]))
+      (printf "Part one: ~A~%" (must-be (solve1 program) 14346))
+      (printf "Part two: ~A~%" (must-be (solve2 program) 479010906)))]))
 
 (provide run-program
          (rename-out (day23-module-begin #%module-begin)))

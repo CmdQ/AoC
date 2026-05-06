@@ -1,6 +1,7 @@
 #lang racket
 
 (require "matrix.rkt")
+(require "utils.rkt")
 
 (define width 50)
 (define height 6)
@@ -37,12 +38,9 @@
     [(_ body ...)
      (#%module-begin
       body ...
-      (define answer1 (solve1))
-      (printf "Answer 1: ~A~%Answer 2:" answer1)
+      (printf "Part one: ~A~%Part two:" (must-be (solve1) 121))
       (solve2)
-      (displayln "")
-      (require rackunit)
-      (check-equal? answer1 121))]))
+      (displayln ""))]))
 
 (provide rect! rotate-row! rotate-column!
          (rename-out (day8-module-begin #%module-begin)))

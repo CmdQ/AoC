@@ -1,5 +1,7 @@
 #lang racket
 
+(require "utils.rkt")
+
 (define (make-env)
   (foldl (λ (c acc) (hash-set acc c 0)) (hasheq) '(a b c d)))
 
@@ -50,13 +52,8 @@
     [(_ body)
      (#%module-begin
       (define program body)
-      (define answer1 (solve1 program))
-      (printf "Answer 1: ~A~%" answer1)
-      (define answer2 (solve2 program))
-      (printf "Answer 2: ~A~%" answer2)
-      (require rackunit)
-      (check-equal? answer1 317993)
-      (check-equal? answer2 9227647))]))
+      (printf "Part one: ~A~%" (must-be (solve1 program) 317993))
+      (printf "Part two: ~A~%" (must-be (solve2 program) 9227647)))]))
 
 (provide copy jump-not-zero increment decrement run-program mappings make-env value-of
          (rename-out (day12-module-begin #%module-begin)))
