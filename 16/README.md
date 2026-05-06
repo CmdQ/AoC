@@ -278,6 +278,20 @@ Count viable pairs of storage nodes, then move the goal data across the grid by 
   - `match-define` for parsed input and matrix cells
   - `curry` for specialized matrix construction
 
+### Day 23 — [Safe Cracking](https://adventofcode.com/2016/day/23)
+Extend the assembunny VM with `tgl` self-modifying code, then optimize the hot loops into arithmetic operations.
+
+- Concepts:
+  - Self-modifying code via instruction toggling
+  - Peephole optimization of addition and multiplication loops
+  - Reusing a custom language reader with a day-specific runtime
+- Racket:
+  - **Custom `#lang`** — `day23.rkt` extends the day 12 reader and points `input23.rkt` at `day23-runtime.rkt`
+  - `match` over instruction data for dispatch and toggling rules
+  - Mutable vector program memory for `tgl`
+  - `threading` (`~>`) for register-update pipelines
+  - `curryr` for part-specific solver specialization
+
 ## Project Infrastructure
 
 ### `run.rkt` — Benchmark runner
@@ -295,7 +309,7 @@ racket run.rkt 14     # run day 14 only
 ```
 
 - Reports module loading time separately from execution time
-- Falls back to `inputNN.rkt` for custom `#lang` days (08, 12) that have no `module+ main`
+- Falls back to `inputNN.rkt` for custom `#lang` days (08, 12, 23) that have no `module+ main`
 - Uses `find-system-path 'run-file` to locate day files relative to the script, not CWD
 - `dynamic-require` with `(submod f main)` for submodule execution
 
@@ -326,27 +340,27 @@ Every day file has:
 | Concept | Days |
 |---|---|
 | Streams (lazy sequences) | 05, 14 |
-| Custom `#lang` / reader macros | 08, 12, 21 |
-| `threading` / `~>` / `lambda~>` | 01, 02, 03, 04, 05, 07, 10, 11, 13, 14, 17, 18, 20, 21, 22 |
+| Custom `#lang` / reader macros | 08, 12, 21, 23 |
+| `threading` / `~>` / `lambda~>` | 01, 02, 03, 04, 05, 07, 10, 11, 13, 14, 17, 18, 20, 21, 22, 23 |
 | `matrix.rkt` (2D grid) | 02, 08, 13, 22 |
 | Complex number geometry | 01 |
 | Regex (`regexp-match`, backrefs, `byte-regexp`) | 04, 07, 10, 11, 12, 14 |
 | BFS / Dijkstra | 11, 13, 17 |
 | `for/fold` with accumulators | 01, 02, 03, 06, 18 |
-| Hash tables (mutable / immutable) | 04, 10, 12, 13 |
+| Hash tables (mutable / immutable) | 04, 10, 12, 13, 23 |
 | Contracts (`contract-out`, `struct/contract`, `define/contract`) | 10, 12, 16, 17 |
 | Port-based I/O (`read-char`) | 09 |
 | `parameterize` / `make-parameter` | 13, 14 |
-| `match` / `match-lambda` / `match-define` | 03, 04, 10, 11, 13, 14, 15, 16, 17, 18, 20, 21, 22 |
+| `match` / `match-lambda` / `match-define` | 03, 04, 10, 11, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23 |
 | Bit manipulation | 11, 13, 16, 18 |
 | SWAR (bulk bignum bit ops) | 16 |
 | `2htdp/image` visualization | 13, 22 |
 | Curried definitions | 07, 09, 17, 20 |
 | `define-match-expander` | 20 |
 | Escape continuations (`let/ec`) | 20 |
-| `values` / `define-values` (multiple return) | 15, 20 |
+| `values` / `define-values` (multiple return) | 15, 20, 23 |
 | Augmented BST / interval tree | 20 |
-| `shadow-as` macro (`utils.rkt`) | 04, 08, 10, 12 |
+| `shadow-as` macro (`utils.rkt`) | 04, 08, 10, 12, 23 |
 | `in-drracket?` (`utils.rkt`) | 13 |
 | `nint.rkt` (fixed-width integers) | 16, 18 |
 | `treelist` (functional sequence) | 11 |
@@ -355,7 +369,9 @@ Every day file has:
 | `struct-copy` | 02 |
 | Modular arithmetic / CRT | 15 |
 | MD5 hashing (`file/md5`) | 05, 14, 17 |
-| `curry` / `curryr` (partial application) | 17, 21, 22 |
+| `curry` / `curryr` (partial application) | 17, 21, 22, 23 |
+| Self-modifying code / instruction toggling | 23 |
+| Peephole optimization | 23 |
 | `match-lambda**` | 21 |
 | `(== expr)` match pattern (value equality) | 21 |
 | `#:do` in `for` clauses | 21 |

@@ -19,7 +19,7 @@
   (values 1 (hash-update regs register sub1)))
 
 (define (jump-not-zero regs compare ahead)
-  (values (if (zero? (value-of compare regs)) 1 ahead) regs))
+  (values (if (zero? (value-of compare regs)) 1 (value-of ahead regs)) regs))
 
 (define mappings (hasheq 'copy copy
                          'increment increment
@@ -58,5 +58,5 @@
       (check-equal? answer1 317993)
       (check-equal? answer2 9227647))]))
 
-(provide copy jump-not-zero increment decrement run-program
+(provide copy jump-not-zero increment decrement run-program mappings make-env value-of
          (rename-out (day12-module-begin #%module-begin)))

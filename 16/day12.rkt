@@ -29,4 +29,4 @@
                           '(,@src-datums)))
   (datum->syntax (quote-syntax here) module-datum))
 
-(provide read-syntax)
+(provide read-syntax parse)
