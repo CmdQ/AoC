@@ -3,33 +3,28 @@
 (define (make-env)
   (foldl (λ (c acc) (hash-set acc c 0)) (hasheq) '(a b c d)))
 
-(define/contract (copy regs src dst)
-  (hash? integer? symbol? . -> . any)
-  (values 1 (hash-set regs dst src)))
+(define (value-of thing env)
+  (cond
+    [(number? thing) thing]
+    [(string? thing) (string->number thing)]
+    [else (hash-ref env thing)]))
 
-(define/contract (increment regs register)
-  (hash? symbol? . -> . any)
+(define (copy regs src dst)
+  (values 1 (hash-set regs dst (value-of src regs))))
+
+(define (increment regs register)
   (values 1 (hash-update regs register add1)))
 
-(define/contract (decrement regs register)
-  (hash? symbol? . -> . any)
+(define (decrement regs register)
   (values 1 (hash-update regs register sub1)))
 
-(define/contract (jump-not-zero regs compare ahead)
-  (hash? integer? integer? . -> . any)
-  (values (if (zero? compare) 1 ahead) regs))
+(define (jump-not-zero regs compare ahead)
+  (values (if (zero? (value-of compare regs)) 1 ahead) regs))
 
 (define mappings (hasheq 'copy copy
                          'increment increment
                          'decrement decrement
                          'jump-not-zero jump-not-zero))
-
-(define (do-read regs lst)
-  (for/list ([e (in-list lst)])
-    (cond
-      [(and (list? e) (eq? (first e) 'read))
-       (hash-ref regs (second e))]
-      [else e])))
 
 (define (run-program prg (env #f))
   (define idata (list->vector (filter (negate void?) prg)))
@@ -39,7 +34,7 @@
     (cond
       [(>= pc end) (hash-ref regs 'a)]
       [else
-       (define cur (do-read regs (vector-ref idata pc)))
+       (define cur (vector-ref idata pc))
        (define-values (advance-pc new-regs)
          (apply (hash-ref mappings (first cur)) regs (rest cur)))
        (loop (+ pc advance-pc) new-regs)])))
