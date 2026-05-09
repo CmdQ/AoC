@@ -13,7 +13,7 @@
 (struct/contract world ((bots (hash/c integer? bot?)) (outputs (hash/c integer? integer?))) #:transparent)
 
 (define input
-  (let ([bots (make-hash)])
+  (let ([bots (make-hasheqv)])
     (~> "input10.txt"
         file->lines
         (for-each (match-lambda
