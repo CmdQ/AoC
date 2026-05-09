@@ -292,6 +292,22 @@ Extend the assembunny VM with `tgl` self-modifying code, then optimize the hot l
   - `threading` (`~>`) for register-update pipelines
   - `curryr` for part-specific solver specialization
 
+### Day 24 — [Air Duct Spelunking](https://adventofcode.com/2016/day/24)
+Find shortest routes through a maze that visit all numbered locations, then repeat with a return to the start.
+
+- Concepts:
+  - BFS on an unweighted grid for pairwise distances between numbered targets
+  - Travelling-salesman-style search over permutations of targets
+  - Memoized distance table reused for both parts
+- Racket:
+  - `matrix.rkt` for grid storage
+  - `data/queue` for BFS frontier management
+  - `mutable-set` for visited grid cells
+  - `make-hasheqv` for character-keyed target positions
+  - `delay`/`force` for memoizing pairwise distances and answers
+  - `in-permutations` and `windows` for route enumeration and edge extraction
+  - `for/fold` with multiple accumulators to compute both answers in one pass
+
 ## Project Infrastructure
 
 ### `run.rkt` — Benchmark runner
@@ -341,17 +357,17 @@ Every day file has:
 |---|---|
 | Streams (lazy sequences) | 05, 14 |
 | Custom `#lang` / reader macros | 08, 12, 21, 23 |
-| `threading` / `~>` / `lambda~>` | 01, 02, 03, 04, 05, 07, 10, 11, 13, 14, 17, 18, 20, 21, 22, 23 |
-| `matrix.rkt` (2D grid) | 02, 08, 13, 22 |
+| `threading` / `~>` / `lambda~>` | 01, 02, 03, 04, 05, 07, 10, 11, 13, 14, 17, 18, 20, 21, 22, 23, 24 |
+| `matrix.rkt` (2D grid) | 02, 08, 13, 22, 24 |
 | Complex number geometry | 01 |
 | Regex (`regexp-match`, backrefs, `byte-regexp`) | 04, 07, 10, 11, 12, 14 |
-| BFS / Dijkstra | 11, 13, 17 |
-| `for/fold` with accumulators | 01, 02, 03, 06, 18 |
-| Hash tables (mutable / immutable) | 04, 10, 12, 13, 23 |
+| BFS / Dijkstra | 11, 13, 17, 24 |
+| `for/fold` with accumulators | 01, 02, 03, 06, 18, 24 |
+| Hash tables (mutable / immutable) | 04, 10, 12, 13, 23, 24 |
 | Contracts (`contract-out`, `struct/contract`, `define/contract`) | 10, 12, 16, 17 |
 | Port-based I/O (`read-char`) | 09 |
 | `parameterize` / `make-parameter` | 13, 14 |
-| `match` / `match-lambda` / `match-define` | 03, 04, 10, 11, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23 |
+| `match` / `match-lambda` / `match-define` | 03, 04, 10, 11, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24 |
 | Bit manipulation | 11, 13, 16, 18 |
 | SWAR (bulk bignum bit ops) | 16 |
 | `2htdp/image` visualization | 13, 22 |
@@ -364,14 +380,16 @@ Every day file has:
 | `in-drracket?` (`utils.rkt`) | 13 |
 | `nint.rkt` (fixed-width integers) | 16, 18 |
 | `treelist` (functional sequence) | 11 |
-| `data/queue` | 11, 17, 19 |
-| Sets (`mutable-set`) | 01, 11 |
+| `data/queue` | 11, 17, 19, 24 |
+| Sets (`mutable-set`) | 01, 11, 24 |
 | `struct-copy` | 02 |
 | Modular arithmetic / CRT | 15 |
 | MD5 hashing (`file/md5`) | 05, 14, 17 |
 | `curry` / `curryr` (partial application) | 17, 21, 22, 23 |
 | Self-modifying code / instruction toggling | 23 |
 | Peephole optimization | 23 |
+| Permutation search / TSP | 24 |
+| `delay` / `force` promises | 24 |
 | `match-lambda**` | 21 |
 | `(== expr)` match pattern (value equality) | 21 |
 | `#:do` in `for` clauses | 21 |

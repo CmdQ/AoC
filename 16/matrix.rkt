@@ -19,7 +19,7 @@
 
 (struct matrix (rows cols data) #:transparent)
 
-(define (make-matrix rows cols [init 0])
+(define (make-matrix rows cols [init #f])
   (matrix rows cols (make-vector (* rows cols) init)))
 
 (define (matrix-index m row col)
